@@ -1,0 +1,120 @@
+-- D:\Program (x86)\Microsoft Visual Studio 14.0>SqlMetal /server:localhost /database:"LsjBokDB" /code:D:\lsjbokdb.cs
+
+create table LsjBokUser
+(
+Id integer not null primary key,
+Name nvarchar(150) not null,
+Pwdhash char(32)
+) --https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/language-compilers/compute-hash-values
+
+create table Companytype
+(
+Id integer not null primary key,
+Name nvarchar(150) not null,
+Shortname nvarchar(10) not null
+)
+
+create table Company
+(
+Id integer not null primary key,
+Name nvarchar(150) not null,
+Orgnr char(13) not null,
+Companytype integer not null foreign key references Companytype(Id),
+Address nvarchar(250),
+Phone nvarchar(25),
+Email nvarchar(50),
+Momsfreq integer not null, -- 0 = ej moms
+Kontant bit not null, 
+Admin integer not null foreign key references LsjBokUser(Id),
+Creator integer not null foreign key references LsjBokUser(Id),
+Creationdate date not null
+)
+
+create table Fiscalyear
+(
+Id integer not null primary key,
+Name varchar(10) not null,
+Company integer not null foreign key references Company(Id),
+Startdate date not null,
+Enddate date not null,
+Closed bit not null,
+Creator integer not null foreign key references LsjBokUser(Id),
+Creationdate date not null
+)
+
+create table Konto
+(
+Id integer not null primary key,
+Year integer not null foreign key references Fiscalyear(Id),
+Name nvarchar(150) not null,
+Number integer not null,
+Kontotyp integer not null,
+Kontogrupp integer not null,
+Konto1 integer not null,
+Konto2 integer not null,
+Konto3 integer not null,
+IB money not null, --  +=debet, -=kredit
+UB money not null, --  +=debet, -=kredit
+Creator integer not null foreign key references LsjBokUser(Id),
+Creationdate date not null
+)
+
+create table Ver
+(
+Id integer not null primary key,
+Verdate date not null,
+Vernumber integer not null,
+Year integer not null foreign key references Fiscalyear(Id),
+Description nvarchar(250) not null,
+Verifikatfil nvarchar(250),
+Creator integer not null foreign key references LsjBokUser(Id),
+Creationdate date not null
+)
+
+create table Rad
+(
+Id integer not null primary key,
+Ver integer not null foreign key references Ver(Id),
+Konto integer not null foreign key references Konto(Id),
+Amount money not null, --  +=debet, -=kredit
+)
+
+create table Momsperiod
+(
+Id integer not null primary key,
+Name varchar(10) not null,
+Fiscal integer not null foreign key references Fiscalyear(Id),
+Startdate date not null,
+Enddate date not null,
+Net money not null, 
+Closed bit not null,
+Rapportfil nvarchar(250),
+Creator integer not null foreign key references LsjBokUser(Id),
+Creationdate date not null
+)
+
+create table Momsentry
+(
+Id integer not null primary key,
+Period integer not null foreign key references Momsperiod(Id),
+Field integer not null,
+Amount money not null
+)
+
+create table Mall
+(
+Id integer not null primary key,
+Description nvarchar(250) not null,
+Creator integer not null foreign key references LsjBokUser(Id),
+Creationdate date not null
+)
+
+create table Mallrad
+(
+Id integer not null primary key,
+Mall integer not null foreign key references Mall(Id),
+Kontonr integer not null,
+Amount money not null, --  +=debet, -=kredit
+)
+
+

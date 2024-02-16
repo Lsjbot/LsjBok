@@ -1,0 +1,26 @@
+USE [LsjBokDB]
+GO
+
+delete from Rad
+
+
+delete from Ver
+delete from Momsentry
+delete from Momsperiod
+delete from Konto
+delete from Fiscalyear
+delete from Company
+delete from Companytype
+delete from LsjBokUser
+DROP TABLE [dbo].[Rad]
+DROP TABLE [dbo].[Ver]
+DROP TABLE [dbo].[Momsentry]
+DROP TABLE [dbo].[Momsperiod]
+DROP TABLE [dbo].[Konto]
+DROP TABLE [dbo].[Fiscalyear]
+DROP TABLE [dbo].[Company]
+DROP TABLE [dbo].[Companytype]
+DROP TABLE [dbo].[LsjBokUser]
+
+
+
