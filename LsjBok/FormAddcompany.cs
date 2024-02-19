@@ -29,20 +29,9 @@ namespace LsjBok
                 return false;
             if (String.IsNullOrEmpty(TBorgnr.Text))
                 return false;
-            if (!validate_orgnr(TBorgnr.Text))
+            if (!util.validate_orgnr(TBorgnr.Text))
                 return false;
             return true;
-        }
-
-        public static bool validate_orgnr(string nr)
-        {
-            string rex = @"\d{6}\-?\d{4}";
-            foreach (Match m in Regex.Matches(nr, rex))
-            {
-                if (m.Value == nr)
-                    return true;
-            }
-            return false;
         }
 
         private void TBorgnr_TextChanged(object sender, EventArgs e)

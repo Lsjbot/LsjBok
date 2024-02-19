@@ -42,6 +42,7 @@ namespace LsjBok
             this.label4 = new System.Windows.Forms.Label();
             this.LBfiscal = new System.Windows.Forms.ListBox();
             this.huvudbokbutton = new System.Windows.Forms.Button();
+            this.importexportbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // quitbutton
@@ -166,11 +167,22 @@ namespace LsjBok
             this.huvudbokbutton.UseVisualStyleBackColor = true;
             this.huvudbokbutton.Click += new System.EventHandler(this.huvudbokbutton_Click);
             // 
+            // importexportbutton
+            // 
+            this.importexportbutton.Location = new System.Drawing.Point(545, 204);
+            this.importexportbutton.Name = "importexportbutton";
+            this.importexportbutton.Size = new System.Drawing.Size(166, 68);
+            this.importexportbutton.TabIndex = 13;
+            this.importexportbutton.Text = "Importera\r\nexportera";
+            this.importexportbutton.UseVisualStyleBackColor = true;
+            this.importexportbutton.Click += new System.EventHandler(this.importexportbutton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 450);
+            this.Controls.Add(this.importexportbutton);
             this.Controls.Add(this.huvudbokbutton);
             this.Controls.Add(this.LBfiscal);
             this.Controls.Add(this.label4);
@@ -206,6 +218,7 @@ namespace LsjBok
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListBox LBfiscal;
         private System.Windows.Forms.Button huvudbokbutton;
+        private System.Windows.Forms.Button importexportbutton;
     }
 }
 

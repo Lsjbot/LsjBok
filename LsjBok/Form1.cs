@@ -212,5 +212,11 @@ namespace LsjBok
             FormHuvudbok fhb = new FormHuvudbok();
             fhb.Show();
         }
+
+        private void importexportbutton_Click(object sender, EventArgs e)
+        {
+            FormImportExport fie = new FormImportExport();
+            fie.Show();
+        }
     }
 }
