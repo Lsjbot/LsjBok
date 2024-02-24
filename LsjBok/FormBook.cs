@@ -39,18 +39,94 @@ namespace LsjBok
         private Label debitlabel = new Label();
         private Label difflabel = new Label();
 
+        Ver vvin = null;
+        bool makecopy = false;
+        int localfiscal = Form1.currentfiscal;
+
         public FormBook()
         {
             InitializeComponent();
 
+            make_controls();
 
 
-            for (int i=0;i<maxrow;i++)
+            TBdate.Text = DateTime.Now.ToString("yyMMdd");
+            TBdate.LostFocus += new EventHandler(checkdate);
+
+            bookbutton.Visible =   true; //bookbutton.Enabled = false;
+            changebutton.Visible = false; //changebutton.Enabled = changebutton.Visible;
+            annulbutton.Visible =  false; //annulbutton.Enabled = annulbutton.Visible;
+            copybutton.Visible =   false; //copybutton.Enabled = copybutton.Visible;
+            mallbutton.Visible =   true; //mallbutton.Enabled = mallbutton.Visible;
+
+            this.Text = "Bokför nytt verifikat för " + util.getcompanyname() + " " + util.getfiscalname();
+        }
+
+        public FormBook(Ver vvpar, bool makecopypar)
+        {
+            vvin = vvpar;
+            makecopy = makecopypar;
+
+            InitializeComponent();
+
+            make_controls();
+
+            if (makecopy)
+                TBdecription.Text = "Kopia av "+vvin.Description;
+            else
+                TBdecription.Text = vvin.Description;
+
+            if (!makecopy)
+                TBdate.Text = vvin.Verdate.ToString("yyMMdd");
+            else
+                TBdate.Text = "";
+            TBdate.LostFocus += new EventHandler(checkdate);
+
+            if (makecopy)
+            {
+                bookbutton.Visible = true; //bookbutton.Enabled = bookbutton.Visible;
+                changebutton.Visible = false;// changebutton.Enabled = changebutton.Visible;
+                annulbutton.Visible = false; //annulbutton.Enabled = annulbutton.Visible;
+                copybutton.Visible = false; //copybutton.Enabled = copybutton.Visible;
+                mallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
+            }
+            else
+            {
+                bookbutton.Visible = false; //bookbutton.Enabled = bookbutton.Visible;
+                changebutton.Visible = false;// changebutton.Enabled = changebutton.Visible;
+                annulbutton.Visible = true; //annulbutton.Enabled = annulbutton.Visible;
+                copybutton.Visible = true; //copybutton.Enabled = copybutton.Visible;
+                mallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
+            }
+
+            var qrad = from c in Form1.db.Rad where c.Ver == vvin.Id select c;
+            int i = 0;
+            foreach (Rad rr in qrad)
+            {
+                cbnumber[i].Text = rr.KontoKonto.Number.ToString();
+                cbname[i].Text = rr.KontoKonto.Name;
+                if (rr.Amount > 0)
+                    cbdebit[i].Text = rr.Amount.ToString();
+                else
+                    cbcredit[i].Text = (-(rr.Amount)).ToString();
+                enabled[i] = true;
+                i++;
+            }
+            setvisible();
+            if (makecopy)
+                this.Text = "Kopia av verifikat " + vvin.Vernumber + " för " + util.getcompanyname() + " " + util.getfiscalname();
+            else
+                this.Text = "Verifikat " + vvin.Vernumber + " för " + util.getcompanyname() + " " + util.getfiscalname();
+        }
+
+        private void make_controls()
+        {
+            for (int i = 0; i < maxrow; i++)
             {
                 cbnumber[i] = new ComboBox();
                 cbnumber[i].Left = xbase;
                 cbnumber[i].Width = numberwidth;
-                cbnumber[i].Top = ybase + i*heightdist;
+                cbnumber[i].Top = ybase + i * heightdist;
 
                 cbname[i] = new ComboBox();
                 cbname[i].Left = cbnumber[i].Right + sep;
@@ -82,6 +158,7 @@ namespace LsjBok
                 this.Controls.Add(onoff[i]);
 
                 onoff[i].Click += new EventHandler(onoffclick);
+                onoff[i].MouseHover += new EventHandler(deletebutton_MouseHover);
                 cbname[i].TextChanged += new EventHandler(comboBox2_TextChanged);
                 cbname[i].SelectedIndexChanged += new EventHandler(comboBox2_SelectedIndexChanged);
                 cbnumber[i].TextChanged += new EventHandler(cbnumber_TextChanged);
@@ -99,7 +176,7 @@ namespace LsjBok
             TBdebitsum.Left = cbdebit[0].Left;
             TBdebitsum.Width = cbdebit[0].Width;
             TBdiff.Top = cbname[0].Top - heightdist;
-            TBdiff.Left = cbdebit[0].Left-sep-moneywidth;
+            TBdiff.Left = cbdebit[0].Left - sep - moneywidth;
             TBdiff.Width = cbdebit[0].Width;
 
             creditlabel.Text = "Kredit";
@@ -119,8 +196,6 @@ namespace LsjBok
             this.Controls.Add(debitlabel);
             this.Controls.Add(difflabel);
 
-            TBdate.Text = DateTime.Now.ToString("yyMMdd");
-            TBdate.LostFocus += new EventHandler(checkdate);
         }
 
         private void setvisible()
@@ -195,6 +270,12 @@ namespace LsjBok
             cbname[i].Items.Add(s.Split('~')[1].Trim());
             cbname[i].Text = s.Split('~')[1].Trim();
             mytextchange = false;
+
+            if (vvin != null)
+            {
+                changebutton.Visible = true;
+                changebutton.Enabled = true;
+            }
         }
 
         private void comboBox2_TextChanged(object sender, EventArgs e)
@@ -231,6 +312,12 @@ namespace LsjBok
                     cbnumber[i].ForeColor = Color.Black;
                     cbname[i].Text = kontoclass.kontodict[nr];
                     mytextchange = false;
+
+                    if (vvin != null)
+                    {
+                        changebutton.Visible = true;
+                        changebutton.Enabled = true;
+                    }
                 }
                 else
                 {
@@ -242,18 +329,24 @@ namespace LsjBok
 
         }
 
-
-
-        private void cbmoney_Lostfocus(object sender, EventArgs e)
+        private bool validate()
         {
+            if (!checkdate())
+                return false;
+
             decimal csum = 0;
             decimal dsum = 0;
-            for (int i=0;i<maxrow;i++)
+            for (int i = 0; i < maxrow; i++)
             {
                 if (!enabled[i])
                     continue;
-                if (!kontoclass.validkonto(cbnumber[i].Text))
+                if (String.IsNullOrEmpty(cbnumber[i].Text))
                     continue;
+                if (!kontoclass.validkonto(cbnumber[i].Text))
+                {
+                    cbnumber[i].ForeColor = Color.Red;
+                    return false;
+                }
 
                 decimal c = util.tryconvertdecimal(cbcredit[i].Text);
                 decimal d = util.tryconvertdecimal(cbdebit[i].Text);
@@ -261,7 +354,7 @@ namespace LsjBok
                 {
                     cbcredit[i].ForeColor = Color.Red;
                     bookbutton.Enabled = false;
-                    return;
+                    return false;
                 }
                 else
                     cbcredit[i].ForeColor = Color.Black;
@@ -269,7 +362,7 @@ namespace LsjBok
                 {
                     cbdebit[i].ForeColor = Color.Red;
                     bookbutton.Enabled = false;
-                    return;
+                    return false;
                 }
                 else
                     cbdebit[i].ForeColor = Color.Black;
@@ -283,22 +376,59 @@ namespace LsjBok
                 else
                     TBdiff.ForeColor = Color.Black;
 
-                bookbutton.Enabled = (dsum - csum == 0);
             }
+            return (dsum - csum == 0);
+        }
 
+
+
+        private void cbmoney_Lostfocus(object sender, EventArgs e)
+        {
+            bool valid = validate();
+
+            bookbutton.Visible = (vvin == null);
+            bookbutton.Enabled = valid;
+            changebutton.Visible = (vvin != null);
+            changebutton.Enabled = valid;
         }
 
         private void checkdate(object sender, EventArgs e)
         {
+            checkdate();
+        }
+
+        private bool checkdate()
+        {
             DateTime? verdate = util.parsedate(TBdate.Text);
-            if (!util.infiscal(verdate))
+            if (verdate == null)
             {
                 TBdate.ForeColor = Color.Red;
+                return false;
+            }
+
+            //int fiscal = localfiscal;
+
+            if (makecopy)
+            {
+                foreach (int fi in (from c in Form1.db.Fiscalyear where c.Company == Form1.currentcompany select c.Id))
+                {
+                    if (util.infiscal(verdate,fi))
+                    {
+                        localfiscal = fi;
+                        break;
+                    }
+                }
+            }
+            if (!util.infiscal(verdate,localfiscal))
+            {
+                TBdate.ForeColor = Color.Red;
+                return false;
             }
             else
+            {
                 TBdate.ForeColor = Color.Black;
-
-
+                return true;
+            }
         }
 
         private void cancelbutton_Click(object sender, EventArgs e)
@@ -306,22 +436,26 @@ namespace LsjBok
             this.Close();
         }
 
-        private void bookbutton_Click(object sender, EventArgs e)
+        private int nextvernumber()
         {
-
-            Ver vv = new Ver();
-            var q = from c in Form1.db.Ver select c.Id;
-            if (q.Count() == 0)
-                vv.Id = 1;
-            else
-                vv.Id = q.Max() + 1;
-            var qv = from c in Form1.db.Ver where c.Year == Form1.currentfiscal select c.Vernumber;
+            var qv = from c in Form1.db.Ver where c.Year == localfiscal select c.Vernumber;
             if (qv.Count() == 0)
-                vv.Vernumber = 1;
+                return 1;
             else
-                vv.Vernumber = qv.Max() + 1;
+                return qv.Max() + 1;
+        }
+
+        private void make_booking()
+        {
+            Ver vv = new Ver();
+            int vvid = 1;
+            var q = from c in Form1.db.Ver select c.Id;
+            if (q.Count() > 0)
+                vvid = q.Max() + 1;
+            vv.Id = vvid;
+            vv.Vernumber = nextvernumber();
             vv.Description = TBdecription.Text;
-            vv.Year = Form1.currentfiscal;
+            vv.Year = localfiscal;
             vv.Creator = Form1.currentuser;
             vv.Creationdate = DateTime.Now;
             DateTime? verdate = util.parsedate(TBdate.Text);
@@ -374,20 +508,20 @@ namespace LsjBok
                     cbdebit[i].ForeColor = Color.Black;
                 csum += cred;
                 dsum += deb;
-                TBcreditsum.Text = csum.ToString();
-                TBdebitsum.Text = dsum.ToString();
-                TBdiff.Text = (dsum - csum).ToString();
+                //TBcreditsum.Text = csum.ToString();
+                //TBdebitsum.Text = dsum.ToString();
+                //TBdiff.Text = (dsum - csum).ToString();
 
                 int kontonr = util.tryconvert(cbnumber[i].Text);
-                Konto qk = (from cc in Form1.db.Konto 
-                         where cc.Number == kontonr
-                         where cc.Year == Form1.currentfiscal
-                         select cc).FirstOrDefault();
+                Konto qk = (from cc in Form1.db.Konto
+                            where cc.Number == kontonr
+                            where cc.Year == localfiscal
+                            select cc).FirstOrDefault();
                 if (qk == null)
                 {
-                    qk = (from cc in lkonto 
+                    qk = (from cc in lkonto
                           where cc.Number == kontonr
-                          where cc.Year == Form1.currentfiscal
+                          where cc.Year == localfiscal
                           select cc).FirstOrDefault();
                 }
                 if (qk == null)
@@ -397,7 +531,7 @@ namespace LsjBok
                     idkonto++;
                     qk.Number = kontonr;
                     qk.Name = kontoclass.kontodict[kontonr];
-                    qk.Year = Form1.currentfiscal;
+                    qk.Year = localfiscal;
                     qk.Kontotyp = 0;
                     qk.Kontogrupp = 0;
                     qk.Konto1 = kontonr / 1000;
@@ -441,6 +575,104 @@ namespace LsjBok
             Form1.db.Rad.InsertAllOnSubmit(lrad);
             Form1.db.SubmitChanges();
 
+        }
+
+        private void bookbutton_Click(object sender, EventArgs e)
+        {
+            if (!validate())
+            {
+                MessageBox.Show("Ogiltiga data");
+                return;
+            }
+
+            make_booking();
+
+            this.Close();
+        }
+
+        private void annulment()
+        {
+            Ver vv = new Ver();
+            int vvid = 1;
+            var q = from c in Form1.db.Ver select c.Id;
+            if (q.Count() > 0)
+                vvid = q.Max() + 1;
+            vv.Id = vvid;
+            vv.Vernumber = nextvernumber();
+            vv.Description = "Annullera verifikat " + vvin.Vernumber;
+            vv.Year = vvin.Year;
+            vv.Creator = Form1.currentuser;
+            vv.Creationdate = DateTime.Now;
+            vv.Verdate = vvin.Verdate;
+
+            List<Rad> lrad = new List<Rad>();
+            int idrad = 1;
+            var qr = from c in Form1.db.Rad select c.Id;
+            if (qr.Count() > 0)
+                idrad = qr.Max() + 1;
+            var qrin = from c in Form1.db.Rad where c.Ver == vvin.Id select c;
+            foreach (Rad rrin in qrin)
+            {
+                Rad rr = new Rad();
+                rr.Id = idrad;
+                idrad++;
+                rr.Ver = vv.Id;
+                rr.Konto = rrin.Konto;
+                rr.Amount = -rrin.Amount;
+                lrad.Add(rr);
+            }
+
+            Form1.db.Ver.InsertOnSubmit(vv);
+            Form1.db.SubmitChanges();
+
+            Form1.db.Rad.InsertAllOnSubmit(lrad);
+            Form1.db.SubmitChanges();
+        }
+
+        private void annulbutton_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Annullera verifikat " + vvin.Vernumber + "?", "Annulera?"
+                , MessageBoxButtons.OKCancel);
+            if (dr != DialogResult.OK)
+                return;
+            else
+                annulment();
+            this.Close();
+        }
+
+        private void changebutton_Click(object sender, EventArgs e)
+        {
+            if (!validate())
+            {
+                MessageBox.Show("Ogiltiga data");
+                return;
+            }
+
+            annulment();
+
+            make_booking();
+
+            this.Close();
+        }
+
+        private void copybutton_Click(object sender, EventArgs e)
+        {
+            FormBook fb2 = new FormBook(vvin, true);
+            fb2.Show();
+            this.Close();
+        }
+
+        private void bookbutton_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(bookbutton, "Bokför som nytt verifikat");
+        }
+
+        private void deletebutton_MouseHover(object sender, EventArgs e)
+        {
+            if ((sender as Control).Text == "+")
+                toolTip1.SetToolTip(sender as Control, "Lägg till ny rad (max 20)");
+            else
+                toolTip1.SetToolTip(sender as Control, "Ta bort den här raden");
         }
     }
 }

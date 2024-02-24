@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace LsjBok
 {
-    public partial class FormHuvudbok : Form
+    public partial class FormVerifikatlista : Form
     {
-        public FormHuvudbok()
+        public FormVerifikatlista()
         {
             InitializeComponent();
             updatetitle();
@@ -23,22 +23,22 @@ namespace LsjBok
             //tree.Nodes[0].Nodes.Add("Child 2");
             //tree.Nodes[0].Nodes[1].Nodes.Add("Grandchild");
             //tree.Nodes[0].Nodes[1].Nodes[0].Nodes.Add("Great Grandchild");
-            var q = from c in Form1.db.Konto
+            var q = from c in Form1.db.Ver
                     where c.Year == Form1.currentfiscal
                     select c;
             int inode = 0;
-            foreach (var kk in q.OrderBy(c => c.Number))
+            foreach (var kk in q.OrderBy(c=>c.Vernumber))
             {
-                tree.Nodes.Add(kk.Number + " " + kk.Name+" | IB: "+kk.IB.ToString("N2")+" | UB: "+kk.UB.ToString("N2"));
+                tree.Nodes.Add("V"+kk.Vernumber + " | " + kk.Description+" | Ver#"+kk.Id);
                 var qrad = from c in Form1.db.Rad
-                           where c.Konto == kk.Id
+                           where c.Ver == kk.Id
                            select c;
                 foreach (var rr in qrad)
                 {
                     string debcred = rr.Amount > 0 ?
                         " | " + rr.Amount.ToString("N2").PadLeft(12) + " |            0 |" :
-                        " |            0 |" + (-rr.Amount).ToString("N2").PadLeft(12)+" |";
-                    tree.Nodes[inode].Nodes.Add("Ver.nr" + rr.VerVer.Vernumber.ToString().PadLeft(5) + debcred+" | Rad #"+rr.Id);
+                        " |            0 |" + (-rr.Amount).ToString("N2").PadLeft(12) + " |";
+                    tree.Nodes[inode].Nodes.Add("Konto" + rr.KontoKonto.Number.ToString().PadLeft(5) + debcred + " | Rad #" + rr.Id);
                 }
                 inode++;
             }
@@ -54,33 +54,31 @@ namespace LsjBok
 
         public void updatetitle()
         {
-            this.Text = "LsjBok huvudbok - " + util.getusername() + " - " + util.getcompanyname() + " - " + util.getfiscalname();
-        }
-
-        private void closebutton_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            this.Text = "LsjBok verifikatlista - " + util.getusername() + " - " + util.getcompanyname() + " - " + util.getfiscalname();
         }
 
         void tree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            try
+            if (e.Node.Text.Contains("Konto"))
             {
-                // Look for a file extension.
-                if (e.Node.Text.Contains("Ver.nr"))
+                int radid = util.tryconvert(e.Node.Text.Split('#').Last().Trim());
+                Rad rr = (from c in Form1.db.Rad where c.Id == radid select c).First();
+                //int vernr = util.tryconvert(e.Node.Text.Split('|')[0].Replace("Ver.nr", "").Trim());
+                FormBook fbn = new FormBook(rr.VerVer, false);
+                fbn.Show();
+            }
+            else
+            {
+                int verid = util.tryconvert(e.Node.Text.Split('#').Last().Trim());
+                Ver vvin = (from c in Form1.db.Ver where c.Id == verid select c).FirstOrDefault();
+                if (vvin != null)
                 {
-                    int radid = util.tryconvert(e.Node.Text.Split('#').Last().Trim());
-                    Rad rr = (from c in Form1.db.Rad where c.Id == radid select c).First();
-                    //int vernr = util.tryconvert(e.Node.Text.Split('|')[0].Replace("Ver.nr", "").Trim());
-                    FormBook fbn = new FormBook(rr.VerVer,false);
+                    FormBook fbn = new FormBook(vvin, false);
                     fbn.Show();
                 }
-            }
-            // If the file is not found, handle the exception and inform the user.
-            catch (System.ComponentModel.Win32Exception)
-            {
-                MessageBox.Show("File not found.");
+
             }
         }
+
     }
 }

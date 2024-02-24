@@ -43,6 +43,7 @@ namespace LsjBok
             this.LBfiscal = new System.Windows.Forms.ListBox();
             this.huvudbokbutton = new System.Windows.Forms.Button();
             this.importexportbutton = new System.Windows.Forms.Button();
+            this.verbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // quitbutton
@@ -177,11 +178,22 @@ namespace LsjBok
             this.importexportbutton.UseVisualStyleBackColor = true;
             this.importexportbutton.Click += new System.EventHandler(this.importexportbutton_Click);
             // 
+            // verbutton
+            // 
+            this.verbutton.Location = new System.Drawing.Point(337, 77);
+            this.verbutton.Name = "verbutton";
+            this.verbutton.Size = new System.Drawing.Size(166, 47);
+            this.verbutton.TabIndex = 14;
+            this.verbutton.Text = "Verifikat";
+            this.verbutton.UseVisualStyleBackColor = true;
+            this.verbutton.Click += new System.EventHandler(this.verbutton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 450);
+            this.Controls.Add(this.verbutton);
             this.Controls.Add(this.importexportbutton);
             this.Controls.Add(this.huvudbokbutton);
             this.Controls.Add(this.LBfiscal);
@@ -219,6 +231,7 @@ namespace LsjBok
         private System.Windows.Forms.ListBox LBfiscal;
         private System.Windows.Forms.Button huvudbokbutton;
         private System.Windows.Forms.Button importexportbutton;
+        private System.Windows.Forms.Button verbutton;
     }
 }
 

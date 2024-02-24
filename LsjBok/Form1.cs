@@ -218,5 +218,11 @@ namespace LsjBok
             FormImportExport fie = new FormImportExport();
             fie.Show();
         }
+
+        private void verbutton_Click(object sender, EventArgs e)
+        {
+            FormVerifikatlista fv = new FormVerifikatlista();
+            fv.Show();
+        }
     }
 }

@@ -29,6 +29,7 @@ namespace LsjBok
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.bookbutton = new System.Windows.Forms.Button();
             this.cancelbutton = new System.Windows.Forms.Button();
             this.TBdecription = new System.Windows.Forms.TextBox();
@@ -36,21 +37,27 @@ namespace LsjBok
             this.TBdate = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.annulbutton = new System.Windows.Forms.Button();
+            this.copybutton = new System.Windows.Forms.Button();
+            this.changebutton = new System.Windows.Forms.Button();
+            this.mallbutton = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // bookbutton
             // 
-            this.bookbutton.Location = new System.Drawing.Point(241, 707);
+            this.bookbutton.Location = new System.Drawing.Point(12, 707);
             this.bookbutton.Name = "bookbutton";
-            this.bookbutton.Size = new System.Drawing.Size(169, 62);
+            this.bookbutton.Size = new System.Drawing.Size(127, 62);
             this.bookbutton.TabIndex = 0;
             this.bookbutton.Text = "Bokför";
             this.bookbutton.UseVisualStyleBackColor = true;
             this.bookbutton.Click += new System.EventHandler(this.bookbutton_Click);
+            this.bookbutton.MouseHover += new System.EventHandler(this.bookbutton_MouseHover);
             // 
             // cancelbutton
             // 
-            this.cancelbutton.Location = new System.Drawing.Point(517, 705);
+            this.cancelbutton.Location = new System.Drawing.Point(710, 705);
             this.cancelbutton.Name = "cancelbutton";
             this.cancelbutton.Size = new System.Drawing.Size(142, 64);
             this.cancelbutton.TabIndex = 1;
@@ -99,11 +106,54 @@ namespace LsjBok
             this.label3.TabIndex = 6;
             this.label3.Text = "ÅÅMMDD";
             // 
+            // annulbutton
+            // 
+            this.annulbutton.Location = new System.Drawing.Point(285, 707);
+            this.annulbutton.Name = "annulbutton";
+            this.annulbutton.Size = new System.Drawing.Size(137, 62);
+            this.annulbutton.TabIndex = 7;
+            this.annulbutton.Text = "Annullera";
+            this.annulbutton.UseVisualStyleBackColor = true;
+            this.annulbutton.Click += new System.EventHandler(this.annulbutton_Click);
+            // 
+            // copybutton
+            // 
+            this.copybutton.Location = new System.Drawing.Point(428, 707);
+            this.copybutton.Name = "copybutton";
+            this.copybutton.Size = new System.Drawing.Size(142, 62);
+            this.copybutton.TabIndex = 8;
+            this.copybutton.Text = "Kopiera";
+            this.copybutton.UseVisualStyleBackColor = true;
+            this.copybutton.Click += new System.EventHandler(this.copybutton_Click);
+            // 
+            // changebutton
+            // 
+            this.changebutton.Location = new System.Drawing.Point(145, 707);
+            this.changebutton.Name = "changebutton";
+            this.changebutton.Size = new System.Drawing.Size(134, 62);
+            this.changebutton.TabIndex = 9;
+            this.changebutton.Text = "Ändra";
+            this.changebutton.UseVisualStyleBackColor = true;
+            this.changebutton.Click += new System.EventHandler(this.changebutton_Click);
+            // 
+            // mallbutton
+            // 
+            this.mallbutton.Location = new System.Drawing.Point(576, 707);
+            this.mallbutton.Name = "mallbutton";
+            this.mallbutton.Size = new System.Drawing.Size(128, 62);
+            this.mallbutton.TabIndex = 10;
+            this.mallbutton.Text = "Spara som mall";
+            this.mallbutton.UseVisualStyleBackColor = true;
+            // 
             // FormBook
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 781);
+            this.Controls.Add(this.mallbutton);
+            this.Controls.Add(this.changebutton);
+            this.Controls.Add(this.copybutton);
+            this.Controls.Add(this.annulbutton);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TBdate);
@@ -127,5 +177,10 @@ namespace LsjBok
         private System.Windows.Forms.TextBox TBdate;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button annulbutton;
+        private System.Windows.Forms.Button copybutton;
+        private System.Windows.Forms.Button changebutton;
+        private System.Windows.Forms.Button mallbutton;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

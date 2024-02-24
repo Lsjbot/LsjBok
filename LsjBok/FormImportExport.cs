@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Globalization;
 
 namespace LsjBok
 {
@@ -18,11 +19,17 @@ namespace LsjBok
         public FormImportExport()
         {
             InitializeComponent();
+            updatetitle();
         }
 
         private void closebutton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        public void updatetitle()
+        {
+            this.Text = "LsjBok import/export - " + util.getusername() + " - " + util.getcompanyname() + " - " + util.getfiscalname();
         }
 
 
@@ -455,16 +462,92 @@ namespace LsjBok
         private void exportbutton_Click(object sender, EventArgs e)
         {
             Company cc = (from c in Form1.db.Company where c.Id == Form1.currentcompany select c).First();
-            Fiscalyear fy = (from c in Form1.db.Fiscalyear where c.Id == Form1.currentfiscal select c).First();
-            String fn = util.unused_filename(Form1.mainfolder + cc.Name + "_" + cc.Orgnr + "_" + fy.Name + ".se");
+            Fiscalyear currentfy = (from c in Form1.db.Fiscalyear where c.Id == Form1.currentfiscal select c).First();
+            String fn = util.unused_filename(Form1.mainfolder +"\\"+ cc.Name + "_" + cc.Orgnr + "_" + currentfy.Name + ".se");
+            memo("Skriver SIE till " + fn);
             using (
                 var sw = new StreamWriter(
-                    new FileStream(fn, FileMode.Open, FileAccess.ReadWrite),
+                    new FileStream(fn, FileMode.CreateNew, FileAccess.Write),
                     Encoding.GetEncoding("iso-8859-1")
                 )
             )
             {
-                sw.Write(sb.ToString());
+                NumberFormatInfo nfi = new NumberFormatInfo();
+                nfi.NumberDecimalSeparator = ".";
+                nfi.NumberDecimalDigits = 2;
+                nfi.NumberGroupSeparator = "";
+                sw.WriteLine("#FLAGGA 0");
+                sw.WriteLine("#PROGRAM LsjBok 1.0");
+                sw.WriteLine("#FORMAT PC8");
+                sw.WriteLine("#GEN " + DateTime.Now.ToString("yyyyMMdd"));
+                sw.WriteLine("#SIETYP 4");
+                sw.WriteLine("#ORGNR " + cc.Orgnr);
+                sw.WriteLine("#FNAMN \"" + cc.Name+"\"");
+                Dictionary<int, int> fiscdict = new Dictionary<int, int>();
+                fiscdict.Add(0, Form1.currentfiscal);
+                int fyid = Form1.currentfiscal;
+                Fiscalyear fy = currentfy;
+                sw.WriteLine("RAR 0 " + fy.Startdate.ToString("yyyyMMdd") + " " + fy.Enddate.ToString("yyyyMMdd"));
+                int n = 0;
+                do
+                {
+                    fy = util.prevfiscal(fy);
+                    n--;
+                    if (fy != null)
+                    {
+                        fiscdict.Add(n, fy.Id);
+                        sw.WriteLine("RAR "+n+" " + fy.Startdate.ToString("yyyyMMdd") + " " + fy.Enddate.ToString("yyyyMMdd"));
+                    }
+                }
+                while (fy != null);
+                sw.WriteLine("#KPTYP BAS2024");
+                var qkk = from c in Form1.db.Konto where c.Year == Form1.currentfiscal select c;
+                foreach (Konto kk in qkk)
+                {
+                    sw.WriteLine("#KONTO " + kk.Number + " \"" + kk.Name + "\"");
+                }
+                var qkbal = from c in qkk where c.Konto1 < 3 select c;
+                foreach (Konto kk in qkbal)
+                {
+                    sw.WriteLine("#IB 0 " + kk.Number + " " + kk.IB.ToString("N2",nfi));
+                    sw.WriteLine("#UB 0 " + kk.Number + " " + kk.UB.ToString("N2",nfi));
+                }
+                if (fiscdict.ContainsKey(-1))
+                {
+                    var qkbal1 = from c in Form1.db.Konto where c.Year == fiscdict[-1] where c.Konto1 < 3 select c;
+                    foreach (Konto kk in qkbal1)
+                    {
+                        sw.WriteLine("#IB -1 " + kk.Number + " " + kk.IB.ToString("N2",nfi));
+                        sw.WriteLine("#UB -1 " + kk.Number + " " + kk.UB.ToString("N2",nfi));
+                    }
+                }
+                var qkres = from c in qkk where c.Konto1 > 2 select c;
+                foreach (Konto kk in qkres)
+                {
+                    sw.WriteLine("#RES 0 " + kk.Number + " " + kk.UB.ToString("N2",nfi));
+                }
+                if (fiscdict.ContainsKey(-1))
+                {
+                    var qkres1 = from c in Form1.db.Konto where c.Year == fiscdict[-1] where c.Konto1 > 2 select c;
+                    foreach (Konto kk in qkres1)
+                    {
+                        sw.WriteLine("#RES -1 " + kk.Number + " " + kk.UB.ToString("N2",nfi));
+                    }
+                }
+                var qver = from c in Form1.db.Ver where c.Year == Form1.currentfiscal select c;
+                foreach (Ver vv in qver)
+                {
+                    sw.WriteLine("#VER V " + vv.Vernumber + " " + vv.Verdate.ToString("yyyyMMdd")
+                        + " \"" + vv.Description + "\" " + vv.Creationdate.ToString("yyyyMMdd") + " \"" + util.getusername()+"\"");
+                    sw.WriteLine("{");
+                    var qrad = from c in Form1.db.Rad where c.Ver == vv.Id select c;
+                    foreach (Rad rr in qrad)
+                    {
+                        sw.WriteLine("\t#TRANS " + rr.KontoKonto.Number + " {} " + rr.Amount.ToString("N2",nfi));
+                    }
+                    sw.WriteLine("}");
+                }
+                memo("== Export till SIE klar ==");
             }
 
         }

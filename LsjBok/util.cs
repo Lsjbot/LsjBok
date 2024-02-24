@@ -147,7 +147,12 @@ namespace LsjBok
         }
         public static bool infiscal(DateTime date)
         {
-            Fiscalyear fy = (from c in Form1.db.Fiscalyear where c.Id == Form1.currentfiscal select c).FirstOrDefault();
+            return infiscal(date, Form1.currentfiscal);
+        }
+
+        public static bool infiscal(DateTime? date, int fiscal)
+        {
+            Fiscalyear fy = (from c in Form1.db.Fiscalyear where c.Id == fiscal select c).FirstOrDefault();
             if (fy == null)
                 return false;
             if (date < fy.Startdate)
@@ -155,6 +160,44 @@ namespace LsjBok
             if (date > fy.Enddate)
                 return false;
             return true;
+        }
+
+        public static Fiscalyear prevfiscal(int oldfyid)
+        {
+            var oldfy = (from c in Form1.db.Fiscalyear where c.Id == oldfyid select c).FirstOrDefault();
+            if (oldfy == null)
+                return null;
+            else
+                return prevfiscal(oldfy);
+        }
+        public static Fiscalyear nextfiscal(int oldfyid)
+        {
+            var oldfy = (from c in Form1.db.Fiscalyear where c.Id == oldfyid select c).FirstOrDefault();
+            if (oldfy == null)
+                return null;
+            else
+                return nextfiscal(oldfy);
+        }
+        public static Fiscalyear prevfiscal(Fiscalyear oldfy)
+        {
+            var q = from c in Form1.db.Fiscalyear where c.Company == Form1.currentcompany select c;
+            foreach (Fiscalyear fy in q)
+            {
+                if ((oldfy.Startdate - fy.Enddate).Days == 1)
+                    return fy;
+            }
+            return null;
+        }
+
+        public static Fiscalyear nextfiscal(Fiscalyear oldfy)
+        {
+            var q = from c in Form1.db.Fiscalyear where c.Company == Form1.currentcompany select c;
+            foreach (Fiscalyear fy in q)
+            {
+                if ((fy.Startdate - oldfy.Enddate).Days == 1)
+                    return fy;
+            }
+            return null;
         }
 
         public static string[] splitcsv(string line)
