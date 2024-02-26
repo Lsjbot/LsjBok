@@ -44,6 +44,8 @@ namespace LsjBok
             this.huvudbokbutton = new System.Windows.Forms.Button();
             this.importexportbutton = new System.Windows.Forms.Button();
             this.verbutton = new System.Windows.Forms.Button();
+            this.rrbutton = new System.Windows.Forms.Button();
+            this.balansbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // quitbutton
@@ -188,11 +190,33 @@ namespace LsjBok
             this.verbutton.UseVisualStyleBackColor = true;
             this.verbutton.Click += new System.EventHandler(this.verbutton_Click);
             // 
+            // rrbutton
+            // 
+            this.rrbutton.Location = new System.Drawing.Point(337, 135);
+            this.rrbutton.Name = "rrbutton";
+            this.rrbutton.Size = new System.Drawing.Size(166, 51);
+            this.rrbutton.TabIndex = 15;
+            this.rrbutton.Text = "Resultaträkning";
+            this.rrbutton.UseVisualStyleBackColor = true;
+            this.rrbutton.Click += new System.EventHandler(this.rrbutton_Click);
+            // 
+            // balansbutton
+            // 
+            this.balansbutton.Location = new System.Drawing.Point(337, 192);
+            this.balansbutton.Name = "balansbutton";
+            this.balansbutton.Size = new System.Drawing.Size(166, 58);
+            this.balansbutton.TabIndex = 16;
+            this.balansbutton.Text = "Balansräkning";
+            this.balansbutton.UseVisualStyleBackColor = true;
+            this.balansbutton.Click += new System.EventHandler(this.balansbutton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 450);
+            this.Controls.Add(this.balansbutton);
+            this.Controls.Add(this.rrbutton);
             this.Controls.Add(this.verbutton);
             this.Controls.Add(this.importexportbutton);
             this.Controls.Add(this.huvudbokbutton);
@@ -232,6 +256,8 @@ namespace LsjBok
         private System.Windows.Forms.Button huvudbokbutton;
         private System.Windows.Forms.Button importexportbutton;
         private System.Windows.Forms.Button verbutton;
+        private System.Windows.Forms.Button rrbutton;
+        private System.Windows.Forms.Button balansbutton;
     }
 }
 

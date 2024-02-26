@@ -224,5 +224,17 @@ namespace LsjBok
             FormVerifikatlista fv = new FormVerifikatlista();
             fv.Show();
         }
+
+        private void rrbutton_Click(object sender, EventArgs e)
+        {
+            FormRR frr = new FormRR("Resultaträkning");
+            frr.Show();
+        }
+
+        private void balansbutton_Click(object sender, EventArgs e)
+        {
+            FormRR frr = new FormRR("Balansräkning");
+            frr.Show();
+        }
     }
 }

@@ -96,6 +96,12 @@
     <Compile Include="FormImportExport.Designer.cs">
       <DependentUpon>FormImportExport.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormRR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRR.Designer.cs">
+      <DependentUpon>FormRR.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormVerifikatlista.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormImportExport.resx">
       <DependentUpon>FormImportExport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormRR.resx">
+      <DependentUpon>FormRR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormVerifikatlista.resx">
       <DependentUpon>FormVerifikatlista.cs</DependentUpon>
