@@ -100,33 +100,39 @@ namespace LsjBok
 
                     //Skapa momsperioder:
 
-                    int mm = fy.CompanyCompany.Momsfreq;
-                    int id = 1;
-                    if (Form1.db.Momsperiod.Count() > 0)
-                        id = (from c in Form1.db.Momsperiod select c.Id).Max() + 1;
-                    DateTime st = start;
-                    while (st < slut)
-                    {
-                        DateTime sl = st.AddMonths(mm).AddDays(-1);
-                        Momsperiod mp = new Momsperiod();
-                        mp.Id = id;
-                        mp.Startdate = st;
-                        mp.Enddate = sl;
-                        mp.Name = sl.Year.ToString() + sl.Month.ToString("D2");
-                        //mp.Company = Form1.currentcompany;
-                        mp.Fiscal = fy.Id;
-                        mp.Closed = false;
-                        mp.Net = 0;
-                        mp.Creator = Form1.currentuser;
-                        mp.Creationdate = DateTime.Now;
-                        Form1.db.Momsperiod.InsertOnSubmit(mp);
-                        st = st.AddMonths(mm);
-                        id++;
-                    }
-                    Form1.db.SubmitChanges();
+                    make_momsperiods(fy);
                     this.Close();
                 }
             }
+        }
+
+        public static void make_momsperiods(Fiscalyear fy)
+        {
+            int mm = fy.CompanyCompany.Momsfreq;
+            int id = 1;
+            if (Form1.db.Momsperiod.Count() > 0)
+                id = (from c in Form1.db.Momsperiod select c.Id).Max() + 1;
+            DateTime st = fy.Startdate;
+            while (st < fy.Enddate)
+            {
+                DateTime sl = st.AddMonths(mm).AddDays(-1);
+                Momsperiod mp = new Momsperiod();
+                mp.Id = id;
+                mp.Startdate = st;
+                mp.Enddate = sl;
+                mp.Name = sl.Year.ToString() + sl.Month.ToString("D2");
+                //mp.Company = Form1.currentcompany;
+                mp.Fiscal = fy.Id;
+                mp.Closed = false;
+                mp.Net = 0;
+                mp.Creator = Form1.currentuser;
+                mp.Creationdate = DateTime.Now;
+                Form1.db.Momsperiod.InsertOnSubmit(mp);
+                st = st.AddMonths(mm);
+                id++;
+            }
+            Form1.db.SubmitChanges();
+
         }
 
     }

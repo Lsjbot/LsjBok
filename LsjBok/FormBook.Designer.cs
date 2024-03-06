@@ -42,6 +42,9 @@ namespace LsjBok
             this.changebutton = new System.Windows.Forms.Button();
             this.mallbutton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.filedropbutton = new System.Windows.Forms.Button();
+            this.TBfilename = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // bookbutton
@@ -145,11 +148,43 @@ namespace LsjBok
             this.mallbutton.Text = "Spara som mall";
             this.mallbutton.UseVisualStyleBackColor = true;
             // 
+            // filedropbutton
+            // 
+            this.filedropbutton.AllowDrop = true;
+            this.filedropbutton.Location = new System.Drawing.Point(372, 36);
+            this.filedropbutton.Name = "filedropbutton";
+            this.filedropbutton.Size = new System.Drawing.Size(213, 59);
+            this.filedropbutton.TabIndex = 11;
+            this.filedropbutton.Text = "Välj underlagsfil...\r\n... eller släpp fil här.";
+            this.filedropbutton.UseVisualStyleBackColor = true;
+            this.filedropbutton.Click += new System.EventHandler(this.filedropbutton_Click);
+            this.filedropbutton.DragDrop += new System.Windows.Forms.DragEventHandler(this.filedropbutton_DragDrop);
+            this.filedropbutton.DragEnter += new System.Windows.Forms.DragEventHandler(this.filedropbutton_DragEnter);
+            // 
+            // TBfilename
+            // 
+            this.TBfilename.Location = new System.Drawing.Point(80, 75);
+            this.TBfilename.Name = "TBfilename";
+            this.TBfilename.Size = new System.Drawing.Size(286, 20);
+            this.TBfilename.TabIndex = 12;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 78);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(46, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Filnamn:";
+            // 
             // FormBook
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 781);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.TBfilename);
+            this.Controls.Add(this.filedropbutton);
             this.Controls.Add(this.mallbutton);
             this.Controls.Add(this.changebutton);
             this.Controls.Add(this.copybutton);
@@ -182,5 +217,8 @@ namespace LsjBok
         private System.Windows.Forms.Button changebutton;
         private System.Windows.Forms.Button mallbutton;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button filedropbutton;
+        private System.Windows.Forms.TextBox TBfilename;
+        private System.Windows.Forms.Label label4;
     }
 }

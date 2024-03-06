@@ -1,6 +1,8 @@
 USE [LsjBokDB]
 GO
 
+delete from Mallrad
+delete from Mall
 delete from Rad
 
 
@@ -12,6 +14,8 @@ delete from Fiscalyear
 delete from Company
 delete from Companytype
 delete from LsjBokUser
+DROP TABLE [dbo].[Mallrad]
+DROP TABLE [dbo].[Mall]
 DROP TABLE [dbo].[Rad]
 DROP TABLE [dbo].[Ver]
 DROP TABLE [dbo].[Momsentry]

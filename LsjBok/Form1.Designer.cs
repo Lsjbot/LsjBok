@@ -46,6 +46,7 @@ namespace LsjBok
             this.verbutton = new System.Windows.Forms.Button();
             this.rrbutton = new System.Windows.Forms.Button();
             this.balansbutton = new System.Windows.Forms.Button();
+            this.momsbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // quitbutton
@@ -210,11 +211,22 @@ namespace LsjBok
             this.balansbutton.UseVisualStyleBackColor = true;
             this.balansbutton.Click += new System.EventHandler(this.balansbutton_Click);
             // 
+            // momsbutton
+            // 
+            this.momsbutton.Location = new System.Drawing.Point(337, 256);
+            this.momsbutton.Name = "momsbutton";
+            this.momsbutton.Size = new System.Drawing.Size(166, 44);
+            this.momsbutton.TabIndex = 17;
+            this.momsbutton.Text = "Momsdeklaration";
+            this.momsbutton.UseVisualStyleBackColor = true;
+            this.momsbutton.Click += new System.EventHandler(this.momsbutton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 450);
+            this.Controls.Add(this.momsbutton);
             this.Controls.Add(this.balansbutton);
             this.Controls.Add(this.rrbutton);
             this.Controls.Add(this.verbutton);
@@ -258,6 +270,7 @@ namespace LsjBok
         private System.Windows.Forms.Button verbutton;
         private System.Windows.Forms.Button rrbutton;
         private System.Windows.Forms.Button balansbutton;
+        private System.Windows.Forms.Button momsbutton;
     }
 }
 

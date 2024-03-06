@@ -50,6 +50,8 @@ namespace LsjBok
             {"\u008f","Å" },
         };
 
+        // http://sietest.sie.se/ för att verifiera SIE-filer
+
         private void importbutton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -394,6 +396,8 @@ namespace LsjBok
 
                 foreach (Konto kkk in kontolist)
                 {
+                    if (kkk.Year != 0)
+                        continue;
                     kkk.Year = rarmatchdict[kkk.Year];
                     var qk = (from c in Form1.db.Konto
                               where c.Year == kkk.Year
@@ -413,7 +417,8 @@ namespace LsjBok
                         kkk.Konto3 = kkk.Number / 10;
                         kkk.Creator = Form1.currentuser;
                         kkk.Creationdate = DateTime.Now;
-                        kontoiddict.Add(kkk.Number, kkk.Id);
+                        if (kkk.Year == rarmatchdict[0])
+                            kontoiddict.Add(kkk.Number, kkk.Id);
                         Form1.db.Konto.InsertOnSubmit(kkk);
                         Form1.db.SubmitChanges();
                     }
@@ -433,6 +438,12 @@ namespace LsjBok
                 {
                     vv.Id = verid;
                     verid++;
+                    if (veriddict.ContainsKey(vv.Vernumber))
+                    {
+                        MessageBox.Show("VARNING: Två verifikat med samma nummer. Nummerbyte.","Nummerkonflikt",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                        while (veriddict.ContainsKey(vv.Vernumber))
+                            vv.Vernumber += 10000;
+                    }
                     veriddict.Add(vv.Vernumber, vv.Id);
                     vv.Year = rarmatchdict[0];
                     vv.Creator = Form1.currentuser;
@@ -468,7 +479,8 @@ namespace LsjBok
             using (
                 var sw = new StreamWriter(
                     new FileStream(fn, FileMode.CreateNew, FileAccess.Write),
-                    Encoding.GetEncoding("iso-8859-1")
+                    //Encoding.GetEncoding("iso-8859-1")
+                    Encoding.GetEncoding(437)
                 )
             )
             {
@@ -487,7 +499,7 @@ namespace LsjBok
                 fiscdict.Add(0, Form1.currentfiscal);
                 int fyid = Form1.currentfiscal;
                 Fiscalyear fy = currentfy;
-                sw.WriteLine("RAR 0 " + fy.Startdate.ToString("yyyyMMdd") + " " + fy.Enddate.ToString("yyyyMMdd"));
+                sw.WriteLine("#RAR 0 " + fy.Startdate.ToString("yyyyMMdd") + " " + fy.Enddate.ToString("yyyyMMdd"));
                 int n = 0;
                 do
                 {
@@ -496,7 +508,7 @@ namespace LsjBok
                     if (fy != null)
                     {
                         fiscdict.Add(n, fy.Id);
-                        sw.WriteLine("RAR "+n+" " + fy.Startdate.ToString("yyyyMMdd") + " " + fy.Enddate.ToString("yyyyMMdd"));
+                        sw.WriteLine("#RAR "+n+" " + fy.Startdate.ToString("yyyyMMdd") + " " + fy.Enddate.ToString("yyyyMMdd"));
                     }
                 }
                 while (fy != null);

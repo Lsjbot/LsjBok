@@ -21,6 +21,11 @@ namespace LsjBok
             }
             return fn;
         }
+
+        public static string getleaf(string fn)
+        {
+            return fn.Split('\\').Last();
+        }
         public static string getusername()
         {
             return getusername(Form1.currentuser);

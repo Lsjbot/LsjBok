@@ -29,6 +29,7 @@ namespace LsjBok
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormImportExport));
             this.closebutton = new System.Windows.Forms.Button();
             this.importbutton = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
@@ -69,11 +70,9 @@ namespace LsjBok
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(21, 315);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(229, 65);
+            this.label1.Size = new System.Drawing.Size(232, 78);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Begränsningar vid SIE-import:\r\nHanterar bara en verifikatserie.\r\nHanterar inte ob" +
-    "jekt.\r\nHanterar inte #BTRANS och #RTRANS\r\nHanterar inte utländsk valuta eller ol" +
-    "ika enheter\r\n";
+            this.label1.Text = resources.GetString("label1.Text");
             // 
             // exportbutton
             // 

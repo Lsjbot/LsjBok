@@ -33,6 +33,8 @@ namespace LsjBok
             this.createuserbutton = new System.Windows.Forms.Button();
             this.createcompanybutton = new System.Windows.Forms.Button();
             this.fiscalyearbutton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TBconnectionstring = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // createDBbutton
@@ -75,11 +77,29 @@ namespace LsjBok
             this.fiscalyearbutton.UseVisualStyleBackColor = true;
             this.fiscalyearbutton.Click += new System.EventHandler(this.fiscalyearbutton_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(55, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(192, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Connectionstring för att skapa databas:";
+            // 
+            // TBconnectionstring
+            // 
+            this.TBconnectionstring.Location = new System.Drawing.Point(42, 38);
+            this.TBconnectionstring.Name = "TBconnectionstring";
+            this.TBconnectionstring.Size = new System.Drawing.Size(424, 20);
+            this.TBconnectionstring.TabIndex = 5;
+            // 
             // FormAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(626, 450);
+            this.Controls.Add(this.TBconnectionstring);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.fiscalyearbutton);
             this.Controls.Add(this.createcompanybutton);
             this.Controls.Add(this.createuserbutton);
@@ -87,6 +107,7 @@ namespace LsjBok
             this.Name = "FormAdmin";
             this.Text = "FormAdmin";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -96,5 +117,7 @@ namespace LsjBok
         private System.Windows.Forms.Button createuserbutton;
         private System.Windows.Forms.Button createcompanybutton;
         private System.Windows.Forms.Button fiscalyearbutton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox TBconnectionstring;
     }
 }

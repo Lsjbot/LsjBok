@@ -22,6 +22,8 @@ namespace LsjBok
             f1 = ff;
 
             setbuttons();
+
+            TBconnectionstring.Text = Form1.connectionstring + "master";
         }
 
         private void setbuttons()
@@ -31,6 +33,7 @@ namespace LsjBok
                 foreach (Control c in this.Controls)
                     c.Enabled = false;
                 createDBbutton.Enabled = true;
+                TBconnectionstring.Enabled = true;
             }
             else if (Form1.currentuser < 0)
             {
@@ -62,9 +65,13 @@ namespace LsjBok
         {
             if (createDB(Form1.dbname))
             {
+                Form1.connectionstring = TBconnectionstring.Text.Replace("=master", "=");
+                using (StreamWriter sw = new StreamWriter(Form1.mainfolder + Form1.connectionfn))
+                    sw.WriteLine(Form1.connectionstring);
+
                 if (createTables(Form1.dbname))
                 {
-                    Form1.db = new LsjBokDB(Form1.connectionstring);
+                    Form1.db = new LsjBokDB(Form1.connectionstring+Form1.dbname);
                     //f1.bookbutton.Enabled = true;
                     foreach (Control c in this.Controls)
                         c.Enabled = true;
@@ -86,7 +93,7 @@ namespace LsjBok
 
             String str;
             SqlConnection myConn = 
-                new SqlConnection("Server=localhost;Integrated security=True;database=master");
+                new SqlConnection(TBconnectionstring.Text);
 
             str = "CREATE DATABASE " + dbname + " ON PRIMARY " +
              "(NAME = " + dbname + ", " +
@@ -125,7 +132,7 @@ namespace LsjBok
         {
             String str;
             SqlConnection myConn = 
-                new SqlConnection(Form1.connectionstring);
+                new SqlConnection(Form1.connectionstring+dbname);
 
             str =
 "create table LsjBokUser\n" +

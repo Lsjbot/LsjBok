@@ -6,19 +6,10 @@ using System.Threading.Tasks;
 
 namespace LsjBok
 {
-    public class rrbrclass
+    public class rrbrclass : kontogruppclass
     {
 
         public string field = "";
-        public string description = "";
-        public string konto1string = "";
-        public string konto2string = "";
-        public string konto3string = "";
-        public string konto4string = "";
-        public List<int> konto1list = new List<int>();
-        public List<int> konto2list = new List<int>();
-        public List<int> konto3list = new List<int>();
-        public List<int> konto4list = new List<int>();
         public int sign = 1;
         public string partof = "";
         public List<string> parts = new List<string>();
@@ -36,58 +27,14 @@ namespace LsjBok
             konto2string = k2;
             konto3string = k3;
             konto4string = k4;
-            if (!String.IsNullOrEmpty(k1))
-            {
-                foreach (string s in k1.Split(','))
-                {
-                    konto1list.Add(util.tryconvert(s));
-                }
-            }
-            if (!String.IsNullOrEmpty(k2))
-            {
-                foreach (string s in k2.Split(','))
-                {
-                    konto2list.Add(util.tryconvert(s));
-                }
-            }
-            if (!String.IsNullOrEmpty(k3))
-            {
-                foreach (string s in k3.Split(','))
-                {
-                    konto3list.Add(util.tryconvert(s));
-                }
-            }
-            if (!String.IsNullOrEmpty(k4))
-            {
-                foreach (string s in k4.Split(','))
-                {
-                    konto4list.Add(util.tryconvert(s));
-                }
-            }
+            stringtolists();
             sign = sg;
             partof = partofpar;
         }
 
-
-
-        public List<Konto> getkonto(int fiscalyear)
-        {
-            var q = from c in Form1.db.Konto where c.Year == fiscalyear select c;
-            var qq = from c in q.ToList()
-                     where 
-                     (  konto1list.Contains(c.Konto1)
-                     || konto2list.Contains(c.Konto2)
-                     || konto3list.Contains(c.Konto3)
-                     || konto4list.Contains(c.Number) )
-                     select c;
-            return qq.ToList();
-        }
-
         public decimal sumamount(int fiscalyear)
         {
-            decimal sum = 0;
-            foreach (Konto kk in getkonto(fiscalyear))
-                sum += kk.UB;
+            decimal sum = sumkonto(fiscalyear);
             sum = sign * sum;
             var qpr = from c in rrlist where c.partof == this.field select c;
             foreach (rrbrclass r in qpr)
@@ -98,13 +45,54 @@ namespace LsjBok
             return sum;
         }
 
-        public void checkallkonto()
+
+        public static List<int> checkallkonto(List<rrbrclass> rlist )
         {
             List<int> covered = new List<int>();
-            foreach (var rr in rrlist)
+            foreach (var rr in rlist)
             {
-
+                foreach (int i in rr.konto1list)
+                {
+                    for (int j=0;j<1000;j++)
+                    {
+                        int k = i*1000 + j;
+                        if (!covered.Contains(k))
+                            covered.Add(k);
+                        else
+                            Console.WriteLine("Dublett1 " + k + " " + rr.field);
+                    }
+                }
+                foreach (int i in rr.konto2list)
+                {
+                    for (int j = 0; j < 100; j++)
+                    {
+                        int k = i*100 + j;
+                        if (!covered.Contains(k))
+                            covered.Add(k);
+                        else
+                            Console.WriteLine("Dublett2 " + k + " " + rr.field);
+                    }
+                }
+                foreach (int i in rr.konto3list)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        int k = i*10 + j;
+                        if (!covered.Contains(k))
+                            covered.Add(k);
+                        else
+                            Console.WriteLine("Dublett3 " + k + " " + rr.field);
+                    }
+                }
+                foreach (int k in rr.konto4list)
+                {
+                    if (!covered.Contains(k))
+                        covered.Add(k);
+                    else
+                        Console.WriteLine("Dublett4 " + k + " " + rr.field);
+                }
             }
+            return covered;
         }
 
         public static void fill_rrbr()
@@ -132,11 +120,12 @@ namespace LsjBok
             rrlist.Add(new rrbrclass("Fält: Förändring av periodiseringsfonder", "", "", "", "881", "", 1, "Bokslutsdispositioner"));
             rrlist.Add(new rrbrclass("Fält: Erhållna koncernbidrag", "", "", "", "882", "", 1, "Bokslutsdispositioner"));
             rrlist.Add(new rrbrclass("Fält: Lämnade koncernbidrag", "", "", "", "883", "", 1, "Bokslutsdispositioner"));
-            rrlist.Add(new rrbrclass("Fält: Övriga bokslutsdispositioner", "", "", "", "884.886,887,888,889", "", 1, "Bokslutsdispositioner"));
+            rrlist.Add(new rrbrclass("Fält: Övriga bokslutsdispositioner", "", "", "", "884,886,887,888,889", "", 1, "Bokslutsdispositioner"));
             rrlist.Add(new rrbrclass("Fält: Förändring av överavskrivningar", "", "", "", "885", "", 1, "Bokslutsdispositioner"));
             rrlist.Add(new rrbrclass("Fält: Skatt på årets resultat", "Beskrivning: Skatt som belastar årets resultat. Här ingår beräknad skatt på årets resultat, men även t.ex. justeringar avseende tidigare års skatt.", "", "", "890,891,892,893,894,895,896,897", "", 1, "Skatter"));
             rrlist.Add(new rrbrclass("Fält: Övriga skatter", "Beskrivning: Används sällan.", "", "", "898", "", 1, "Skatter"));
-
+            rrlist.Add(new rrbrclass("Nedskrivningar", "", "", "", "817", "", 1, "Av- och nedskrivningar"));
+            rrlist.Add(new rrbrclass("Återföring av nedskrivningar", "", "", "", "818", "", 1, "Av- och nedskrivningar"));
 
 
 
@@ -188,23 +177,23 @@ namespace LsjBok
             brlist.Add(new rrbrclass("Fält: Fri överkursfond", "", "", "", "", "2097", -1, "Fritt eget kapital"));
             brlist.Add(new rrbrclass("Fält: Periodiseringsfonder", "Beskrivning: Man kan avsätta upp till 25% av resultat efter finansiella poster till periodiseringsfonden. Det är ett sätt att skjuta upp bolagsskatten i upp till fem år. Avsättningen måste återföras till beskattning senast på det sjätte året efter det att avsättningen gjordes.", "", "", "211,212,213,214", "", -1, "Obeskattade reserver"));
             brlist.Add(new rrbrclass("Fält: Ackumulerade överavskrivningar", "", "", "", "215", "", -1, "Obeskattade reserver"));
-            brlist.Add(new rrbrclass("Fält: Övriga obeskattade reserver", "", "", "", "216", "", -1, "Obeskattade reserver"));
+            brlist.Add(new rrbrclass("Fält: Övriga obeskattade reserver", "", "", "", "216,217,218,219", "", -1, "Obeskattade reserver"));
             brlist.Add(new rrbrclass("Fält: Avsättningar för pensioner och liknande förpliktelser enligt lagen (1967:531) om tryggande av pensionsutfästelse m.m.", "Beskrivning: Åtaganden för pensioner enligt tryggandelagen.", "", "", "221", "", -1, "Avsättningar"));
             brlist.Add(new rrbrclass("Fält: Övriga avsättningar", "Beskrivning: Andra avsättningar än för pensioner, t.ex. garantiåtaganden.", "", "", "222,225,226,227,228,229", "", -1, "Avsättningar"));
             brlist.Add(new rrbrclass("Fält: Övriga avsättningar för pensioner och liknande förpliktelser", "Beskrivning: Övriga pensionsåtaganden till nuvarande och tidigare anställda.", "", "", "223", "", -1, "Avsättningar"));
             brlist.Add(new rrbrclass("Fält: Obligationslån", "", "", "", "231,232", "", -1, "Långfristiga skulder"));
             brlist.Add(new rrbrclass("Fält: Checkräkningskredit", "", "", "", "233", "", -1, "Långfristiga skulder"));
-            brlist.Add(new rrbrclass("Fält: Övriga skulder till kreditinstitut", "", "", "", "234", "", -1, "Långfristiga skulder"));
+            brlist.Add(new rrbrclass("Fält: Övriga skulder till kreditinstitut", "", "", "", "234,235", "", -1, "Långfristiga skulder"));
             brlist.Add(new rrbrclass("Fält: Skulder till koncernföretag", "", "", "", "236", "", -1, "Långfristiga skulder"));
             brlist.Add(new rrbrclass("Fält: Skulder till intresseföretag och gemensamt styrda företag", "", "", "", "", "2370,2371,2372,2374,2375,2376,2377,2378,2379", -1, "Långfristiga skulder"));
             brlist.Add(new rrbrclass("Fält: Skulder till övriga företag som det finns ett ägarintresse i", "", "", "", "", "2373", -1, "Långfristiga skulder"));
-            brlist.Add(new rrbrclass("Fält: Övriga skulder", "", "", "", "", "239", -1, "Långfristiga skulder"));
-            brlist.Add(new rrbrclass("Fält: Övriga skulder till kreditinstitut", "", "", "", "", "241", -1, "Kortfristiga skulder"));
-            brlist.Add(new rrbrclass("Fält: Förskott från kunder", "", "", "", "", "242", -1, "Kortfristiga skulder"));
-            brlist.Add(new rrbrclass("Fält: Pågående arbete för annans räkning", "Beskrivning: Om du fyller i detta fält måste du även fylla i motsvarande not i avsnittet \"Noter\".", "", "", "", "243", -1, "Kortfristiga skulder"));
-            brlist.Add(new rrbrclass("Fält: Leverantörsskulder", "", "", "", "", "244", -1, "Kortfristiga skulder"));
-            brlist.Add(new rrbrclass("Fält: Fakturerad men ej upparbetad intäkt", "", "", "", "", "245", -1, "Kortfristiga skulder"));
-            brlist.Add(new rrbrclass("Fält: Skulder till koncernföretag", "", "", "", "", "246,286", -1, "Kortfristiga skulder"));
+            brlist.Add(new rrbrclass("Fält: Övriga skulder", "", "", "", "239", "", -1, "Långfristiga skulder"));
+            brlist.Add(new rrbrclass("Fält: Övriga skulder till kreditinstitut", "", "", "", "241", "", -1, "Kortfristiga skulder"));
+            brlist.Add(new rrbrclass("Fält: Förskott från kunder", "", "", "", "242", "", -1, "Kortfristiga skulder"));
+            brlist.Add(new rrbrclass("Fält: Pågående arbete för annans räkning", "Beskrivning: Om du fyller i detta fält måste du även fylla i motsvarande not i avsnittet \"Noter\".", "", "", "243", "", -1, "Kortfristiga skulder"));
+            brlist.Add(new rrbrclass("Fält: Leverantörsskulder", "", "", "", "244", "", -1, "Kortfristiga skulder"));
+            brlist.Add(new rrbrclass("Fält: Fakturerad men ej upparbetad intäkt", "", "", "", "245", "", -1, "Kortfristiga skulder"));
+            brlist.Add(new rrbrclass("Fält: Skulder till koncernföretag", "", "", "", "246,286", "", -1, "Kortfristiga skulder"));
             brlist.Add(new rrbrclass("Fält: Skulder till intresseföretag och gemensamt styrda företag", "", "", "", "", "2470,2471,2472,2474,2475,2476,2477,2478,2479,2870,2871,2872,2874,2875,2876,2877,2878,2879", -1, "Kortfristiga skulder"));
             brlist.Add(new rrbrclass("Fält: Skulder till övriga företag som det finns ett ägarintresse i", "", "", "", "", "2473,2873", -1, "Kortfristiga skulder"));
             brlist.Add(new rrbrclass("Fält: Checkräkningskredit", "", "", "", "248", "", -1, "Kortfristiga skulder"));
@@ -212,6 +201,17 @@ namespace LsjBok
             brlist.Add(new rrbrclass("Fält: Växelskulder", "", "", "", "", "2492", -1, "Kortfristiga skulder"));
             brlist.Add(new rrbrclass("Fält: Skatteskuld", "", "", "25", "", "", -1, "Skatteskulder"));
             brlist.Add(new rrbrclass("Fält: Upplupna kostnader och förutbetalda intäkter", "", "", "29", "", "", -1, "Kortfristiga skulder"));
+            brlist.Add(new rrbrclass("Utveckling", "", "", "", "101", "", 1, "Immateriella tillgångar"));
+            brlist.Add(new rrbrclass("Leasade tillgångar", "", "", "", "126", "", 1, "Anläggningstillgångar"));
+            brlist.Add(new rrbrclass("Uppskjuten skattefordran", "", "", "", "137", "", 1, "Långsiktiga fordringar"));
+            brlist.Add(new rrbrclass("Särskilda bankkonton", "", "", "", "197", "", 1, "Kassa och bank"));
+            brlist.Add(new rrbrclass("Eget kapital (firma/delägare)", "", "", "", "201,202,203,204", "", 1, "Eget kapital"));
+            brlist.Add(new rrbrclass("Avsättning till expansionsfond", "", "", "", "205", "", -1, "Eget kapital"));
+            brlist.Add(new rrbrclass("Eget kapital (ideell/stitelse mm)", "", "", "", "206", "", -1, "Eget kapital"));
+            brlist.Add(new rrbrclass("Ändamålsbestäma medel", "", "", "", "207", "", -1, "Eget kapital"));
+            brlist.Add(new rrbrclass("Fondmedel", "", "", "", "", "2088,2089,2096", -1, "Eget kapital"));
+            brlist.Add(new rrbrclass("Koncernbidrag", "", "", "", "", "2092", -1, "Eget kapital"));
+            brlist.Add(new rrbrclass("Avsättningar för uppskjutna skatter", "", "", "", "", "2240", -1, "Skatteskulder"));
 
 
             rrlist.Add(new rrbrclass("Resultaträkning", "", "", "", "", "", 1, ""));
@@ -330,7 +330,15 @@ namespace LsjBok
 
 
 
-
+            var covered = checkallkonto(rrlist);
+            covered.AddRange(checkallkonto(brlist));
+            foreach (int k in kontoclass.kontodict.Keys)
+            {
+                if (k < 1000)
+                    continue;
+                if (!covered.Contains(k))
+                    Console.WriteLine(k + " " + kontoclass.kontodict[k]);
+            }
         }
     }
 }

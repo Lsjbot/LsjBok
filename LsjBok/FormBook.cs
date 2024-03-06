@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace LsjBok
 {
@@ -15,7 +16,7 @@ namespace LsjBok
         static int maxrow = 20;
         static int defaultrow = 3;
         static int xbase = 10;
-        static int ybase = 100;
+        static int ybase = 200;
         static int numberwidth = 100;
         static int moneywidth = 150;
         static int sep = 10;
@@ -458,6 +459,7 @@ namespace LsjBok
             vv.Year = localfiscal;
             vv.Creator = Form1.currentuser;
             vv.Creationdate = DateTime.Now;
+            
             DateTime? verdate = util.parsedate(TBdate.Text);
             if (!util.infiscal(verdate))
             {
@@ -566,6 +568,18 @@ namespace LsjBok
             else
                 TBdiff.ForeColor = Color.Black;
 
+            if (!string.IsNullOrEmpty(TBfilename.Text) && File.Exists(TBfilename.Text))
+            {
+                string dir = Form1.mainfolder + "\\" + util.getcompanyname() + " " + util.getfiscalname()+"\\";
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                string fn = dir + "V" + vv.Vernumber + " " + util.getleaf(TBfilename.Text);
+                File.Copy(TBfilename.Text, fn);
+                vv.Verifikatfil = fn;
+            }
+
             Form1.db.Ver.InsertOnSubmit(vv);
             Form1.db.SubmitChanges();
 
@@ -673,6 +687,29 @@ namespace LsjBok
                 toolTip1.SetToolTip(sender as Control, "Lägg till ny rad (max 20)");
             else
                 toolTip1.SetToolTip(sender as Control, "Ta bort den här raden");
+        }
+
+        private void filedropbutton_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void filedropbutton_DragDrop(object sender, DragEventArgs e)
+        {
+            var q = e.Data.GetData(DataFormats.FileDrop) as string[];
+            TBfilename.Text = q[0];
+        }
+
+        private void filedropbutton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog of = new OpenFileDialog();
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                TBfilename.Text = of.FileName;
+            }
         }
     }
 }

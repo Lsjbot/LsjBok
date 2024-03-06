@@ -15,9 +15,10 @@ namespace LsjBok
     {
         public static string mainfolder;
         public static string folderfn = "lsjbokfolder.txt";
+        public static string connectionfn = "connectionstring.txt";
         public static string dbname = "LsjBokDB";
-        public static string connectionstring = 
-            "Server=localhost;Integrated security=True;database=" + dbname;
+        public static string connectionstring =
+            "Server=localhost;Integrated security=True;database=";// + dbname;
         public static LsjBokDB db = null;
         public static int currentuser = -1;
         public static int currentcompany = -1;
@@ -39,9 +40,15 @@ namespace LsjBok
             }
             folderlabel.Text = mainfolder;
 
+            if (File.Exists(mainfolder+connectionfn))
+            {
+                using (StreamReader sr = new StreamReader(mainfolder + connectionfn))
+                    connectionstring = sr.ReadLine();
+            }
+
             try
             {
-                db = new LsjBokDB(connectionstring);
+                db = new LsjBokDB(connectionstring+dbname);
                 db.LsjBokUser.Count();
             }
             catch (Exception e)
@@ -235,6 +242,12 @@ namespace LsjBok
         {
             FormRR frr = new FormRR("Balansräkning");
             frr.Show();
+        }
+
+        private void momsbutton_Click(object sender, EventArgs e)
+        {
+            FormMoms fm = new FormMoms();
+            fm.Show();
         }
     }
 }
