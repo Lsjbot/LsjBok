@@ -117,4 +117,11 @@ Kontonr integer not null,
 Amount money not null, --  +=debet, -=kredit
 )
 
-
+create table Log
+(
+Id integer not null primary key,
+Description nvarchar(250) not null,
+Event integer not null,
+Creator integer not null foreign key references LsjBokUser(Id),
+Creationdate date not null
+)

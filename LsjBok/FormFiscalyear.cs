@@ -96,6 +96,8 @@ namespace LsjBok
                     fy.Creationdate = DateTime.Now;
                     Form1.db.Fiscalyear.InsertOnSubmit(fy);
                     Form1.db.SubmitChanges();
+                    util.logentry("Skapar räkenskapsår " + fy.Name, fy.Id);
+
                     Form1.currentfiscal = fy.Id;
 
                     //Skapa momsperioder:

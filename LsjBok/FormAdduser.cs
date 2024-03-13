@@ -53,6 +53,7 @@ namespace LsjBok
             lb.Name = TBnamn.Text;
             Form1.db.LsjBokUser.InsertOnSubmit(lb);
             Form1.db.SubmitChanges();
+            util.logentry("Skapar användare " + lb.Name, lb.Id);
 
             Form1.currentuser = lb.Id;
 

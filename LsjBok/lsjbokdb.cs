@@ -40,6 +40,9 @@ public partial class LsjBokDB : System.Data.Linq.DataContext
   partial void InsertKonto(Konto instance);
   partial void UpdateKonto(Konto instance);
   partial void DeleteKonto(Konto instance);
+  partial void InsertLog(Log instance);
+  partial void UpdateLog(Log instance);
+  partial void DeleteLog(Log instance);
   partial void InsertLsjBokUser(LsjBokUser instance);
   partial void UpdateLsjBokUser(LsjBokUser instance);
   partial void DeleteLsjBokUser(LsjBokUser instance);
@@ -116,6 +119,14 @@ public partial class LsjBokDB : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<Konto>();
+		}
+	}
+	
+	public System.Data.Linq.Table<Log> Log
+	{
+		get
+		{
+			return this.GetTable<Log>();
 		}
 	}
 	
@@ -1647,6 +1658,205 @@ public partial class Konto : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 }
 
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Log")]
+public partial class Log : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _Id;
+	
+	private string _Description;
+	
+	private int _Event;
+	
+	private int _Creator;
+	
+	private System.DateTime _Creationdate;
+	
+	private EntityRef<LsjBokUser> _LsjBokUser;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnEventChanging(int value);
+    partial void OnEventChanged();
+    partial void OnCreatorChanging(int value);
+    partial void OnCreatorChanged();
+    partial void OnCreationdateChanging(System.DateTime value);
+    partial void OnCreationdateChanged();
+    #endregion
+	
+	public Log()
+	{
+		this._LsjBokUser = default(EntityRef<LsjBokUser>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+	public int Id
+	{
+		get
+		{
+			return this._Id;
+		}
+		set
+		{
+			if ((this._Id != value))
+			{
+				this.OnIdChanging(value);
+				this.SendPropertyChanging();
+				this._Id = value;
+				this.SendPropertyChanged("Id");
+				this.OnIdChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(250) NOT NULL", CanBeNull=false)]
+	public string Description
+	{
+		get
+		{
+			return this._Description;
+		}
+		set
+		{
+			if ((this._Description != value))
+			{
+				this.OnDescriptionChanging(value);
+				this.SendPropertyChanging();
+				this._Description = value;
+				this.SendPropertyChanged("Description");
+				this.OnDescriptionChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Event", DbType="Int NOT NULL")]
+	public int Event
+	{
+		get
+		{
+			return this._Event;
+		}
+		set
+		{
+			if ((this._Event != value))
+			{
+				this.OnEventChanging(value);
+				this.SendPropertyChanging();
+				this._Event = value;
+				this.SendPropertyChanged("Event");
+				this.OnEventChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Creator", DbType="Int NOT NULL")]
+	public int Creator
+	{
+		get
+		{
+			return this._Creator;
+		}
+		set
+		{
+			if ((this._Creator != value))
+			{
+				if (this._LsjBokUser.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnCreatorChanging(value);
+				this.SendPropertyChanging();
+				this._Creator = value;
+				this.SendPropertyChanged("Creator");
+				this.OnCreatorChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Creationdate", DbType="Date NOT NULL")]
+	public System.DateTime Creationdate
+	{
+		get
+		{
+			return this._Creationdate;
+		}
+		set
+		{
+			if ((this._Creationdate != value))
+			{
+				this.OnCreationdateChanging(value);
+				this.SendPropertyChanging();
+				this._Creationdate = value;
+				this.SendPropertyChanged("Creationdate");
+				this.OnCreationdateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK__Log__Creator__49C3F6B7", Storage="_LsjBokUser", ThisKey="Creator", OtherKey="Id", IsForeignKey=true)]
+	public LsjBokUser LsjBokUser
+	{
+		get
+		{
+			return this._LsjBokUser.Entity;
+		}
+		set
+		{
+			LsjBokUser previousValue = this._LsjBokUser.Entity;
+			if (((previousValue != value) 
+						|| (this._LsjBokUser.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._LsjBokUser.Entity = null;
+					previousValue.Log.Remove(this);
+				}
+				this._LsjBokUser.Entity = value;
+				if ((value != null))
+				{
+					value.Log.Add(this);
+					this._Creator = value.Id;
+				}
+				else
+				{
+					this._Creator = default(int);
+				}
+				this.SendPropertyChanged("LsjBokUser");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LsjBokUser")]
 public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChanged
 {
@@ -1666,6 +1876,8 @@ public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChange
 	private EntitySet<Fiscalyear> _Fiscalyear;
 	
 	private EntitySet<Konto> _Konto;
+	
+	private EntitySet<Log> _Log;
 	
 	private EntitySet<Mall> _Mall;
 	
@@ -1691,6 +1903,7 @@ public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChange
 		this.@__Company__Creator__2A4B4B5E = new EntitySet<Company>(new Action<Company>(this.attach__Company__Creator__2A4B4B5E), new Action<Company>(this.detach__Company__Creator__2A4B4B5E));
 		this._Fiscalyear = new EntitySet<Fiscalyear>(new Action<Fiscalyear>(this.attach_Fiscalyear), new Action<Fiscalyear>(this.detach_Fiscalyear));
 		this._Konto = new EntitySet<Konto>(new Action<Konto>(this.attach_Konto), new Action<Konto>(this.detach_Konto));
+		this._Log = new EntitySet<Log>(new Action<Log>(this.attach_Log), new Action<Log>(this.detach_Log));
 		this._Mall = new EntitySet<Mall>(new Action<Mall>(this.attach_Mall), new Action<Mall>(this.detach_Mall));
 		this._Momsperiod = new EntitySet<Momsperiod>(new Action<Momsperiod>(this.attach_Momsperiod), new Action<Momsperiod>(this.detach_Momsperiod));
 		this._Ver = new EntitySet<Ver>(new Action<Ver>(this.attach_Ver), new Action<Ver>(this.detach_Ver));
@@ -1809,6 +2022,19 @@ public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChange
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK__Log__Creator__49C3F6B7", Storage="_Log", ThisKey="Id", OtherKey="Creator", DeleteRule="NO ACTION")]
+	public EntitySet<Log> Log
+	{
+		get
+		{
+			return this._Log;
+		}
+		set
+		{
+			this._Log.Assign(value);
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK__Mall__Creator__4316F928", Storage="_Mall", ThisKey="Id", OtherKey="Creator", DeleteRule="NO ACTION")]
 	public EntitySet<Mall> Mall
 	{
@@ -1911,6 +2137,18 @@ public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChange
 	}
 	
 	private void detach_Konto(Konto entity)
+	{
+		this.SendPropertyChanging();
+		entity.LsjBokUser = null;
+	}
+	
+	private void attach_Log(Log entity)
+	{
+		this.SendPropertyChanging();
+		entity.LsjBokUser = this;
+	}
+	
+	private void detach_Log(Log entity)
 	{
 		this.SendPropertyChanging();
 		entity.LsjBokUser = null;

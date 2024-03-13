@@ -72,6 +72,8 @@ namespace LsjBok
             Form1.db.Company.InsertOnSubmit(cc);
             Form1.db.SubmitChanges();
 
+            util.logentry("Skapar företag " + cc.Name, cc.Id);
+
             Form1.currentcompany = cc.Id;
             
             this.Close();

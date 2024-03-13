@@ -10,6 +10,7 @@ namespace LsjBok
 {
     class util
     {
+        private static int nextlogid = -1;
         public static string unused_filename(string fnbase)
         {
             string fn = fnbase;
@@ -276,6 +277,32 @@ namespace LsjBok
             return false;
         }
 
+        private static int getnextlogid()
+        {
+            if (nextlogid < 0)
+            {
+                var q = from c in Form1.db.Log select c.Id;
+                nextlogid = q.Count() + 1;
+                //if (q.Count() == 0)
+                //    nextlogid = 1;
+                //else
+                //    nextlogid = q.Max() + 1;
+            }
+            else
+                nextlogid++;
+            return nextlogid;
+        }
 
+        public static void logentry(string desc, int evid)
+        {
+            Log ll = new Log();
+            ll.Id = getnextlogid();
+            ll.Description = desc;
+            ll.Event = evid;
+            ll.Creator = Form1.currentuser;
+            ll.Creationdate = DateTime.Now;
+            Form1.db.Log.InsertOnSubmit(ll);
+            Form1.db.SubmitChanges();
+        }
     }
 }

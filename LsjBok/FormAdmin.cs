@@ -250,7 +250,16 @@ namespace LsjBok
 "Mall integer not null foreign key references Mall(Id),\n" +
 "Kontonr integer not null,\n" +
 "Amount money not null, --  +=debet, -=kredit\n" +
-")\n" 
+")\n" +
+"create table Log\n" +
+"(\n" +
+"Id integer not null primary key,\n" +
+"Description nvarchar(250) not null,\n" +
+"Event integer not null,\n" +
+"Creator integer not null foreign key references LsjBokUser(Id),\n" +
+"Creationdate date not null\n" +
+")\n"
+
 ;
 
             bool success;

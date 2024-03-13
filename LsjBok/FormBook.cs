@@ -582,6 +582,8 @@ namespace LsjBok
 
             Form1.db.Ver.InsertOnSubmit(vv);
             Form1.db.SubmitChanges();
+            util.logentry("Skapar verifikat " + vv.Vernumber+" "+vv.Description, vv.Id);
+
 
             Form1.db.Konto.InsertAllOnSubmit(lkonto);
             Form1.db.SubmitChanges();
@@ -638,6 +640,8 @@ namespace LsjBok
 
             Form1.db.Ver.InsertOnSubmit(vv);
             Form1.db.SubmitChanges();
+            util.logentry("Annulerar verifikat " + vvin.Vernumber + " genom verifikat "+vv.Vernumber, vv.Id);
+
 
             Form1.db.Rad.InsertAllOnSubmit(lrad);
             Form1.db.SubmitChanges();

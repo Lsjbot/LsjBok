@@ -465,6 +465,8 @@ namespace LsjBok
                 }
                 Form1.db.SubmitChanges();
 
+                util.logentry("Importerar " + fn, -1);
+
                 memo("Import av " + fn + " slutförd!");
                 memo("======================================================");
             }
@@ -559,6 +561,7 @@ namespace LsjBok
                     }
                     sw.WriteLine("}");
                 }
+                util.logentry("Exporterar till " + fn, -1);
                 memo("== Export till SIE klar ==");
             }
 
