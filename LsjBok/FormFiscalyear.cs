@@ -12,25 +12,6 @@ namespace LsjBok
 {
     public partial class FormFiscalyear : Form
     {
-        public static Fiscalyear find_latest(int company)
-        {
-            var q = from c in Form1.db.Fiscalyear where c.Company == company select c;
-            if (q.Count() > 0)
-            {
-                int year = -1;
-                Fiscalyear latest = null;
-                foreach (var c in q)
-                {
-                    if (c.Startdate.Year > year)
-                    {
-                        year = c.Startdate.Year;
-                        latest = c;
-                    }
-                }
-                return latest;
-            }
-            return null;
-        }
         public FormFiscalyear()
         {
             InitializeComponent();
@@ -135,6 +116,55 @@ namespace LsjBok
             }
             Form1.db.SubmitChanges();
 
+        }
+        public static Fiscalyear find_latest(int company)
+        {
+            var q = from c in Form1.db.Fiscalyear where c.Company == company select c;
+            if (q.Count() > 0)
+            {
+                int year = -1;
+                Fiscalyear latest = null;
+                foreach (var c in q)
+                {
+                    if (c.Startdate.Year > year)
+                    {
+                        year = c.Startdate.Year;
+                        latest = c;
+                    }
+                }
+                return latest;
+            }
+            return null;
+        }
+
+        public static TimeSpan oneday = new TimeSpan(24, 0, 0);
+
+        public static Fiscalyear previousfiscal(Fiscalyear old)
+        {
+            var q = from c in Form1.db.Fiscalyear where c.Company == old.Company select c;
+            if (q.Count() > 0)
+            {
+                foreach (Fiscalyear fy in q)
+                {
+                    if (old.Startdate - fy.Enddate == oneday)
+                        return fy;
+                }
+            }
+            return null;
+        }
+
+        public static Fiscalyear nextfiscal(Fiscalyear old)
+        {
+            var q = from c in Form1.db.Fiscalyear where c.Company == old.Company select c;
+            if (q.Count() > 0)
+            {
+                foreach (Fiscalyear fy in q)
+                {
+                    if (fy.Startdate - old.Enddate == oneday)
+                        return fy;
+                }
+            }
+            return null;
         }
 
     }
