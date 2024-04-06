@@ -13,7 +13,7 @@ namespace LsjBok
     public partial class FormRR : Form
     {
         TreeView tree = new TreeView();
-        int localfiscal = Form1.currentfiscal;
+        int localfiscal = common.currentfiscal;
         string headerstring = "";
         public FormRR(string headerpar)
         {
@@ -22,7 +22,7 @@ namespace LsjBok
             if (rrbrclass.rrlist.Count == 0)
                 rrbrclass.fill_rrbr();
             updatetitle();
-            tree.Font = new Font(FontFamily.GenericMonospace, 12);
+            tree.Font = new Font(FontFamily.GenericMonospace, 11);
 
             filltree();
 
@@ -34,12 +34,19 @@ namespace LsjBok
 
             tree.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(tree_NodeMouseDoubleClick);
 
-            foreach (var fy in (from c in Form1.db.Fiscalyear where c.Company == Form1.currentcompany select c))
+            foreach (var fy in (from c in common.db.Fiscalyear where c.Company == common.currentcompany select c))
             {
                 LBfiscal.Items.Add(fy.Name);
-                if (fy.Id == Form1.currentfiscal)
+                if (fy.Id == common.currentfiscal)
+                {
                     LBfiscal.SelectedItem = fy.Name;
+                    TBstart.Text = fy.Startdate.ToString("yyMMdd");
+                    TBslut.Text =  fy.Enddate.ToString("yyMMdd");
+                }
             }
+
+            TBstart.LostFocus += new EventHandler(TBdate_LostFocus);
+            TBslut.LostFocus +=  new EventHandler(TBdate_LostFocus);
         }
 
         public void filltree()
@@ -53,6 +60,14 @@ namespace LsjBok
 
             string dashline = "".PadRight(80, '-');
 
+            DateTime start = fiscalclass.infiscal(util.parsedate(TBstart.Text)) ?
+                (DateTime)util.parsedate(TBstart.Text) :
+                fiscalclass.getfiscal(localfiscal).Startdate;
+            DateTime end = fiscalclass.infiscal(util.parsedate(TBslut.Text)) ?
+                (DateTime)util.parsedate(TBslut.Text) :
+                fiscalclass.getfiscal(localfiscal).Enddate;
+
+
             if (headerstring == "Resultaträkning")
             {
                 rrbrclass rrtop = (from c in rrbrclass.rrlist where c.field == "Resultaträkning" select c).First();
@@ -63,38 +78,42 @@ namespace LsjBok
                 rrbrclass bokdisp = (from c in rrbrclass.rrlist where c.field == "Bokslutsdispositioner" select c).First();
                 rrbrclass skatt = (from c in rrbrclass.rrlist where c.field == "Skatter" select c).First();
 
-                TreeNode rrnode = tree.Nodes.Add(rrtop.field + " | " + (intakt.sumamount(localfiscal)-kostnad.sumamount(localfiscal)).ToString("N2"));
-                addtree(rrnode, intakt, 0,rrbrclass.rrlist);
-                addtree(rrnode, kostnad, 0, rrbrclass.rrlist);
+                decimal rorelseresultat = -intakt.sumamount_transactions(localfiscal, start, end) - kostnad.sumamount_transactions(localfiscal, start, end);
+                TreeNode rrnode = tree.Nodes.Add(rrtop.field + " | " + (rorelseresultat).ToString("N2"));
+                addtreeRR(rrnode, intakt, 0,rrbrclass.rrlist, start, end);
+                addtreeRR(rrnode, kostnad, 0, rrbrclass.rrlist, start, end);
                 rrnode.Nodes.Add(dashline);
-                decimal rorelseresultat = intakt.sumamount(localfiscal) - kostnad.sumamount(localfiscal);
                 TreeNode roresnode = rrnode.Nodes.Add(RRrow("Rörelseresultat", 0, rorelseresultat));
                 roresnode.NodeFont = new Font(tree.Font, FontStyle.Bold);
                 rrnode.Nodes.Add(dashline);
-                addtree(rrnode, finans, 0, rrbrclass.rrlist);
-                decimal resultatfinans = rorelseresultat - finans.sumamount(localfiscal);
+                addtreeRR(rrnode, finans, 0, rrbrclass.rrlist, start, end);
+                decimal resultatfinans = rorelseresultat - finans.sumamount_transactions(localfiscal, start, end);
                 TreeNode firesnode = rrnode.Nodes.Add(RRrow("Resultat efter finansiella poster", 0, resultatfinans));
                 firesnode.NodeFont = new Font(tree.Font, FontStyle.Bold);
-                addtree(rrnode, bokdisp, 0, rrbrclass.rrlist);
-                decimal resultatbokdisp = resultatfinans - bokdisp.sumamount(localfiscal);
+                addtreeRR(rrnode, bokdisp, 0, rrbrclass.rrlist, start, end);
+                decimal resultatbokdisp = resultatfinans - bokdisp.sumamount_transactions(localfiscal, start, end);
                 TreeNode bokresnode = rrnode.Nodes.Add(RRrow("Resultat efter bokslutsdispositioner", 0, resultatbokdisp));
                 bokresnode.NodeFont = new Font(tree.Font, FontStyle.Bold);
-                addtree(rrnode, skatt, 0, rrbrclass.rrlist);
+                addtreeRR(rrnode, skatt, 0, rrbrclass.rrlist, start, end);
+                decimal resultatefterskatt = resultatbokdisp - skatt.sumamount_transactions(localfiscal, start, end);
+                TreeNode efterskattnode = rrnode.Nodes.Add(RRrow("Resultat efter skatt", 0, resultatefterskatt));
                 rrnode.Expand();
             }
             else if (headerstring == "Balansräkning")
             {
                 rrbrclass rrtop = (from c in rrbrclass.brlist where c.field == "Balansräkning" select c).First();
 
-                rrbrclass tillgang = (from c in rrbrclass.brlist where c.field == "Tillgångar" select c).First();
-                rrbrclass skuld = (from c in rrbrclass.brlist where c.field == "Eget kapital och skulder" select c).First();
+                rrbrclass tillgang = rrbrclass.get_assets();// (from c in rrbrclass.brlist where c.field == "Tillgångar" select c).First();
+                rrbrclass skuld = rrbrclass.get_debts();// (from c in rrbrclass.brlist where c.field == "Eget kapital och skulder" select c).First();
 
-                decimal ts = tillgang.sumamount(localfiscal) - skuld.sumamount(localfiscal);
-                string balansvarning = ts == 0 ? "" : " !!! EJ I BALANS !!!";
-                TreeNode rrnode = tree.Nodes.Add(rrtop.field + " | " + ts.ToString("N2")+balansvarning);
-                addtree(rrnode, tillgang, 0, rrbrclass.brlist);
+                decimal tsIB = tillgang.sumamount_UB(localfiscal, start) + skuld.sumamount_UB(localfiscal, start);
+                decimal tsUB = tillgang.sumamount_UB(localfiscal, end) + skuld.sumamount_UB(localfiscal, end);
+                string balansvarningIB = tsIB == 0 ? "" : " !!! EJ I BALANS !!!";
+                string balansvarningUB = tsUB == 0 ? "" : " !!! EJ I BALANS !!!";
+                TreeNode rrnode = tree.Nodes.Add(rrtop.field + " | IB " + tsIB.ToString("N2")+ balansvarningIB + " | UB " + tsUB.ToString("N2") + balansvarningUB);
+                addtreeBR(rrnode, tillgang, 0, rrbrclass.brlist, start, end);
                 rrnode.Nodes.Add(dashline);
-                addtree(rrnode, skuld, 0, rrbrclass.brlist);
+                addtreeBR(rrnode, skuld, 0, rrbrclass.brlist, start, end);
                 //decimal balans = tillgang.sumamount(localfiscal) - skuld.sumamount(localfiscal);
                 rrnode.Expand();
             }
@@ -109,21 +128,49 @@ namespace LsjBok
             return s;
         }
 
-        public void addtree(TreeNode rootnode,rrbrclass rootrr,int level, List<rrbrclass> rrlist)
+        public string BRrow(string label, int level, decimal IB, decimal UB)
         {
-            TreeNode newnode = rootnode.Nodes.Add(RRrow(rootrr.field,level,rootrr.sumamount(localfiscal)));
+            string s = label.PadRight(60 - 2 * level) + " | IB " + IB.ToString("N2").PadLeft(12) + " | UB " + UB.ToString("N2").PadLeft(12);
+            return s;
+        }
+
+        public void addtreeRR(TreeNode rootnode,rrbrclass rootrr,int level, List<rrbrclass> rrlist,DateTime start, DateTime end)
+        {
+            TreeNode newnode = rootnode.Nodes.Add(RRrow(rootrr.field,level,-rootrr.sumamount_transactions(localfiscal, start, end)));
             if (!String.IsNullOrEmpty(rootrr.description))
                 newnode.ToolTipText = rootrr.description;
             foreach (var rr in (from c in rrlist where c.partof == rootrr.field select c))
             {
-                if (rr.sumamount(localfiscal) != 0)
-                    addtree(newnode, rr,level+1,rrlist);
+                //if (rr.sumamount(localfiscal, start, end) != 0)
+                    addtreeRR(newnode, rr,level+1,rrlist,start,end);
+            }
+            foreach (Konto kk in rootrr.getkonto(localfiscal))
+            {
+                decimal sum = kontoclass.UB(kk, end) - kontoclass.UB(kk, start);
+                if (sum != 0)
+                {
+                    TreeNode knode = newnode.Nodes.Add(RRrow(kk.Number + " | " + kk.Name, level + 1, sum));
+                    //knode.ToolTipText = kk.
+                }
+            }
+        }
+
+        public void addtreeBR(TreeNode rootnode, rrbrclass rootrr, int level, List<rrbrclass> rrlist, DateTime start, DateTime end)
+        {
+            TreeNode newnode = rootnode.Nodes.Add(BRrow(rootrr.field, level, rootrr.sumamount_UB(localfiscal, start), rootrr.sumamount_UB(localfiscal, end)));
+            if (!String.IsNullOrEmpty(rootrr.description))
+                newnode.ToolTipText = rootrr.description;
+            foreach (var rr in (from c in rrlist where c.partof == rootrr.field select c))
+            {
+                //if (rr.sumamount(localfiscal, start, end) != 0)
+                addtreeBR(newnode, rr, level + 1, rrlist, start, end);
             }
             foreach (Konto kk in rootrr.getkonto(localfiscal))
             {
                 if (kk.UB != 0)
                 {
-                    TreeNode knode = newnode.Nodes.Add(RRrow(kk.Number + " | " + kk.Name, level + 1, rootrr.sign * kk.UB));
+                    //TreeNode knode = newnode.Nodes.Add(BRrow(kk.Number + " | " + kk.Name, level + 1, rootrr.sign * kk.UB));
+                    TreeNode knode = newnode.Nodes.Add(BRrow(kk.Number + " | " + kk.Name, level + 1, kontoclass.UB(kk,start),kontoclass.UB(kk,end)));
                     //knode.ToolTipText = kk.
                 }
             }
@@ -147,7 +194,7 @@ namespace LsjBok
                 if (e.Node.Text.Contains("Ver.nr"))
                 {
                     int radid = util.tryconvert(e.Node.Text.Split('#').Last().Trim());
-                    Rad rr = (from c in Form1.db.Rad where c.Id == radid select c).First();
+                    Rad rr = (from c in common.db.Rad where c.Id == radid select c).First();
                     //int vernr = util.tryconvert(e.Node.Text.Split('|')[0].Replace("Ver.nr", "").Trim());
                     FormBook fbn = new FormBook(rr.VerVer, false);
                     fbn.Show();
@@ -160,20 +207,33 @@ namespace LsjBok
             }
         }
 
+        private void TBdate_LostFocus(object sender, EventArgs e)
+        {
+            updatetree();
+        }
+
+
+        private void updatetree()
+        {
+            tree.Nodes.Clear();
+            filltree();
+            updatetitle();
+        }
+
         private void LBfiscal_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (LBfiscal.SelectedItem != null)
             {
-                var q = from c in Form1.db.Fiscalyear
-                        where c.Company == Form1.currentcompany
+                var q = from c in common.db.Fiscalyear
+                        where c.Company == common.currentcompany
                         where c.Name == LBfiscal.SelectedItem.ToString()
                         select c;
                 if (q.Count() > 0)
                 {
                     localfiscal = q.First().Id;
-                    tree.Nodes.Clear();
-                    filltree();
-                    updatetitle();
+                    TBstart.Text = q.First().Startdate.ToString("yyMMdd");
+                    TBslut.Text = q.First().Enddate.ToString("yyMMdd");
+                    updatetree();
                 }
             }
         }

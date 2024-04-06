@@ -42,7 +42,7 @@ namespace LsjBok
 
         Ver vvin = null;
         bool makecopy = false;
-        int localfiscal = Form1.currentfiscal;
+        int localfiscal = common.currentfiscal;
 
         public FormBook()
         {
@@ -100,7 +100,7 @@ namespace LsjBok
                 mallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
             }
 
-            var qrad = from c in Form1.db.Rad where c.Ver == vvin.Id select c;
+            var qrad = from c in common.db.Rad where c.Ver == vvin.Id select c;
             int i = 0;
             foreach (Rad rr in qrad)
             {
@@ -411,16 +411,16 @@ namespace LsjBok
 
             if (makecopy)
             {
-                foreach (int fi in (from c in Form1.db.Fiscalyear where c.Company == Form1.currentcompany select c.Id))
+                foreach (int fi in (from c in common.db.Fiscalyear where c.Company == common.currentcompany select c.Id))
                 {
-                    if (util.infiscal(verdate,fi))
+                    if (fiscalclass.infiscal(verdate,fi))
                     {
                         localfiscal = fi;
                         break;
                     }
                 }
             }
-            if (!util.infiscal(verdate,localfiscal))
+            if (!fiscalclass.infiscal(verdate,localfiscal))
             {
                 TBdate.ForeColor = Color.Red;
                 return false;
@@ -439,7 +439,7 @@ namespace LsjBok
 
         private int nextvernumber()
         {
-            var qv = from c in Form1.db.Ver where c.Year == localfiscal select c.Vernumber;
+            var qv = from c in common.db.Ver where c.Year == localfiscal select c.Vernumber;
             if (qv.Count() == 0)
                 return 1;
             else
@@ -450,18 +450,18 @@ namespace LsjBok
         {
             Ver vv = new Ver();
             int vvid = 1;
-            var q = from c in Form1.db.Ver select c.Id;
+            var q = from c in common.db.Ver select c.Id;
             if (q.Count() > 0)
                 vvid = q.Max() + 1;
             vv.Id = vvid;
             vv.Vernumber = nextvernumber();
             vv.Description = TBdecription.Text;
             vv.Year = localfiscal;
-            vv.Creator = Form1.currentuser;
+            vv.Creator = common.currentuser;
             vv.Creationdate = DateTime.Now;
             
             DateTime? verdate = util.parsedate(TBdate.Text);
-            if (!util.infiscal(verdate))
+            if (!fiscalclass.infiscal(verdate))
             {
                 TBdate.ForeColor = Color.Red;
                 return;
@@ -469,11 +469,11 @@ namespace LsjBok
             vv.Verdate = (DateTime)verdate;
 
             int idrad = 1;
-            var qr = from c in Form1.db.Rad select c.Id;
+            var qr = from c in common.db.Rad select c.Id;
             if (qr.Count() > 0)
                 idrad = qr.Max() + 1;
             int idkonto = 1;
-            var qkk = from c in Form1.db.Konto select c.Id;
+            var qkk = from c in common.db.Konto select c.Id;
             if (qkk.Count() > 0)
                 idkonto = qkk.Max() + 1;
             List<Rad> lrad = new List<Rad>();
@@ -515,7 +515,7 @@ namespace LsjBok
                 //TBdiff.Text = (dsum - csum).ToString();
 
                 int kontonr = util.tryconvert(cbnumber[i].Text);
-                Konto qk = (from cc in Form1.db.Konto
+                Konto qk = (from cc in common.db.Konto
                             where cc.Number == kontonr
                             where cc.Year == localfiscal
                             select cc).FirstOrDefault();
@@ -541,11 +541,11 @@ namespace LsjBok
                     qk.Konto3 = kontonr / 10;
                     qk.IB = 0;
                     qk.UB = 0;
-                    qk.Creator = Form1.currentuser;
+                    qk.Creator = common.currentuser;
                     qk.Creationdate = DateTime.Now;
                     lkonto.Add(qk);
-                    //Form1.db.Konto.InsertOnSubmit(qk);
-                    //Form1.db.SubmitChanges();
+                    //common.db.Konto.InsertOnSubmit(qk);
+                    //common.db.SubmitChanges();
                 }
                 Rad rr = new Rad();
                 rr.Id = idrad;
@@ -555,7 +555,7 @@ namespace LsjBok
                 rr.Amount = deb - cred;
                 qk.UB += rr.Amount;
 
-                //Form1.db.Rad.InsertOnSubmit(rr);
+                //common.db.Rad.InsertOnSubmit(rr);
                 lrad.Add(rr);
                 //bookbutton.Enabled = (dsum - csum == 0);
             }
@@ -570,7 +570,7 @@ namespace LsjBok
 
             if (!string.IsNullOrEmpty(TBfilename.Text) && File.Exists(TBfilename.Text))
             {
-                string dir = Form1.mainfolder + "\\" + util.getcompanyname() + " " + util.getfiscalname()+"\\";
+                string dir = common.mainfolder + "\\" + util.getcompanyname() + " " + util.getfiscalname()+"\\";
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -580,16 +580,16 @@ namespace LsjBok
                 vv.Verifikatfil = fn;
             }
 
-            Form1.db.Ver.InsertOnSubmit(vv);
-            Form1.db.SubmitChanges();
+            common.db.Ver.InsertOnSubmit(vv);
+            common.db.SubmitChanges();
             util.logentry("Skapar verifikat " + vv.Vernumber+" "+vv.Description, vv.Id);
 
 
-            Form1.db.Konto.InsertAllOnSubmit(lkonto);
-            Form1.db.SubmitChanges();
+            common.db.Konto.InsertAllOnSubmit(lkonto);
+            common.db.SubmitChanges();
 
-            Form1.db.Rad.InsertAllOnSubmit(lrad);
-            Form1.db.SubmitChanges();
+            common.db.Rad.InsertAllOnSubmit(lrad);
+            common.db.SubmitChanges();
 
         }
 
@@ -610,23 +610,23 @@ namespace LsjBok
         {
             Ver vv = new Ver();
             int vvid = 1;
-            var q = from c in Form1.db.Ver select c.Id;
+            var q = from c in common.db.Ver select c.Id;
             if (q.Count() > 0)
                 vvid = q.Max() + 1;
             vv.Id = vvid;
             vv.Vernumber = nextvernumber();
             vv.Description = "Annullera verifikat " + vvin.Vernumber;
             vv.Year = vvin.Year;
-            vv.Creator = Form1.currentuser;
+            vv.Creator = common.currentuser;
             vv.Creationdate = DateTime.Now;
             vv.Verdate = vvin.Verdate;
 
             List<Rad> lrad = new List<Rad>();
             int idrad = 1;
-            var qr = from c in Form1.db.Rad select c.Id;
+            var qr = from c in common.db.Rad select c.Id;
             if (qr.Count() > 0)
                 idrad = qr.Max() + 1;
-            var qrin = from c in Form1.db.Rad where c.Ver == vvin.Id select c;
+            var qrin = from c in common.db.Rad where c.Ver == vvin.Id select c;
             foreach (Rad rrin in qrin)
             {
                 Rad rr = new Rad();
@@ -638,13 +638,13 @@ namespace LsjBok
                 lrad.Add(rr);
             }
 
-            Form1.db.Ver.InsertOnSubmit(vv);
-            Form1.db.SubmitChanges();
+            common.db.Ver.InsertOnSubmit(vv);
+            common.db.SubmitChanges();
             util.logentry("Annulerar verifikat " + vvin.Vernumber + " genom verifikat "+vv.Vernumber, vv.Id);
 
 
-            Form1.db.Rad.InsertAllOnSubmit(lrad);
-            Form1.db.SubmitChanges();
+            common.db.Rad.InsertAllOnSubmit(lrad);
+            common.db.SubmitChanges();
         }
 
         private void annulbutton_Click(object sender, EventArgs e)

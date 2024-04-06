@@ -21,7 +21,7 @@ namespace LsjBok
 
         public List<Konto> getkonto(int fiscalyear)
         {
-            var q = from c in Form1.db.Konto where c.Year == fiscalyear select c;
+            var q = from c in common.db.Konto where c.Year == fiscalyear select c;
             var qq = from c in q.ToList()
                      where
                      (konto1list.Contains(c.Konto1)
@@ -31,6 +31,14 @@ namespace LsjBok
                      select c;
             return qq.ToList();
         }
+        public decimal sumkonto_IB(int fiscalyear)
+        {
+            decimal sum = 0;
+            foreach (Konto kk in getkonto(fiscalyear))
+                sum += kk.IB;
+            return sum;
+        }
+
         public decimal sumkonto(int fiscalyear)
         {
             decimal sum = 0;
@@ -39,18 +47,21 @@ namespace LsjBok
             return sum;
         }
 
-        public decimal sumkonto(int fiscalyear, DateTime start, DateTime end)
+        public decimal sumkonto_transactions(int fiscalyear, DateTime start, DateTime end)
         {
             decimal sum = 0;
+            //decimal IBsum = 0;
             foreach (Konto kk in getkonto(fiscalyear))
             {
+                //IBsum += kk.IB;
                 foreach (Rad rr in kk.Rad)
                 {
                     if (rr.VerVer.Verdate < start)
+                        continue;// IBsum += rr.Amount;
+                    else if (rr.VerVer.Verdate > end)
                         continue;
-                    if (rr.VerVer.Verdate > end)
-                        continue;
-                    sum += rr.Amount;
+                    else
+                        sum += rr.Amount;
                 }
                 //sum += kk.UB;
             }
@@ -58,6 +69,47 @@ namespace LsjBok
 
         }
 
+        public decimal sumkonto_IB(int fiscalyear, DateTime start)
+        {
+            decimal sum = 0;
+            decimal IBsum = 0;
+            foreach (Konto kk in getkonto(fiscalyear))
+            {
+                IBsum += kk.IB;
+                foreach (Rad rr in kk.Rad)
+                {
+                    if (rr.VerVer.Verdate < start)
+                        IBsum += rr.Amount;
+                    //else if (rr.VerVer.Verdate > end)
+                    //    continue;
+                    //else
+                    //    sum += rr.Amount;
+                }
+                //sum += kk.UB;
+            }
+            return IBsum;
+        }
+
+        public decimal sumkonto_UB(int fiscalyear, DateTime end)
+        {
+            decimal sum = 0;
+            decimal UBsum = 0;
+            foreach (Konto kk in getkonto(fiscalyear))
+            {
+                UBsum += kk.IB;
+                foreach (Rad rr in kk.Rad)
+                {
+                    if (rr.VerVer.Verdate < end)
+                        UBsum += rr.Amount;
+                    //else if (rr.VerVer.Verdate > end)
+                    //    continue;
+                    //else
+                    //    sum += rr.Amount;
+                }
+                //sum += kk.UB;
+            }
+            return UBsum;
+        }
         public void stringtolists()
         {
             if (!String.IsNullOrEmpty(konto1string))

@@ -12,6 +12,21 @@ namespace LsjBok
         public static Dictionary<int, string> kontospecialdict = new Dictionary<int, string>();
         public static Dictionary<string, int> kontosearchlist = new Dictionary<string, int>();
 
+		public static decimal UB(Konto kk, DateTime end)
+        {
+			decimal UBsum = kk.IB;
+			foreach (Rad rr in kk.Rad)
+			{
+				if (rr.VerVer.Verdate < end)
+					UBsum += rr.Amount;
+				//else if (rr.VerVer.Verdate > end)
+				//    continue;
+				//else
+				//    sum += rr.Amount;
+			}
+			return UBsum;
+		}
+
 		public static Dictionary<int, string> searchkonto(string s)
 		{
 			string ss = s.ToLower();

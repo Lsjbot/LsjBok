@@ -34,6 +34,7 @@ namespace LsjBok
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.makeperiodbutton = new System.Windows.Forms.Button();
+            this.momsxmlbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // LBfiscal
@@ -83,11 +84,22 @@ namespace LsjBok
             this.makeperiodbutton.UseVisualStyleBackColor = true;
             this.makeperiodbutton.Click += new System.EventHandler(this.button1_Click);
             // 
+            // momsxmlbutton
+            // 
+            this.momsxmlbutton.Location = new System.Drawing.Point(3, 462);
+            this.momsxmlbutton.Name = "momsxmlbutton";
+            this.momsxmlbutton.Size = new System.Drawing.Size(118, 53);
+            this.momsxmlbutton.TabIndex = 5;
+            this.momsxmlbutton.Text = "Skapa momsrapport";
+            this.momsxmlbutton.UseVisualStyleBackColor = true;
+            this.momsxmlbutton.Click += new System.EventHandler(this.momsxmlbutton_Click);
+            // 
             // FormMoms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 761);
+            this.Controls.Add(this.momsxmlbutton);
             this.Controls.Add(this.makeperiodbutton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -107,5 +119,6 @@ namespace LsjBok
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button makeperiodbutton;
+        private System.Windows.Forms.Button momsxmlbutton;
     }
 }

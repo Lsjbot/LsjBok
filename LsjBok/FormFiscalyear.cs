@@ -16,7 +16,7 @@ namespace LsjBok
         {
             InitializeComponent();
             this.Text = "Skapa räkenskapsår för " + util.getcompanyname();
-            var latest = find_latest(Form1.currentcompany);
+            var latest = fiscalclass.find_latest(common.currentcompany);
             
             if (latest != null)
             {
@@ -65,21 +65,23 @@ namespace LsjBok
                 {
 
                     Fiscalyear fy = new Fiscalyear();
-                    fy.Id = Form1.db.Fiscalyear.Count() + 1;
+                    fy.Id = common.db.Fiscalyear.Count() + 1;
                     fy.Name = start.Year.ToString();
                     if (slut.Year != start.Year)
                         fy.Name += "-" + slut.Year;
-                    fy.Company = Form1.currentcompany;
+                    fy.Company = common.currentcompany;
                     fy.Startdate = start;
                     fy.Enddate = slut;
                     fy.Closed = false;
-                    fy.Creator = Form1.currentuser;
+                    fy.Creator = common.currentuser;
                     fy.Creationdate = DateTime.Now;
-                    Form1.db.Fiscalyear.InsertOnSubmit(fy);
-                    Form1.db.SubmitChanges();
+                    common.db.Fiscalyear.InsertOnSubmit(fy);
+                    common.db.SubmitChanges();
                     util.logentry("Skapar räkenskapsår " + fy.Name, fy.Id);
 
-                    Form1.currentfiscal = fy.Id;
+                    common.currentfiscal = fy.Id;
+
+                    fiscalclass.update_IB(fy);
 
                     //Skapa momsperioder:
 
@@ -93,8 +95,8 @@ namespace LsjBok
         {
             int mm = fy.CompanyCompany.Momsfreq;
             int id = 1;
-            if (Form1.db.Momsperiod.Count() > 0)
-                id = (from c in Form1.db.Momsperiod select c.Id).Max() + 1;
+            if (common.db.Momsperiod.Count() > 0)
+                id = (from c in common.db.Momsperiod select c.Id).Max() + 1;
             DateTime st = fy.Startdate;
             while (st < fy.Enddate)
             {
@@ -108,64 +110,16 @@ namespace LsjBok
                 mp.Fiscal = fy.Id;
                 mp.Closed = false;
                 mp.Net = 0;
-                mp.Creator = Form1.currentuser;
+                mp.Creator = common.currentuser;
                 mp.Creationdate = DateTime.Now;
-                Form1.db.Momsperiod.InsertOnSubmit(mp);
+                common.db.Momsperiod.InsertOnSubmit(mp);
                 st = st.AddMonths(mm);
                 id++;
             }
-            Form1.db.SubmitChanges();
+            common.db.SubmitChanges();
 
         }
-        public static Fiscalyear find_latest(int company)
-        {
-            var q = from c in Form1.db.Fiscalyear where c.Company == company select c;
-            if (q.Count() > 0)
-            {
-                int year = -1;
-                Fiscalyear latest = null;
-                foreach (var c in q)
-                {
-                    if (c.Startdate.Year > year)
-                    {
-                        year = c.Startdate.Year;
-                        latest = c;
-                    }
-                }
-                return latest;
-            }
-            return null;
-        }
 
-        public static TimeSpan oneday = new TimeSpan(24, 0, 0);
-
-        public static Fiscalyear previousfiscal(Fiscalyear old)
-        {
-            var q = from c in Form1.db.Fiscalyear where c.Company == old.Company select c;
-            if (q.Count() > 0)
-            {
-                foreach (Fiscalyear fy in q)
-                {
-                    if (old.Startdate - fy.Enddate == oneday)
-                        return fy;
-                }
-            }
-            return null;
-        }
-
-        public static Fiscalyear nextfiscal(Fiscalyear old)
-        {
-            var q = from c in Form1.db.Fiscalyear where c.Company == old.Company select c;
-            if (q.Count() > 0)
-            {
-                foreach (Fiscalyear fy in q)
-                {
-                    if (fy.Startdate - old.Enddate == oneday)
-                        return fy;
-                }
-            }
-            return null;
-        }
 
     }
 }

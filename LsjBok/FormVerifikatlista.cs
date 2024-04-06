@@ -23,14 +23,14 @@ namespace LsjBok
             //tree.Nodes[0].Nodes.Add("Child 2");
             //tree.Nodes[0].Nodes[1].Nodes.Add("Grandchild");
             //tree.Nodes[0].Nodes[1].Nodes[0].Nodes.Add("Great Grandchild");
-            var q = from c in Form1.db.Ver
-                    where c.Year == Form1.currentfiscal
+            var q = from c in common.db.Ver
+                    where c.Year == common.currentfiscal
                     select c;
             int inode = 0;
             foreach (var kk in q.OrderBy(c=>c.Vernumber))
             {
                 tree.Nodes.Add("V"+kk.Vernumber + " | " + kk.Description+" | Ver#"+kk.Id);
-                var qrad = from c in Form1.db.Rad
+                var qrad = from c in common.db.Rad
                            where c.Ver == kk.Id
                            select c;
                 foreach (var rr in qrad)
@@ -62,7 +62,7 @@ namespace LsjBok
             if (e.Node.Text.Contains("Konto"))
             {
                 int radid = util.tryconvert(e.Node.Text.Split('#').Last().Trim());
-                Rad rr = (from c in Form1.db.Rad where c.Id == radid select c).First();
+                Rad rr = (from c in common.db.Rad where c.Id == radid select c).First();
                 //int vernr = util.tryconvert(e.Node.Text.Split('|')[0].Replace("Ver.nr", "").Trim());
                 FormBook fbn = new FormBook(rr.VerVer, false);
                 fbn.Show();
@@ -70,7 +70,7 @@ namespace LsjBok
             else
             {
                 int verid = util.tryconvert(e.Node.Text.Split('#').Last().Trim());
-                Ver vvin = (from c in Form1.db.Ver where c.Id == verid select c).FirstOrDefault();
+                Ver vvin = (from c in common.db.Ver where c.Id == verid select c).FirstOrDefault();
                 if (vvin != null)
                 {
                     FormBook fbn = new FormBook(vvin, false);

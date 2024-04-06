@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace LsjBok
 {
     public partial class FormMoms : Form
     {
-        int localfiscal = Form1.currentfiscal;
+        int localfiscal = common.currentfiscal;
 
         int xc1 = 150;
         int xc2 = 500;
@@ -86,7 +87,7 @@ namespace LsjBok
         public void updatefiscal()
         {
             LBfiscal.Items.Clear();
-            var q = from c in Form1.db.Fiscalyear where c.Company == Form1.currentcompany select c;
+            var q = from c in common.db.Fiscalyear where c.Company == common.currentcompany select c;
             foreach (var ff in q)
             {
                 LBfiscal.Items.Add(ff.Name);
@@ -96,7 +97,7 @@ namespace LsjBok
         public void updateperiods()
         {
             LBperiod.Items.Clear();
-            var q = from c in Form1.db.Momsperiod where c.Fiscal == localfiscal select c;
+            var q = from c in common.db.Momsperiod where c.Fiscal == localfiscal select c;
             if (q.Count() == 0)
                 makeperiodbutton.Enabled = true;
             else
@@ -113,9 +114,9 @@ namespace LsjBok
         {
             if (LBfiscal.SelectedItem == null)
                 return;
-            var q = from c in Form1.db.Fiscalyear
+            var q = from c in common.db.Fiscalyear
                     where c.Name == LBfiscal.SelectedItem.ToString()
-                    where c.Company == Form1.currentcompany select c;
+                    where c.Company == common.currentcompany select c;
             if (q.Count() == 0)
                 return;
             localfiscal = q.First().Id;
@@ -125,7 +126,7 @@ namespace LsjBok
         private void button1_Click(object sender, EventArgs e)
         {
             //Skapa momsperioder
-            var q = from c in Form1.db.Fiscalyear
+            var q = from c in common.db.Fiscalyear
                     where c.Id == localfiscal
                     select c;
             if (q.Count() == 0)
@@ -138,7 +139,7 @@ namespace LsjBok
         {
             if (LBperiod.SelectedItem == null)
                 return;
-            var q = from c in Form1.db.Momsperiod
+            var q = from c in common.db.Momsperiod
                     where c.Name == LBperiod.SelectedItem.ToString()
                     where c.Fiscal == localfiscal
                     select c;
@@ -161,6 +162,41 @@ namespace LsjBok
                     ruttbdict[mc.ruta].Text = "";
                 }
             }
+        }
+
+        private void momsxmlbutton_Click(object sender, EventArgs e)
+        {
+            if (LBperiod.SelectedItem == null)
+                return;
+            var q = from c in common.db.Momsperiod
+                    where c.Name == LBperiod.SelectedItem.ToString()
+                    where c.Fiscal == localfiscal
+                    select c;
+            if (q.Count() == 0)
+                return;
+            Momsperiod mp = q.First();
+            string orgnr = util.getcompany(common.currentcompany).Orgnr.Trim();
+            string fn = util.unused_filename(common.mainfolder + "\\moms_" + orgnr + "_" + mp.Startdate.ToString("yyMMdd") + "_" + mp.Enddate.ToString("yyMMdd")+"_.txt");
+            using (StreamWriter sw = new StreamWriter(fn))
+            {
+                sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                sw.WriteLine("<!DOCTYPE eSKDUpload PUBLIC \"-//Skatteverket, Sweden//DTD Skatteverket eSKDUpload-DTD Version 6.0//SV\" \"https://www.skatteverket.se/download/18.3f4496fd14864cc5ac99cb1/1415022101213/eSKDUpload_6p0.dtd\">");
+                sw.WriteLine("<eSKDUpload Version=\"6.0\">");
+                sw.WriteLine("  <OrgNr>"+orgnr+"</OrgNr>");
+                sw.WriteLine("  <Moms>");
+                sw.WriteLine("    <Period>"+mp.Name+"</Period>");
+                
+                foreach (int ruta in ruttbdict.Keys)
+                {
+                    string tag = momsrutaclass.momsdict[ruta].xmltag;
+                    decimal amount = util.tryconvertdecimal(ruttbdict[ruta].Text);
+                    if (amount != 0 || ruta == 5 || ruta == 49)
+                        sw.WriteLine("    <" + tag + ">" + amount.ToString("F0") + "</" + tag + ">");
+                }
+                sw.WriteLine("  </Moms>");
+                sw.WriteLine("</eSKDUpload>");
+            }
+            MessageBox.Show("Momsdeklaration skapad: " + fn);
         }
     }
 }

@@ -49,9 +49,9 @@ namespace LsjBok
             momsdict.Add(40, new momsrutaclass(40, "Övrig försäljning av tjänster omsatta utanför Sverige", "ForsTjOvrUtomEg", "", "", "", "3305"));
             momsdict.Add(41, new momsrutaclass(41, "Försäljning när köparen är skattskyldig i Sverige", "ForsKopareSkskSverige", "", "", "", "3231,3232,3233"));
             momsdict.Add(42, new momsrutaclass(42, "Övrig försäljning m.m.", "ForsOvrigt", "", "", "", "3004,3994,3980,3992,3404"));
-            momsdict.Add(10, new momsrutaclass(10, "Utgående moms 25%", "MomsUtgHog", "", "", "", "2611,2612,2613,2616"));
-            momsdict.Add(11, new momsrutaclass(11, "Utgående moms 12%", "MomsUtgMedel", "", "", "", "2621,2622"));
-            momsdict.Add(12, new momsrutaclass(12, "Utgående moms 6%", "MomsUtgLag", "", "", "", "2631,2632,2636"));
+            momsdict.Add(10, new momsrutaclass(10, "Utgående moms 25%", "MomsUtgHog", "", "", "", "2610,2611,2612,2613,2616"));
+            momsdict.Add(11, new momsrutaclass(11, "Utgående moms 12%", "MomsUtgMedel", "", "", "", "2620,2621,2622"));
+            momsdict.Add(12, new momsrutaclass(12, "Utgående moms 6%", "MomsUtgLag", "", "", "", "2630,2631,2632,2636"));
             momsdict.Add(30, new momsrutaclass(30, "Utgående moms 25% ruta 20-24", "MomsInkopUtgHog", "", "", "", "2614"));
             momsdict.Add(31, new momsrutaclass(31, "Utgående moms 12% ruta 20-24", "MomsInkopUtgMedel", "", "", "", "2624"));
             momsdict.Add(32, new momsrutaclass(32, "Utgående moms 6% ruta 20-24", "MomsInkopUtgLag", "", "", "", "2634"));
@@ -66,37 +66,37 @@ namespace LsjBok
         {
             if (ruta == 5)
             {
-                decimal sum = sumkonto(fiscal, start, end);
-                sum -= momsdict[6].sumkonto(fiscal, start, end);
-                sum -= momsdict[7].sumkonto(fiscal, start, end);
-                sum -= momsdict[8].sumkonto(fiscal, start, end);
-                sum -= momsdict[35].sumkonto(fiscal, start, end);
-                sum -= momsdict[36].sumkonto(fiscal, start, end);
-                sum -= momsdict[38].sumkonto(fiscal, start, end);
-                sum -= momsdict[39].sumkonto(fiscal, start, end);
-                sum -= momsdict[40].sumkonto(fiscal, start, end);
-                sum -= momsdict[41].sumkonto(fiscal, start, end);
-                sum -= momsdict[42].sumkonto(fiscal, start, end);
-                return sum;
+                decimal sum = sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[6].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[7].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[8].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[35].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[36].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[38].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[39].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[40].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[41].sumkonto_transactions(fiscal, start, end);
+                sum -= momsdict[42].sumkonto_transactions(fiscal, start, end);
+                return Math.Abs(sum);
             }
             else if (ruta == 49)
             {
                 decimal sum = 0;
-                sum += momsdict[10].sumkonto(fiscal, start, end);
-                sum += momsdict[11].sumkonto(fiscal, start, end);
-                sum += momsdict[12].sumkonto(fiscal, start, end);
-                sum += momsdict[30].sumkonto(fiscal, start, end);
-                sum += momsdict[31].sumkonto(fiscal, start, end);
-                sum += momsdict[32].sumkonto(fiscal, start, end);
-                sum += momsdict[60].sumkonto(fiscal, start, end);
-                sum += momsdict[61].sumkonto(fiscal, start, end);
-                sum += momsdict[62].sumkonto(fiscal, start, end);
-                sum -= momsdict[48].sumkonto(fiscal, start, end);
+                sum += momsdict[10].sumkonto_transactions(fiscal, start, end);
+                sum += momsdict[11].sumkonto_transactions(fiscal, start, end);
+                sum += momsdict[12].sumkonto_transactions(fiscal, start, end);
+                sum += momsdict[30].sumkonto_transactions(fiscal, start, end);
+                sum += momsdict[31].sumkonto_transactions(fiscal, start, end);
+                sum += momsdict[32].sumkonto_transactions(fiscal, start, end);
+                sum += momsdict[60].sumkonto_transactions(fiscal, start, end);
+                sum += momsdict[61].sumkonto_transactions(fiscal, start, end);
+                sum += momsdict[62].sumkonto_transactions(fiscal, start, end);
+                sum = Math.Abs(sum) - Math.Abs(momsdict[48].sumkonto_transactions(fiscal, start, end));
                 return sum;
             }
             else
             {
-                return sumkonto(fiscal, start, end);
+                return Math.Abs(sumkonto_transactions(fiscal, start, end));
             }
         }
     }

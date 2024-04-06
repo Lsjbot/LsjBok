@@ -49,13 +49,13 @@ namespace LsjBok
         private void createbutton_Click(object sender, EventArgs e)
         {
             LsjBokUser lb = new LsjBokUser();
-            lb.Id = Form1.db.LsjBokUser.Count() + 1;
+            lb.Id = common.db.LsjBokUser.Count() + 1;
             lb.Name = TBnamn.Text;
-            Form1.db.LsjBokUser.InsertOnSubmit(lb);
-            Form1.db.SubmitChanges();
+            common.db.LsjBokUser.InsertOnSubmit(lb);
+            common.db.SubmitChanges();
+            common.currentuser = lb.Id;
             util.logentry("Skapar användare " + lb.Name, lb.Id);
 
-            Form1.currentuser = lb.Id;
 
             this.Close();
         }

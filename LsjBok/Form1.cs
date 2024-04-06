@@ -13,51 +13,41 @@ namespace LsjBok
 {
     public partial class Form1 : Form
     {
-        public static string mainfolder;
-        public static string folderfn = "lsjbokfolder.txt";
-        public static string connectionfn = "connectionstring.txt";
-        public static string dbname = "LsjBokDB";
-        public static string connectionstring =
-            "Server=localhost;Integrated security=True;database=";// + dbname;
-        public static LsjBokDB db = null;
-        public static int currentuser = -1;
-        public static int currentcompany = -1;
-        public static int currentfiscal = -1;
 
         public Form1()
         {
             InitializeComponent();
-            if (!File.Exists(folderfn))
+            if (!File.Exists(common.folderfn))
             {
-                mainfolder = @"C:\LsjBok\";
-                using (StreamWriter sw = new StreamWriter(folderfn))
-                    sw.WriteLine(mainfolder);
+                common.mainfolder = @"C:\LsjBok\";
+                using (StreamWriter sw = new StreamWriter(common.folderfn))
+                    sw.WriteLine(common.mainfolder);
             }
             else
             {
-                using (StreamReader sr = new StreamReader(folderfn))
-                    mainfolder = sr.ReadLine();
+                using (StreamReader sr = new StreamReader(common.folderfn))
+                    common.mainfolder = sr.ReadLine();
             }
-            folderlabel.Text = mainfolder;
+            folderlabel.Text = common.mainfolder;
 
-            if (File.Exists(mainfolder+connectionfn))
+            if (File.Exists(common.mainfolder + common.connectionfn))
             {
-                using (StreamReader sr = new StreamReader(mainfolder + connectionfn))
-                    connectionstring = sr.ReadLine();
+                using (StreamReader sr = new StreamReader(common.mainfolder + common.connectionfn))
+                    common.connectionstring = sr.ReadLine();
             }
 
             try
             {
-                db = new LsjBokDB(connectionstring+dbname);
-                db.LsjBokUser.Count();
+                common.db = new LsjBokDB(common.connectionstring + common.dbname);
+                common.db.LsjBokUser.Count();
             }
             catch (Exception e)
             {
-                db = null;
+                common.db = null;
             }
 
 
-            if (db == null)
+            if (common.db == null)
             {
                 foreach (Control c in this.Controls)
                     c.Enabled = false;
@@ -71,12 +61,12 @@ namespace LsjBok
             {
                 companytypeclass.fill_companytype();
                 kontoclass.fill_kontodict();
-                LBuser.Visible = db.LsjBokUser.Count() > 1;
-                LBuser.Enabled = db.LsjBokUser.Count() > 1;
-                LBcompany.Visible = db.Company.Count() > 1;
-                LBcompany.Enabled = db.Company.Count() > 1;
+                LBuser.Visible = common.db.LsjBokUser.Count() > 1;
+                LBuser.Enabled = common.db.LsjBokUser.Count() > 1;
+                LBcompany.Visible = common.db.Company.Count() > 1;
+                LBcompany.Enabled = common.db.Company.Count() > 1;
 
-                if (db.LsjBokUser.Count() == 0)
+                if (common.db.LsjBokUser.Count() == 0)
                 {
                     foreach (Control c in this.Controls)
                         c.Enabled = false;
@@ -86,13 +76,13 @@ namespace LsjBok
                 }
                 else
                 {
-                    if (db.LsjBokUser.Count() > 0)
+                    if (common.db.LsjBokUser.Count() > 0)
                     {
-                        currentuser = db.LsjBokUser.First().Id;
-                        foreach (var user in db.LsjBokUser)
+                        common.currentuser = common.db.LsjBokUser.First().Id;
+                        foreach (var user in common.db.LsjBokUser)
                             LBuser.Items.Add(user.Name);
                     }
-                    if (db.Company.Count() == 0)
+                    if (common.db.Company.Count() == 0)
                     {
                         foreach (Control c in this.Controls)
                             c.Enabled = false;
@@ -102,10 +92,10 @@ namespace LsjBok
                     }
                     else
                     {
-                        if (db.Company.Count() > 0)
+                        if (common.db.Company.Count() > 0)
                         {
-                            currentcompany = db.Company.First().Id;
-                            foreach (var cc in db.Company)
+                            common.currentcompany = common.db.Company.First().Id;
+                            foreach (var cc in common.db.Company)
                                 LBcompany.Items.Add(cc.Name);
                         }
                         updatefiscal();
@@ -114,37 +104,38 @@ namespace LsjBok
                     }
                 }
             }
+            rrbrclass.fill_rrbr();
             updatetitle();
         }
 
         public void updatefiscal()
         {
             LBfiscal.Items.Clear();
-            var q = from c in db.Fiscalyear where c.Company == currentcompany select c;
+            var q = from c in common.db.Fiscalyear where c.Company == common.currentcompany select c;
             foreach (var ff in q)
             {
                 LBfiscal.Items.Add(ff.Name);
                 if (ff.Enddate > DateTime.Now)
-                    currentfiscal = ff.Id;
+                    common.currentfiscal = ff.Id;
             }
         }
 
         public void updatetitle()
         {
-            this.Text = "LsjBok - " + util.getusername(currentuser) + " - " + util.getcompanyname(currentcompany) + " - "+util.getfiscalname(currentfiscal);
+            this.Text = "LsjBok - " + util.getusername(common.currentuser) + " - " + util.getcompanyname(common.currentcompany) + " - "+util.getfiscalname(common.currentfiscal);
         }
 
         public void updateboxes()
         {
-            LBuser.Visible = db.LsjBokUser.Count() > 1;
-            LBuser.Enabled = db.LsjBokUser.Count() > 1;
-            LBcompany.Visible = db.Company.Count() > 1;
-            LBcompany.Enabled = db.Company.Count() > 1;
+            LBuser.Visible = common.db.LsjBokUser.Count() > 1;
+            LBuser.Enabled = common.db.LsjBokUser.Count() > 1;
+            LBcompany.Visible = common.db.Company.Count() > 1;
+            LBcompany.Enabled = common.db.Company.Count() > 1;
             LBuser.Items.Clear();
-            foreach (var user in db.LsjBokUser)
+            foreach (var user in common.db.LsjBokUser)
                 LBuser.Items.Add(user.Name);
             LBcompany.Items.Clear();
-            foreach (var cc in db.Company)
+            foreach (var cc in common.db.Company)
                 LBcompany.Items.Add(cc.Name);
             updatefiscal();
         }
@@ -159,12 +150,12 @@ namespace LsjBok
             FolderBrowserDialog fb = new FolderBrowserDialog();
             if (fb.ShowDialog() == DialogResult.OK)
             {
-                mainfolder = fb.SelectedPath;
-                folderlabel.Text = mainfolder;
-                string oldfn = util.unused_filename(folderfn);
-                File.Move(folderfn, oldfn);
-                using (StreamWriter sw = new StreamWriter(folderfn))
-                    sw.WriteLine(mainfolder);
+                common.mainfolder = fb.SelectedPath;
+                folderlabel.Text = common.mainfolder;
+                string oldfn = util.unused_filename(common.folderfn);
+                File.Move(common.folderfn, oldfn);
+                using (StreamWriter sw = new StreamWriter(common.folderfn))
+                    sw.WriteLine(common.mainfolder);
             }
         }
 
@@ -182,10 +173,10 @@ namespace LsjBok
 
         private void LBuser_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var q = (from c in db.LsjBokUser where c.Name == LBuser.SelectedItem.ToString() select c).FirstOrDefault();
+            var q = (from c in common.db.LsjBokUser where c.Name == LBuser.SelectedItem.ToString() select c).FirstOrDefault();
             if (q != null)
             {
-                currentuser = q.Id;
+                common.currentuser = q.Id;
                 updatetitle();
             }
             
@@ -193,10 +184,10 @@ namespace LsjBok
 
         private void LBcompany_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var q = (from c in db.Company where c.Name == LBcompany.SelectedItem.ToString() select c).FirstOrDefault();
+            var q = (from c in common.db.Company where c.Name == LBcompany.SelectedItem.ToString() select c).FirstOrDefault();
             if (q != null)
             {
-                currentcompany = q.Id;
+                common.currentcompany = q.Id;
                 updatetitle();
                 updatefiscal();
             }
@@ -205,10 +196,10 @@ namespace LsjBok
 
         private void LBfiscal_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var q = (from c in db.Fiscalyear where c.Name == LBfiscal.SelectedItem.ToString() select c).FirstOrDefault();
+            var q = (from c in common.db.Fiscalyear where c.Name == LBfiscal.SelectedItem.ToString() select c).FirstOrDefault();
             if (q != null)
             {
-                currentfiscal = q.Id;
+                common.currentfiscal = q.Id;
                 updatetitle();
             }
 

@@ -32,19 +32,66 @@ namespace LsjBok
             partof = partofpar;
         }
 
-        public decimal sumamount(int fiscalyear)
+        //public decimal sumamount(int fiscalyear)
+        //{
+        //    decimal sum = sumkonto(fiscalyear);
+        //    sum = sign * sum;
+        //    var qpr = from c in rrlist where c.partof == this.field select c;
+        //    foreach (rrbrclass r in qpr)
+        //        sum += r.sumamount(fiscalyear);
+        //    var qpb = from c in brlist where c.partof == this.field select c;
+        //    foreach (rrbrclass r in qpb)
+        //        sum += r.sumamount(fiscalyear);
+        //    return sum;
+        //}
+        public decimal sumamount_IB(int fiscalyear)
         {
-            decimal sum = sumkonto(fiscalyear);
-            sum = sign * sum;
+            decimal sum = sumkonto_IB(fiscalyear);
+            //sum = sign * sum;
             var qpr = from c in rrlist where c.partof == this.field select c;
             foreach (rrbrclass r in qpr)
-                sum += r.sumamount(fiscalyear);
+                sum += r.sumamount_IB(fiscalyear);
             var qpb = from c in brlist where c.partof == this.field select c;
             foreach (rrbrclass r in qpb)
-                sum += r.sumamount(fiscalyear);
+                sum += r.sumamount_IB(fiscalyear);
             return sum;
         }
 
+        public decimal sumamount_transactions(int fiscalyear, DateTime start, DateTime end)
+        {
+            decimal sum = sumkonto_transactions(fiscalyear, start, end);
+            //sum = sign * sum;
+            var qpr = from c in rrlist where c.partof == this.field select c;
+            foreach (rrbrclass r in qpr)
+                sum += r.sumamount_transactions(fiscalyear, start, end);
+            var qpb = from c in brlist where c.partof == this.field select c;
+            foreach (rrbrclass r in qpb)
+                sum += r.sumamount_transactions(fiscalyear, start, end);
+            return sum;
+        }
+
+        public decimal sumamount_UB(int fiscalyear, DateTime end)
+        {
+            decimal sum = sumkonto_UB(fiscalyear, end);
+            //sum = sign * sum;
+            var qpr = from c in rrlist where c.partof == this.field select c;
+            foreach (rrbrclass r in qpr)
+                sum += r.sumamount_UB(fiscalyear, end);
+            var qpb = from c in brlist where c.partof == this.field select c;
+            foreach (rrbrclass r in qpb)
+                sum += r.sumamount_UB(fiscalyear, end);
+            return sum;
+        }
+
+        public static rrbrclass get_assets()
+        {
+            return (from c in rrbrclass.brlist where c.field == "Tillgångar" select c).First();
+        }
+
+        public static rrbrclass get_debts()
+        {
+            return (from c in rrbrclass.brlist where c.field == "Eget kapital och skulder" select c).First();
+        }
 
         public static List<int> checkallkonto(List<rrbrclass> rlist )
         {
@@ -97,6 +144,9 @@ namespace LsjBok
 
         public static void fill_rrbr()
         {
+            if (rrlist.Count > 0)
+                return;
+
             rrlist.Add(new rrbrclass("Fält: Nettoomsättning", "Beskrivning: Intäkter som genererats av företagets ordinarie verksamhet, t.ex. varuförsäljning och tjänsteintäkter.", "", "30,31,32,33,34,35,36,37", "", "", -1, "Rörelsens intäkter"));
             rrlist.Add(new rrbrclass("Fält: Aktiverat arbete för egen räkning", "Beskrivning: Kostnader för eget arbete där resultatet av arbetet tas upp som en tillgång i balansräkningen.", "", "38", "", "", -1, "Rörelsens intäkter"));
             rrlist.Add(new rrbrclass("Fält: Övriga rörelseintäkter", "Beskrivning: Intäkter genererade utanför företagets ordinarie verksamhet, t.ex. valutakursvinster eller realisationsvinster.", "", "39", "", "", -1, "Rörelsens intäkter"));
@@ -326,7 +376,6 @@ namespace LsjBok
 
 
 
-            brlist.Add(new rrbrclass("Skatteskulder", "", "", "", "", "", 1, "Eget kapital och skulder"));
 
 
 

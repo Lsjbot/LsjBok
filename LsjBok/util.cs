@@ -29,13 +29,13 @@ namespace LsjBok
         }
         public static string getusername()
         {
-            return getusername(Form1.currentuser);
+            return getusername(common.currentuser);
         }
         public static string getusername(int nr)
         {
-            if (Form1.db == null)
+            if (common.db == null)
                 return "";
-            var q = (from c in Form1.db.LsjBokUser where c.Id == nr select c).FirstOrDefault();
+            var q = (from c in common.db.LsjBokUser where c.Id == nr select c).FirstOrDefault();
             if (q == null)
                 return "(no user)";
             else
@@ -43,29 +43,36 @@ namespace LsjBok
         }
         public static string getcompanyname()
         {
-            return getcompanyname(Form1.currentcompany);
+            return getcompanyname(common.currentcompany);
         }
         public static string getcompanyname(int nr)
         {
-            if (Form1.db == null)
+            if (common.db == null)
                 return "";
-            var q = (from c in Form1.db.Company where c.Id == nr select c).FirstOrDefault();
+            var q = (from c in common.db.Company where c.Id == nr select c).FirstOrDefault();
             if (q == null)
                 return "(no company)";
             else
                 return q.Name;
         }
 
+        public static Company getcompany(int nr)
+        {
+            if (common.db == null)
+                return null;
+            return (from c in common.db.Company where c.Id == nr select c).FirstOrDefault();
+        }
+
         public static string getfiscalname()
         {
-            return getfiscalname(Form1.currentfiscal);
+            return getfiscalname(common.currentfiscal);
         }
 
         public static string getfiscalname(int nr)
         {
-            if (Form1.db == null)
+            if (common.db == null)
                 return "";
-            var q = (from c in Form1.db.Fiscalyear where c.Id == nr select c).FirstOrDefault();
+            var q = (from c in common.db.Fiscalyear where c.Id == nr select c).FirstOrDefault();
             if (q == null)
                 return "(no fiscal year)";
             else
@@ -116,13 +123,14 @@ namespace LsjBok
 
         }
 
-        public static decimal tryconvertdecimal(string word)
+        public static decimal tryconvertdecimal(string wordpar)
         {
-            if (String.IsNullOrEmpty(word))
+            if (String.IsNullOrEmpty(wordpar))
                 return 0;
 
             decimal i = Decimal.MinValue;
 
+            string word = wordpar.Replace(" ","");
             try
             {
                 i = Convert.ToDecimal(word);
@@ -144,67 +152,43 @@ namespace LsjBok
             return i;
 
         }
-        public static bool infiscal(DateTime? date)
-        {
-            if (date == null)
-                return false;
-            else
-                return infiscal((DateTime)date);
-        }
-        public static bool infiscal(DateTime date)
-        {
-            return infiscal(date, Form1.currentfiscal);
-        }
+        //public static Fiscalyear prevfiscal(int oldfyid)
+        //{
+        //    var oldfy = (from c in common.db.Fiscalyear where c.Id == oldfyid select c).FirstOrDefault();
+        //    if (oldfy == null)
+        //        return null;
+        //    else
+        //        return prevfiscal(oldfy);
+        //}
+        //public static Fiscalyear nextfiscal(int oldfyid)
+        //{
+        //    var oldfy = (from c in common.db.Fiscalyear where c.Id == oldfyid select c).FirstOrDefault();
+        //    if (oldfy == null)
+        //        return null;
+        //    else
+        //        return nextfiscal(oldfy);
+        //}
+        //public static Fiscalyear prevfiscal(Fiscalyear oldfy)
+        //{
+        //    var q = from c in common.db.Fiscalyear where c.Company == common.currentcompany select c;
+        //    foreach (Fiscalyear fy in q)
+        //    {
+        //        if ((oldfy.Startdate - fy.Enddate).Days == 1)
+        //            return fy;
+        //    }
+        //    return null;
+        //}
 
-        public static bool infiscal(DateTime? date, int fiscal)
-        {
-            Fiscalyear fy = (from c in Form1.db.Fiscalyear where c.Id == fiscal select c).FirstOrDefault();
-            if (fy == null)
-                return false;
-            if (date < fy.Startdate)
-                return false;
-            if (date > fy.Enddate)
-                return false;
-            return true;
-        }
-
-        public static Fiscalyear prevfiscal(int oldfyid)
-        {
-            var oldfy = (from c in Form1.db.Fiscalyear where c.Id == oldfyid select c).FirstOrDefault();
-            if (oldfy == null)
-                return null;
-            else
-                return prevfiscal(oldfy);
-        }
-        public static Fiscalyear nextfiscal(int oldfyid)
-        {
-            var oldfy = (from c in Form1.db.Fiscalyear where c.Id == oldfyid select c).FirstOrDefault();
-            if (oldfy == null)
-                return null;
-            else
-                return nextfiscal(oldfy);
-        }
-        public static Fiscalyear prevfiscal(Fiscalyear oldfy)
-        {
-            var q = from c in Form1.db.Fiscalyear where c.Company == Form1.currentcompany select c;
-            foreach (Fiscalyear fy in q)
-            {
-                if ((oldfy.Startdate - fy.Enddate).Days == 1)
-                    return fy;
-            }
-            return null;
-        }
-
-        public static Fiscalyear nextfiscal(Fiscalyear oldfy)
-        {
-            var q = from c in Form1.db.Fiscalyear where c.Company == Form1.currentcompany select c;
-            foreach (Fiscalyear fy in q)
-            {
-                if ((fy.Startdate - oldfy.Enddate).Days == 1)
-                    return fy;
-            }
-            return null;
-        }
+        //public static Fiscalyear nextfiscal(Fiscalyear oldfy)
+        //{
+        //    var q = from c in common.db.Fiscalyear where c.Company == common.currentcompany select c;
+        //    foreach (Fiscalyear fy in q)
+        //    {
+        //        if ((fy.Startdate - oldfy.Enddate).Days == 1)
+        //            return fy;
+        //    }
+        //    return null;
+        //}
 
         public static string[] splitcsv(string line)
         {
@@ -281,7 +265,7 @@ namespace LsjBok
         {
             if (nextlogid < 0)
             {
-                var q = from c in Form1.db.Log select c.Id;
+                var q = from c in common.db.Loglist select c.Id;
                 nextlogid = q.Count() + 1;
                 //if (q.Count() == 0)
                 //    nextlogid = 1;
@@ -295,14 +279,14 @@ namespace LsjBok
 
         public static void logentry(string desc, int evid)
         {
-            Log ll = new Log();
+            Loglist ll = new Loglist();
             ll.Id = getnextlogid();
             ll.Description = desc;
             ll.Event = evid;
-            ll.Creator = Form1.currentuser;
+            ll.Creator = common.currentuser;
             ll.Creationdate = DateTime.Now;
-            Form1.db.Log.InsertOnSubmit(ll);
-            Form1.db.SubmitChanges();
+            common.db.Loglist.InsertOnSubmit(ll);
+            common.db.SubmitChanges();
         }
     }
 }

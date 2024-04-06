@@ -20,7 +20,7 @@ Id integer not null primary key,
 Name nvarchar(150) not null,
 Orgnr char(13) not null,
 Companytype integer not null foreign key references Companytype(Id),
-Address nvarchar(250),
+Address nvarchar(300),
 Phone nvarchar(25),
 Email nvarchar(50),
 Momsfreq integer not null, -- 0 = ej moms
@@ -65,8 +65,8 @@ Id integer not null primary key,
 Verdate date not null,
 Vernumber integer not null,
 Year integer not null foreign key references Fiscalyear(Id),
-Description nvarchar(250) not null,
-Verifikatfil nvarchar(250),
+Description nvarchar(300) not null,
+Verifikatfil nvarchar(300),
 Creator integer not null foreign key references LsjBokUser(Id),
 Creationdate date not null
 )
@@ -88,7 +88,7 @@ Startdate date not null,
 Enddate date not null,
 Net money not null, 
 Closed bit not null,
-Rapportfil nvarchar(250),
+Rapportfil nvarchar(300),
 Creator integer not null foreign key references LsjBokUser(Id),
 Creationdate date not null
 )
@@ -104,7 +104,7 @@ Amount money not null
 create table Mall
 (
 Id integer not null primary key,
-Description nvarchar(250) not null,
+Description nvarchar(300) not null,
 Creator integer not null foreign key references LsjBokUser(Id),
 Creationdate date not null
 )
@@ -117,10 +117,10 @@ Kontonr integer not null,
 Amount money not null, --  +=debet, -=kredit
 )
 
-create table Log
+create table Loglist
 (
 Id integer not null primary key,
-Description nvarchar(250) not null,
+Description nvarchar(300) not null,
 Event integer not null,
 Creator integer not null foreign key references LsjBokUser(Id),
 Creationdate date not null

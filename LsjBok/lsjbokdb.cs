@@ -40,9 +40,9 @@ public partial class LsjBokDB : System.Data.Linq.DataContext
   partial void InsertKonto(Konto instance);
   partial void UpdateKonto(Konto instance);
   partial void DeleteKonto(Konto instance);
-  partial void InsertLog(Log instance);
-  partial void UpdateLog(Log instance);
-  partial void DeleteLog(Log instance);
+  partial void InsertLoglist(Loglist instance);
+  partial void UpdateLoglist(Loglist instance);
+  partial void DeleteLoglist(Loglist instance);
   partial void InsertLsjBokUser(LsjBokUser instance);
   partial void UpdateLsjBokUser(LsjBokUser instance);
   partial void DeleteLsjBokUser(LsjBokUser instance);
@@ -122,11 +122,11 @@ public partial class LsjBokDB : System.Data.Linq.DataContext
 		}
 	}
 	
-	public System.Data.Linq.Table<Log> Log
+	public System.Data.Linq.Table<Loglist> Loglist
 	{
 		get
 		{
-			return this.GetTable<Log>();
+			return this.GetTable<Loglist>();
 		}
 	}
 	
@@ -348,7 +348,7 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(250)")]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(300)")]
 	public string Address
 	{
 		get
@@ -1658,8 +1658,8 @@ public partial class Konto : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 }
 
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Log")]
-public partial class Log : INotifyPropertyChanging, INotifyPropertyChanged
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Loglist")]
+public partial class Loglist : INotifyPropertyChanging, INotifyPropertyChanged
 {
 	
 	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -1692,7 +1692,7 @@ public partial class Log : INotifyPropertyChanging, INotifyPropertyChanged
     partial void OnCreationdateChanged();
     #endregion
 	
-	public Log()
+	public Loglist()
 	{
 		this._LsjBokUser = default(EntityRef<LsjBokUser>);
 		OnCreated();
@@ -1718,7 +1718,7 @@ public partial class Log : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(250) NOT NULL", CanBeNull=false)]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(300) NOT NULL", CanBeNull=false)]
 	public string Description
 	{
 		get
@@ -1802,7 +1802,7 @@ public partial class Log : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK__Log__Creator__49C3F6B7", Storage="_LsjBokUser", ThisKey="Creator", OtherKey="Id", IsForeignKey=true)]
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK__Loglist__Creator__48CFD27E", Storage="_LsjBokUser", ThisKey="Creator", OtherKey="Id", IsForeignKey=true)]
 	public LsjBokUser LsjBokUser
 	{
 		get
@@ -1819,12 +1819,12 @@ public partial class Log : INotifyPropertyChanging, INotifyPropertyChanged
 				if ((previousValue != null))
 				{
 					this._LsjBokUser.Entity = null;
-					previousValue.Log.Remove(this);
+					previousValue.Loglist.Remove(this);
 				}
 				this._LsjBokUser.Entity = value;
 				if ((value != null))
 				{
-					value.Log.Add(this);
+					value.Loglist.Add(this);
 					this._Creator = value.Id;
 				}
 				else
@@ -1877,7 +1877,7 @@ public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChange
 	
 	private EntitySet<Konto> _Konto;
 	
-	private EntitySet<Log> _Log;
+	private EntitySet<Loglist> _Loglist;
 	
 	private EntitySet<Mall> _Mall;
 	
@@ -1903,7 +1903,7 @@ public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChange
 		this.@__Company__Creator__2A4B4B5E = new EntitySet<Company>(new Action<Company>(this.attach__Company__Creator__2A4B4B5E), new Action<Company>(this.detach__Company__Creator__2A4B4B5E));
 		this._Fiscalyear = new EntitySet<Fiscalyear>(new Action<Fiscalyear>(this.attach_Fiscalyear), new Action<Fiscalyear>(this.detach_Fiscalyear));
 		this._Konto = new EntitySet<Konto>(new Action<Konto>(this.attach_Konto), new Action<Konto>(this.detach_Konto));
-		this._Log = new EntitySet<Log>(new Action<Log>(this.attach_Log), new Action<Log>(this.detach_Log));
+		this._Loglist = new EntitySet<Loglist>(new Action<Loglist>(this.attach_Loglist), new Action<Loglist>(this.detach_Loglist));
 		this._Mall = new EntitySet<Mall>(new Action<Mall>(this.attach_Mall), new Action<Mall>(this.detach_Mall));
 		this._Momsperiod = new EntitySet<Momsperiod>(new Action<Momsperiod>(this.attach_Momsperiod), new Action<Momsperiod>(this.detach_Momsperiod));
 		this._Ver = new EntitySet<Ver>(new Action<Ver>(this.attach_Ver), new Action<Ver>(this.detach_Ver));
@@ -2022,16 +2022,16 @@ public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChange
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK__Log__Creator__49C3F6B7", Storage="_Log", ThisKey="Id", OtherKey="Creator", DeleteRule="NO ACTION")]
-	public EntitySet<Log> Log
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK__Loglist__Creator__48CFD27E", Storage="_Loglist", ThisKey="Id", OtherKey="Creator", DeleteRule="NO ACTION")]
+	public EntitySet<Loglist> Loglist
 	{
 		get
 		{
-			return this._Log;
+			return this._Loglist;
 		}
 		set
 		{
-			this._Log.Assign(value);
+			this._Loglist.Assign(value);
 		}
 	}
 	
@@ -2142,13 +2142,13 @@ public partial class LsjBokUser : INotifyPropertyChanging, INotifyPropertyChange
 		entity.LsjBokUser = null;
 	}
 	
-	private void attach_Log(Log entity)
+	private void attach_Loglist(Loglist entity)
 	{
 		this.SendPropertyChanging();
 		entity.LsjBokUser = this;
 	}
 	
-	private void detach_Log(Log entity)
+	private void detach_Loglist(Loglist entity)
 	{
 		this.SendPropertyChanging();
 		entity.LsjBokUser = null;
@@ -2250,7 +2250,7 @@ public partial class Mall : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(250) NOT NULL", CanBeNull=false)]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(300) NOT NULL", CanBeNull=false)]
 	public string Description
 	{
 		get
@@ -2954,7 +2954,7 @@ public partial class Momsperiod : INotifyPropertyChanging, INotifyPropertyChange
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rapportfil", DbType="NVarChar(250)")]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rapportfil", DbType="NVarChar(300)")]
 	public string Rapportfil
 	{
 		get
@@ -3490,7 +3490,7 @@ public partial class Ver : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(250) NOT NULL", CanBeNull=false)]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(300) NOT NULL", CanBeNull=false)]
 	public string Description
 	{
 		get
@@ -3510,7 +3510,7 @@ public partial class Ver : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Verifikatfil", DbType="NVarChar(250)")]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Verifikatfil", DbType="NVarChar(300)")]
 	public string Verifikatfil
 	{
 		get

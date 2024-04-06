@@ -47,7 +47,7 @@ namespace LsjBok
         private void createbutton_Click(object sender, EventArgs e)
         {
             Company cc = new Company();
-            cc.Id = Form1.db.Company.Count() + 1;
+            cc.Id = common.db.Company.Count() + 1;
             cc.Name = TBnamn.Text;
             if (TBorgnr.Text.Contains('-'))
                 cc.Orgnr = TBorgnr.Text;
@@ -66,15 +66,15 @@ namespace LsjBok
                 cc.Momsfreq = 12;
             else
                 cc.Momsfreq = 0;
-            cc.Admin = Form1.currentuser;
-            cc.Creator = Form1.currentuser;
+            cc.Admin = common.currentuser;
+            cc.Creator = common.currentuser;
             cc.Creationdate = DateTime.Now;
-            Form1.db.Company.InsertOnSubmit(cc);
-            Form1.db.SubmitChanges();
+            common.db.Company.InsertOnSubmit(cc);
+            common.db.SubmitChanges();
 
             util.logentry("Skapar företag " + cc.Name, cc.Id);
 
-            Form1.currentcompany = cc.Id;
+            common.currentcompany = cc.Id;
             
             this.Close();
         }

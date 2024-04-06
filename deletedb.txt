@@ -1,11 +1,10 @@
 USE [LsjBokDB]
 GO
 
+delete from Loglist
 delete from Mallrad
 delete from Mall
 delete from Rad
-
-
 delete from Ver
 delete from Momsentry
 delete from Momsperiod
@@ -14,6 +13,7 @@ delete from Fiscalyear
 delete from Company
 delete from Companytype
 delete from LsjBokUser
+DROP TABLE [dbo].[Loglist]
 DROP TABLE [dbo].[Mallrad]
 DROP TABLE [dbo].[Mall]
 DROP TABLE [dbo].[Rad]

@@ -15,7 +15,7 @@ namespace LsjBok
         public static void fill_companytype()
         {
 
-            if (Form1.db.Companytype.Count() == 0)
+            if (common.db.Companytype.Count() == 0)
             {
                 if (ctdict.Count == 0)
                 {
@@ -50,16 +50,16 @@ namespace LsjBok
                     ct.Id = id;
                     ct.Shortname = sn;
                     ct.Name = ctdict[sn];
-                    Form1.db.Companytype.InsertOnSubmit(ct);
+                    common.db.Companytype.InsertOnSubmit(ct);
                     ctiddict.Add(sn, id);
                     ctiddict.Add(ctdict[sn], id);
                     idctdict.Add(id, sn);
                 }
-                Form1.db.SubmitChanges();
+                common.db.SubmitChanges();
             }
             else
             {
-                foreach (Companytype ct in Form1.db.Companytype)
+                foreach (Companytype ct in common.db.Companytype)
                 {
                     ctdict.Add(ct.Shortname, ct.Name);
                     ctiddict.Add(ct.Shortname, ct.Id);
