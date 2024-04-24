@@ -119,7 +119,7 @@ namespace LsjBok
 
         private void closebutton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            //this.Close();
         }
 
         private void backupDBbutton_Click(object sender, EventArgs e)

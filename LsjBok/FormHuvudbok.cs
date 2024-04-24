@@ -88,7 +88,7 @@ namespace LsjBok
 
         private void closebutton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            //this.Close();
         }
 
         void tree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)

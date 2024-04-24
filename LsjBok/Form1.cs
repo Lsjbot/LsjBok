@@ -106,6 +106,8 @@ namespace LsjBok
             }
             rrbrclass.fill_rrbr();
             updatetitle();
+
+            createForms();
         }
 
         public void updatefiscal()
@@ -161,14 +163,16 @@ namespace LsjBok
 
         private void adminbutton_Click(object sender, EventArgs e)
         {
-            FormAdmin fa = new FormAdmin(this);
-            fa.Show();
+            //FormAdmin fa = new FormAdmin(this);
+            //fa.Show();
+            showForm(fa);
         }
 
         private void bookbutton_Click(object sender, EventArgs e)
         {
-            FormBook fb = new FormBook();
-            fb.Show();
+            //FormBook fb = new FormBook();
+            //fb.Show();
+            showForm(fb);
         }
 
         private void LBuser_SelectedIndexChanged(object sender, EventArgs e)
@@ -207,38 +211,206 @@ namespace LsjBok
 
         private void huvudbokbutton_Click(object sender, EventArgs e)
         {
-            FormHuvudbok fhb = new FormHuvudbok();
-            fhb.Show();
+            //FormHuvudbok fhb = new FormHuvudbok();
+            //fhb.Show();
+            showForm(fhb);
         }
 
         private void importexportbutton_Click(object sender, EventArgs e)
         {
-            FormImportExport fie = new FormImportExport();
-            fie.Show();
+            //FormImportExport fie = new FormImportExport();
+            //fie.Show();
+            showForm(fie);
         }
 
         private void verbutton_Click(object sender, EventArgs e)
         {
-            FormVerifikatlista fv = new FormVerifikatlista();
-            fv.Show();
+            //formverifikatlista fv = new formverifikatlista();
+            //fv.Show();
+            showForm(fv);
         }
 
         private void rrbutton_Click(object sender, EventArgs e)
         {
-            FormRR frr = new FormRR("Resultaträkning");
-            frr.Show();
+            //FormRR frr = new FormRR("Resultaträkning");
+            //frr.Show();
+            showForm(frr);
         }
 
         private void balansbutton_Click(object sender, EventArgs e)
         {
-            FormRR frr = new FormRR("Balansräkning");
-            frr.Show();
+            //FormRR frr = new FormRR("Balansräkning");
+            //frr.Show();
+            showForm(fbr);
         }
 
         private void momsbutton_Click(object sender, EventArgs e)
         {
-            FormMoms fm = new FormMoms();
-            fm.Show();
+            //FormMoms fm = new FormMoms();
+            //fm.Show();
+            showForm(fm);
         }
+
+
+        List<Form> formList;
+        FormAdmin fa;
+        FormBook fb;
+        FormHuvudbok fhb;
+        FormImportExport fie;
+        FormVerifikatlista fv;
+        FormRR frr;
+        FormRR fbr;
+        FormMoms fm;
+        private void createForms()
+        {
+            fa = new FormAdmin(this);
+            fb = new FormBook();
+            fhb = new FormHuvudbok();
+            fie = new FormImportExport();
+            fv = new FormVerifikatlista();
+            frr = new FormRR("Resultaträkning");
+            fbr = new FormRR("Balansräkning");
+            fm = new FormMoms();
+
+            formList = new List<Form>();
+            formList.Add(fa);
+            formList.Add(fb);
+            formList.Add(fhb);
+            formList.Add(fie);
+            formList.Add(fv);
+            formList.Add(frr);
+            formList.Add(fbr);
+            formList.Add(fm);
+
+            foreach (var f in formList) 
+            {
+                f.Dock = DockStyle.Fill;
+                f.TopLevel = false;
+                f.TopMost = true;
+                f.FormBorderStyle = FormBorderStyle.None;
+                f.AutoScroll = true;
+            }
+        }
+
+        private void showForm(Form form)
+        {
+            this.panelContainer.Controls.Clear();
+            this.panelContainer.Controls.Add(form);
+            form.Show();
+        }
+
+
+        bool sidebarExpanded = true;
+        private void sidebarTimer_Tick(object sender, EventArgs e)
+        {
+            if (sidebarExpanded)
+            {
+                flowLayoutPanelSidebar.Width -= 50;
+                if (flowLayoutPanelSidebar.Width <= flowLayoutPanelSidebar.MinimumSize.Width)
+                {
+                    sidebarExpanded = false;
+                    timerSidebar.Stop();
+                }
+            }
+            else
+            {
+                flowLayoutPanelSidebar.Width += 50;
+                if (flowLayoutPanelSidebar.Width >= flowLayoutPanelSidebar.MaximumSize.Width)
+                {
+                    sidebarExpanded = true;
+                    timerSidebar.Stop();
+                }
+            }
+        }
+
+        private void buttonMenu_Click(object sender, EventArgs e)
+        {
+            timerSidebar.Start();
+        }
+
+        bool accountingExpanded = false;
+        private void timerAccounting_Tick(object sender, EventArgs e)
+        {
+            if (accountingExpanded)
+            {
+                flowLayoutPanelAccounting.Height -= 100;
+                if (flowLayoutPanelAccounting.Height <= flowLayoutPanelAccounting.MinimumSize.Height)
+                {
+                    accountingExpanded = false;
+                    timerAccounting.Stop();
+                }
+             }
+            else
+            {
+                flowLayoutPanelAccounting.Height += 100;
+                if (flowLayoutPanelAccounting.Height >= flowLayoutPanelAccounting.MaximumSize.Height)
+                {
+                    accountingExpanded = true;
+                    timerAccounting.Stop();
+                }
+            }
+        }
+
+        private void buttonAccounting_Click(object sender, EventArgs e)
+        {
+            timerAccounting.Start();
+        }
+
+        bool invoicingExpanded = false;
+        private void timerInvoicing_Tick(object sender, EventArgs e)
+        {
+            if (invoicingExpanded)
+            {
+                flowLayoutPanelInvoicing.Height -= 100;
+                if (flowLayoutPanelInvoicing.Height <= flowLayoutPanelInvoicing.MinimumSize.Height)
+                {
+                    invoicingExpanded = false;
+                    timerInvoicing.Stop();
+                }
+            }
+            else
+            {
+                flowLayoutPanelInvoicing.Height += 100;
+                if (flowLayoutPanelInvoicing.Height >= flowLayoutPanelInvoicing.MaximumSize.Height)
+                {
+                    invoicingExpanded = true;
+                    timerInvoicing.Stop();
+                }
+            }
+        }
+
+        private void buttonInvoicing_Click(object sender, EventArgs e)
+        {
+            timerInvoicing.Start();
+        }
+
+        bool settingsExpanded = false;
+        private void timerSettings_Tick(object sender, EventArgs e)
+        {
+            if (settingsExpanded)
+            {
+                flowLayoutPanelSettings.Height -= 100;
+                if (flowLayoutPanelSettings.Height <= flowLayoutPanelSettings.MinimumSize.Height)
+                {
+                    settingsExpanded = false;
+                    timerSettings.Stop();
+                }
+            }
+            else
+            {
+                flowLayoutPanelSettings.Height += 100;
+                if (flowLayoutPanelSettings.Height >= flowLayoutPanelSettings.MaximumSize.Height)
+                {
+                    settingsExpanded = true;
+                    timerSettings.Stop();
+                }
+            }
+
+        }
+        private void buttonSettings_Click(object sender, EventArgs e)
+        {
+            timerSettings.Start();
+        }
+
     }
 }

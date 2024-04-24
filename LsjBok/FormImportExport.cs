@@ -24,7 +24,7 @@ namespace LsjBok
 
         private void closebutton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            //this.Close();
         }
 
         public void updatetitle()
