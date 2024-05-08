@@ -107,6 +107,9 @@ namespace LsjBok
             this.timerSettings = new System.Windows.Forms.Timer(this.components);
             this.panelContainer = new System.Windows.Forms.Panel();
             this.panel32 = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.RBsamewindow = new System.Windows.Forms.RadioButton();
+            this.RBmanywindows = new System.Windows.Forms.RadioButton();
             this.flowLayoutPanelSidebar.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -138,6 +141,7 @@ namespace LsjBok
             this.panel30.SuspendLayout();
             this.panel31.SuspendLayout();
             this.panel32.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // quitbutton
@@ -359,7 +363,7 @@ namespace LsjBok
             // flowLayoutPanelSidebar
             // 
             this.flowLayoutPanelSidebar.AutoScroll = true;
-            this.flowLayoutPanelSidebar.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.flowLayoutPanelSidebar.BackColor = System.Drawing.SystemColors.ControlDark;
             this.flowLayoutPanelSidebar.Controls.Add(this.panel1);
             this.flowLayoutPanelSidebar.Controls.Add(this.panel2);
             this.flowLayoutPanelSidebar.Controls.Add(this.panel3);
@@ -972,6 +976,7 @@ namespace LsjBok
             // 
             // panel32
             // 
+            this.panel32.Controls.Add(this.groupBox1);
             this.panel32.Controls.Add(this.label2);
             this.panel32.Controls.Add(this.label1);
             this.panel32.Controls.Add(this.folderlabel);
@@ -986,6 +991,39 @@ namespace LsjBok
             this.panel32.Name = "panel32";
             this.panel32.Size = new System.Drawing.Size(214, 1161);
             this.panel32.TabIndex = 20;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.RBmanywindows);
+            this.groupBox1.Controls.Add(this.RBsamewindow);
+            this.groupBox1.Location = new System.Drawing.Point(12, 604);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 75);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Fönsterhantering";
+            // 
+            // RBsamewindow
+            // 
+            this.RBsamewindow.AutoSize = true;
+            this.RBsamewindow.Location = new System.Drawing.Point(10, 22);
+            this.RBsamewindow.Name = "RBsamewindow";
+            this.RBsamewindow.Size = new System.Drawing.Size(115, 17);
+            this.RBsamewindow.TabIndex = 0;
+            this.RBsamewindow.Text = "Allt i samma fönster";
+            this.RBsamewindow.UseVisualStyleBackColor = true;
+            // 
+            // RBmanywindows
+            // 
+            this.RBmanywindows.AutoSize = true;
+            this.RBmanywindows.Checked = true;
+            this.RBmanywindows.Location = new System.Drawing.Point(10, 45);
+            this.RBmanywindows.Name = "RBmanywindows";
+            this.RBmanywindows.Size = new System.Drawing.Size(83, 17);
+            this.RBmanywindows.TabIndex = 1;
+            this.RBmanywindows.TabStop = true;
+            this.RBmanywindows.Text = "Flera fönster";
+            this.RBmanywindows.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -1034,6 +1072,8 @@ namespace LsjBok
             this.panel31.ResumeLayout(false);
             this.panel32.ResumeLayout(false);
             this.panel32.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1116,6 +1156,9 @@ namespace LsjBok
         private System.Windows.Forms.Timer timerSettings;
         private System.Windows.Forms.Panel panelContainer;
         private System.Windows.Forms.Panel panel32;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton RBmanywindows;
+        private System.Windows.Forms.RadioButton RBsamewindow;
     }
 }
 

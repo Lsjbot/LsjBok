@@ -51,7 +51,10 @@ namespace LsjBok
             {
                 foreach (Control c in this.Controls)
                     c.Enabled = false;
+                flowLayoutPanelSidebar.Enabled = true;
+                flowLayoutPanelSettings.Enabled = true;
                 adminbutton.Enabled = true;
+                buttonSettings.Enabled = true;
                 quitbutton.Enabled = true;
                 folderchangebutton.Enabled = true;
                 folderlabel.Enabled = true;
@@ -70,7 +73,10 @@ namespace LsjBok
                 {
                     foreach (Control c in this.Controls)
                         c.Enabled = false;
+                    flowLayoutPanelSidebar.Enabled = true;
+                    flowLayoutPanelSettings.Enabled = true;
                     adminbutton.Enabled = true;
+                    buttonSettings.Enabled = true;
                     quitbutton.Enabled = true;
                     MessageBox.Show("Börja med att skapa en användare", "LsjBok", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
@@ -86,7 +92,10 @@ namespace LsjBok
                     {
                         foreach (Control c in this.Controls)
                             c.Enabled = false;
+                        flowLayoutPanelSidebar.Enabled = true;
+                        flowLayoutPanelSettings.Enabled = true;
                         adminbutton.Enabled = true;
+                        buttonSettings.Enabled = true;
                         quitbutton.Enabled = true;
                         MessageBox.Show("Börja med att skapa ett företag", "LsjBok", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
@@ -163,16 +172,24 @@ namespace LsjBok
 
         private void adminbutton_Click(object sender, EventArgs e)
         {
-            //FormAdmin fa = new FormAdmin(this);
-            //fa.Show();
-            showForm(fa);
+            if (RBmanywindows.Checked)
+            {
+                FormAdmin fa = new FormAdmin(this);
+                fa.Show();
+            }
+            else
+                showForm(fa);
         }
 
         private void bookbutton_Click(object sender, EventArgs e)
         {
-            //FormBook fb = new FormBook();
-            //fb.Show();
-            showForm(fb);
+            if (RBmanywindows.Checked)
+            {
+                FormBook fb = new FormBook();
+                fb.Show();
+            }
+            else
+                showForm(fb);
         }
 
         private void LBuser_SelectedIndexChanged(object sender, EventArgs e)
@@ -211,44 +228,68 @@ namespace LsjBok
 
         private void huvudbokbutton_Click(object sender, EventArgs e)
         {
-            //FormHuvudbok fhb = new FormHuvudbok();
-            //fhb.Show();
-            showForm(fhb);
+            if (RBmanywindows.Checked)
+            {
+                FormHuvudbok fhb1 = new FormHuvudbok();
+                fhb1.Show();
+            }
+            else
+                showForm(fhb);
         }
 
         private void importexportbutton_Click(object sender, EventArgs e)
         {
-            //FormImportExport fie = new FormImportExport();
-            //fie.Show();
-            showForm(fie);
+            if (RBmanywindows.Checked)
+            {
+                FormImportExport fie1 = new FormImportExport();
+                fie1.Show();
+            }
+            else
+                showForm(fie);
         }
 
         private void verbutton_Click(object sender, EventArgs e)
         {
-            //formverifikatlista fv = new formverifikatlista();
-            //fv.Show();
-            showForm(fv);
+            if (RBmanywindows.Checked)
+            {
+                FormVerifikatlista fv1 = new FormVerifikatlista();
+                fv1.Show();
+            }
+            else
+                showForm(fv);
         }
 
         private void rrbutton_Click(object sender, EventArgs e)
         {
-            //FormRR frr = new FormRR("Resultaträkning");
-            //frr.Show();
-            showForm(frr);
+            if (RBmanywindows.Checked)
+            {
+                FormRR frr1 = new FormRR("Resultaträkning");
+                frr1.Show();
+            }
+            else
+                showForm(frr);
         }
 
         private void balansbutton_Click(object sender, EventArgs e)
         {
-            //FormRR frr = new FormRR("Balansräkning");
-            //frr.Show();
-            showForm(fbr);
+            if (RBmanywindows.Checked)
+            {
+                FormRR frr1 = new FormRR("Balansräkning");
+                frr1.Show();
+            }
+            else
+                showForm(fbr);
         }
 
         private void momsbutton_Click(object sender, EventArgs e)
         {
-            //FormMoms fm = new FormMoms();
-            //fm.Show();
-            showForm(fm);
+            if (RBmanywindows.Checked)
+            {
+                FormMoms fm1 = new FormMoms();
+                fm1.Show();
+            }
+            else
+                showForm(fm);
         }
 
 
@@ -263,6 +304,9 @@ namespace LsjBok
         FormMoms fm;
         private void createForms()
         {
+            if (RBmanywindows.Checked)
+                return;
+
             fa = new FormAdmin(this);
             fb = new FormBook();
             fhb = new FormHuvudbok();
@@ -294,9 +338,17 @@ namespace LsjBok
 
         private void showForm(Form form)
         {
-            this.panelContainer.Controls.Clear();
-            this.panelContainer.Controls.Add(form);
-            form.Show();
+            if (RBsamewindow.Checked)
+            {
+                this.panelContainer.Controls.Clear();
+                this.panelContainer.Controls.Add(form);
+                form.Show();
+            }
+            //else
+            //{
+            //    Form f = (Form)Activator.CreateInstance(form.GetType());
+            //    f.Show();
+            //}
         }
 
 

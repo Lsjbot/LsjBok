@@ -234,6 +234,18 @@ namespace LsjBok
                                     Rad rr = new Rad();
                                     rr.Ver = vv.Vernumber;
                                     rr.Konto = util.tryconvert(w2[1]);
+                                    var tkonto = (from c in kontolist where c.Year == 0 where c.Number == rr.Konto select c).FirstOrDefault();
+                                    if (tkonto == null)
+                                    {
+                                        tkonto = new Konto();
+                                        tkonto.Number = rr.Konto;
+                                        if (siekontodict.ContainsKey(rr.Konto))
+                                            tkonto.Name = siekontodict[rr.Konto];
+                                        tkonto.Year = 0;
+                                        tkonto.IB = 0;
+                                        tkonto.UB = 0;
+                                        kontolist.Add(tkonto);
+                                    }
                                     rr.Amount = util.tryconvertdecimal(w2[3]);
                                     total += rr.Amount;
                                     radlist.Add(rr);
