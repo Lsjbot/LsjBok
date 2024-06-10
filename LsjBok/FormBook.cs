@@ -434,7 +434,7 @@ namespace LsjBok
 
         private void cancelbutton_Click(object sender, EventArgs e)
         {
-            //this.Close();
+            this.Close();
         }
 
         private int nextvernumber()

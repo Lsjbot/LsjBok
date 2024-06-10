@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using HQAccounting.Models;
 
 namespace LsjBok
 {
@@ -29,6 +30,7 @@ namespace LsjBok
                     common.mainfolder = sr.ReadLine();
             }
             folderlabel.Text = common.mainfolder;
+            lblFolder.Text = common.mainfolder;
 
             if (File.Exists(common.mainfolder + common.connectionfn))
             {
@@ -49,15 +51,24 @@ namespace LsjBok
 
             if (common.db == null)
             {
-                foreach (Control c in this.Controls)
-                    c.Enabled = false;
-                flowLayoutPanelSidebar.Enabled = true;
-                flowLayoutPanelSettings.Enabled = true;
-                adminbutton.Enabled = true;
-                buttonSettings.Enabled = true;
-                quitbutton.Enabled = true;
-                folderchangebutton.Enabled = true;
-                folderlabel.Enabled = true;
+                //foreach (Control c in this.Controls)
+                //    c.Enabled = false;
+                //flowLayoutPanelSidebar.Enabled = true;
+                //flowLayoutPanelSettings.Enabled = true;
+                //adminbutton.Enabled = true;
+                //buttonSettings.Enabled = true;
+                //quitbutton.Enabled = true;
+                //folderchangebutton.Enabled = true;
+                //folderlabel.Enabled = true;
+
+                //menuStrip1.Enabled = true;
+                foreach (ToolStripMenuItem item in menuStrip1.Items)
+                {
+                    item.Enabled = false;
+                }
+                settingsToolStripMenuItem.Enabled = true;
+                btnFolder.Enabled = true;
+
                 MessageBox.Show("Börja med att skapa databas", "LsjBok", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
@@ -71,13 +82,22 @@ namespace LsjBok
 
                 if (common.db.LsjBokUser.Count() == 0)
                 {
-                    foreach (Control c in this.Controls)
-                        c.Enabled = false;
-                    flowLayoutPanelSidebar.Enabled = true;
-                    flowLayoutPanelSettings.Enabled = true;
-                    adminbutton.Enabled = true;
-                    buttonSettings.Enabled = true;
-                    quitbutton.Enabled = true;
+                    //foreach (Control c in this.Controls)
+                    //    c.Enabled = false;
+                    //flowLayoutPanelSidebar.Enabled = true;
+                    //flowLayoutPanelSettings.Enabled = true;
+                    //adminbutton.Enabled = true;
+                    //buttonSettings.Enabled = true;
+                    //quitbutton.Enabled = true;
+
+                    //menuStrip1.Enabled = true;
+                    foreach (ToolStripMenuItem item in menuStrip1.Items)
+                    {
+                        item.Enabled = false;
+                    }
+                    settingsToolStripMenuItem.Enabled = true;
+                    btnFolder.Enabled = true;
+
                     MessageBox.Show("Börja med att skapa en användare", "LsjBok", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
@@ -86,17 +106,29 @@ namespace LsjBok
                     {
                         common.currentuser = common.db.LsjBokUser.First().Id;
                         foreach (var user in common.db.LsjBokUser)
+                        {
                             LBuser.Items.Add(user.Name);
+                            cboUser.Items.Add(user.Name);
+                        }
                     }
                     if (common.db.Company.Count() == 0)
                     {
-                        foreach (Control c in this.Controls)
-                            c.Enabled = false;
-                        flowLayoutPanelSidebar.Enabled = true;
-                        flowLayoutPanelSettings.Enabled = true;
-                        adminbutton.Enabled = true;
-                        buttonSettings.Enabled = true;
-                        quitbutton.Enabled = true;
+                        //foreach (Control c in this.Controls)
+                        //    c.Enabled = false;
+                        //flowLayoutPanelSidebar.Enabled = true;
+                        //flowLayoutPanelSettings.Enabled = true;
+                        //adminbutton.Enabled = true;
+                        //buttonSettings.Enabled = true;
+                        //quitbutton.Enabled = true;
+
+                        //menuStrip1.Enabled = true;
+                        foreach (ToolStripMenuItem item in menuStrip1.Items)
+                        {
+                            item.Enabled = false;
+                        }
+                        settingsToolStripMenuItem.Enabled = true;
+                        btnFolder.Enabled = true;
+
                         MessageBox.Show("Börja med att skapa ett företag", "LsjBok", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
@@ -105,27 +137,30 @@ namespace LsjBok
                         {
                             common.currentcompany = common.db.Company.First().Id;
                             foreach (var cc in common.db.Company)
+                            {
                                 LBcompany.Items.Add(cc.Name);
+                                cboCompany.Items.Add(cc.Name);
+                            }
                         }
                         updatefiscal();
-                        bookbutton.Enabled = true;
-                        huvudbokbutton.Enabled = true;
+                        //bookbutton.Enabled = true;
+                        //huvudbokbutton.Enabled = true;
                     }
                 }
             }
             rrbrclass.fill_rrbr();
             updatetitle();
-
-            createForms();
         }
 
         public void updatefiscal()
         {
             LBfiscal.Items.Clear();
+            cboFiscalYear.Items.Clear();
             var q = from c in common.db.Fiscalyear where c.Company == common.currentcompany select c;
             foreach (var ff in q)
             {
                 LBfiscal.Items.Add(ff.Name);
+                cboFiscalYear.Items.Add(ff.Name);
                 if (ff.Enddate > DateTime.Now)
                     common.currentfiscal = ff.Id;
             }
@@ -143,11 +178,19 @@ namespace LsjBok
             LBcompany.Visible = common.db.Company.Count() > 1;
             LBcompany.Enabled = common.db.Company.Count() > 1;
             LBuser.Items.Clear();
+            cboUser.Items.Clear();
             foreach (var user in common.db.LsjBokUser)
+            {
                 LBuser.Items.Add(user.Name);
+                cboUser.Items.Add(user.Name);
+            }
             LBcompany.Items.Clear();
+            cboCompany.Items.Clear();
             foreach (var cc in common.db.Company)
+            {
                 LBcompany.Items.Add(cc.Name);
+                cboCompany.Items.Add(cc.Name);
+            }
             updatefiscal();
         }
 
@@ -163,33 +206,12 @@ namespace LsjBok
             {
                 common.mainfolder = fb.SelectedPath;
                 folderlabel.Text = common.mainfolder;
+                lblFolder.Text = common.mainfolder;
                 string oldfn = util.unused_filename(common.folderfn);
                 File.Move(common.folderfn, oldfn);
                 using (StreamWriter sw = new StreamWriter(common.folderfn))
                     sw.WriteLine(common.mainfolder);
             }
-        }
-
-        private void adminbutton_Click(object sender, EventArgs e)
-        {
-            if (RBmanywindows.Checked)
-            {
-                FormAdmin fa = new FormAdmin(this);
-                fa.Show();
-            }
-            else
-                showForm(fa);
-        }
-
-        private void bookbutton_Click(object sender, EventArgs e)
-        {
-            if (RBmanywindows.Checked)
-            {
-                FormBook fb = new FormBook();
-                fb.Show();
-            }
-            else
-                showForm(fb);
         }
 
         private void LBuser_SelectedIndexChanged(object sender, EventArgs e)
@@ -226,243 +248,138 @@ namespace LsjBok
 
         }
 
-        private void huvudbokbutton_Click(object sender, EventArgs e)
+
+        private void huvudbokToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RBmanywindows.Checked)
-            {
-                FormHuvudbok fhb1 = new FormHuvudbok();
-                fhb1.Show();
-            }
-            else
-                showForm(fhb);
+            var form = new FormHuvudbok();
+            form.Show();
         }
 
-        private void importexportbutton_Click(object sender, EventArgs e)
+        private void balansrapportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RBmanywindows.Checked)
-            {
-                FormImportExport fie1 = new FormImportExport();
-                fie1.Show();
-            }
-            else
-                showForm(fie);
+            var form = new FormRR("Balansräkning");
+            form.Show();
         }
 
-        private void verbutton_Click(object sender, EventArgs e)
+        private void resultatrapportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RBmanywindows.Checked)
-            {
-                FormVerifikatlista fv1 = new FormVerifikatlista();
-                fv1.Show();
-            }
-            else
-                showForm(fv);
+            var form = new FormRR("Resultaträkning");
+            form.Show();
         }
 
-        private void rrbutton_Click(object sender, EventArgs e)
+        private void momsrapportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RBmanywindows.Checked)
-            {
-                FormRR frr1 = new FormRR("Resultaträkning");
-                frr1.Show();
-            }
-            else
-                showForm(frr);
+            var form = new FormMoms();
+            form.Show();
         }
 
-        private void balansbutton_Click(object sender, EventArgs e)
+        private void skapaVerifikatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RBmanywindows.Checked)
-            {
-                FormRR frr1 = new FormRR("Balansräkning");
-                frr1.Show();
-            }
-            else
-                showForm(fbr);
+            var form = new FormBook();
+            form.Show();
         }
 
-        private void momsbutton_Click(object sender, EventArgs e)
+        private void bokföringsinställningarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RBmanywindows.Checked)
-            {
-                FormMoms fm1 = new FormMoms();
-                fm1.Show();
-            }
-            else
-                showForm(fm);
+
         }
 
-
-        List<Form> formList;
-        FormAdmin fa;
-        FormBook fb;
-        FormHuvudbok fhb;
-        FormImportExport fie;
-        FormVerifikatlista fv;
-        FormRR frr;
-        FormRR fbr;
-        FormMoms fm;
-        private void createForms()
+        private void bokföringsmallarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RBmanywindows.Checked)
-                return;
 
-            fa = new FormAdmin(this);
-            fb = new FormBook();
-            fhb = new FormHuvudbok();
-            fie = new FormImportExport();
-            fv = new FormVerifikatlista();
-            frr = new FormRR("Resultaträkning");
-            fbr = new FormRR("Balansräkning");
-            fm = new FormMoms();
-
-            formList = new List<Form>();
-            formList.Add(fa);
-            formList.Add(fb);
-            formList.Add(fhb);
-            formList.Add(fie);
-            formList.Add(fv);
-            formList.Add(frr);
-            formList.Add(fbr);
-            formList.Add(fm);
-
-            foreach (var f in formList) 
-            {
-                f.Dock = DockStyle.Fill;
-                f.TopLevel = false;
-                f.TopMost = true;
-                f.FormBorderStyle = FormBorderStyle.None;
-                f.AutoScroll = true;
-            }
         }
 
-        private void showForm(Form form)
+        private void tillgångarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (RBsamewindow.Checked)
-            {
-                this.panelContainer.Controls.Clear();
-                this.panelContainer.Controls.Add(form);
-                form.Show();
-            }
-            //else
-            //{
-            //    Form f = (Form)Activator.CreateInstance(form.GetType());
-            //    f.Show();
-            //}
+
         }
 
-
-        bool sidebarExpanded = true;
-        private void sidebarTimer_Tick(object sender, EventArgs e)
+        private void verifikatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (sidebarExpanded)
-            {
-                flowLayoutPanelSidebar.Width -= 50;
-                if (flowLayoutPanelSidebar.Width <= flowLayoutPanelSidebar.MinimumSize.Width)
-                {
-                    sidebarExpanded = false;
-                    timerSidebar.Stop();
-                }
-            }
-            else
-            {
-                flowLayoutPanelSidebar.Width += 50;
-                if (flowLayoutPanelSidebar.Width >= flowLayoutPanelSidebar.MaximumSize.Width)
-                {
-                    sidebarExpanded = true;
-                    timerSidebar.Stop();
-                }
-            }
+            var form = new FormVerifikatlista();
+            form.Show();
         }
 
-        private void buttonMenu_Click(object sender, EventArgs e)
+        private void fakturorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            timerSidebar.Start();
+            var form = new InvoicesForm();
+            form.ShowDialog();
         }
 
-        bool accountingExpanded = false;
-        private void timerAccounting_Tick(object sender, EventArgs e)
+        private void kunderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (accountingExpanded)
-            {
-                flowLayoutPanelAccounting.Height -= 100;
-                if (flowLayoutPanelAccounting.Height <= flowLayoutPanelAccounting.MinimumSize.Height)
-                {
-                    accountingExpanded = false;
-                    timerAccounting.Stop();
-                }
-             }
-            else
-            {
-                flowLayoutPanelAccounting.Height += 100;
-                if (flowLayoutPanelAccounting.Height >= flowLayoutPanelAccounting.MaximumSize.Height)
-                {
-                    accountingExpanded = true;
-                    timerAccounting.Stop();
-                }
-            }
+            var form = new CustomersForm();
+            form.ShowDialog();
         }
 
-        private void buttonAccounting_Click(object sender, EventArgs e)
+        private void artiklarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            timerAccounting.Start();
+            var form = new ItemsForm();
+            form.ShowDialog();
         }
 
-        bool invoicingExpanded = false;
-        private void timerInvoicing_Tick(object sender, EventArgs e)
+        private void importexportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (invoicingExpanded)
-            {
-                flowLayoutPanelInvoicing.Height -= 100;
-                if (flowLayoutPanelInvoicing.Height <= flowLayoutPanelInvoicing.MinimumSize.Height)
-                {
-                    invoicingExpanded = false;
-                    timerInvoicing.Stop();
-                }
-            }
-            else
-            {
-                flowLayoutPanelInvoicing.Height += 100;
-                if (flowLayoutPanelInvoicing.Height >= flowLayoutPanelInvoicing.MaximumSize.Height)
-                {
-                    invoicingExpanded = true;
-                    timerInvoicing.Stop();
-                }
-            }
+            var form = new FormImportExport();
+            form.Show();
         }
 
-        private void buttonInvoicing_Click(object sender, EventArgs e)
+        private void företagsinställningarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            timerInvoicing.Start();
+            var form = new FormAdmin(this);
+            form.Show();
         }
 
-        bool settingsExpanded = false;
-        private void timerSettings_Tick(object sender, EventArgs e)
+        private void räkenskapsårToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (settingsExpanded)
+
+        }
+
+        private void cboUser_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var q = (from c in common.db.LsjBokUser where c.Name == cboUser.SelectedItem.ToString() select c).FirstOrDefault();
+            if (q != null)
             {
-                flowLayoutPanelSettings.Height -= 100;
-                if (flowLayoutPanelSettings.Height <= flowLayoutPanelSettings.MinimumSize.Height)
-                {
-                    settingsExpanded = false;
-                    timerSettings.Stop();
-                }
-            }
-            else
-            {
-                flowLayoutPanelSettings.Height += 100;
-                if (flowLayoutPanelSettings.Height >= flowLayoutPanelSettings.MaximumSize.Height)
-                {
-                    settingsExpanded = true;
-                    timerSettings.Stop();
-                }
+                common.currentuser = q.Id;
+                updatetitle();
             }
 
         }
-        private void buttonSettings_Click(object sender, EventArgs e)
+
+        private void cboCompany_SelectedIndexChanged(object sender, EventArgs e)
         {
-            timerSettings.Start();
+            var q = (from c in common.db.Company where c.Name == cboCompany.SelectedItem.ToString() select c).FirstOrDefault();
+            if (q != null)
+            {
+                common.currentcompany = q.Id;
+                updatetitle();
+                updatefiscal();
+            }
         }
 
+        private void cboFiscalYear_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var q = (from c in common.db.Fiscalyear where c.Name == cboFiscalYear.SelectedItem.ToString() select c).FirstOrDefault();
+            if (q != null)
+            {
+                common.currentfiscal = q.Id;
+                updatetitle();
+            }
+        }
+
+        private void btnFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fb = new FolderBrowserDialog();
+            if (fb.ShowDialog() == DialogResult.OK)
+            {
+                common.mainfolder = fb.SelectedPath;
+                folderlabel.Text = common.mainfolder;
+                lblFolder.Text = common.mainfolder;
+                string oldfn = util.unused_filename(common.folderfn);
+                File.Move(common.folderfn, oldfn);
+                using (StreamWriter sw = new StreamWriter(common.folderfn))
+                    sw.WriteLine(common.mainfolder);
+            }
+        }
     }
 }

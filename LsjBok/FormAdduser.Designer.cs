@@ -71,6 +71,7 @@ namespace LsjBok
             this.TBpw1.Name = "TBpw1";
             this.TBpw1.Size = new System.Drawing.Size(142, 20);
             this.TBpw1.TabIndex = 3;
+            this.TBpw1.UseSystemPasswordChar = true;
             this.TBpw1.TextChanged += new System.EventHandler(this.TBpw1_TextChanged);
             // 
             // label3
@@ -86,9 +87,9 @@ namespace LsjBok
             // 
             this.TBpw2.Location = new System.Drawing.Point(115, 93);
             this.TBpw2.Name = "TBpw2";
-            this.TBpw2.PasswordChar = '*';
             this.TBpw2.Size = new System.Drawing.Size(142, 20);
             this.TBpw2.TabIndex = 5;
+            this.TBpw2.UseSystemPasswordChar = true;
             this.TBpw2.TextChanged += new System.EventHandler(this.TBpw2_TextChanged);
             // 
             // createbutton
