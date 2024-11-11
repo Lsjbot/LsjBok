@@ -387,9 +387,9 @@ namespace LsjBok
         {
             bool valid = validate();
 
-            bookbutton.Visible = (vvin == null);
+            bookbutton.Visible = (vvin == null) || makecopy;
             bookbutton.Enabled = valid;
-            changebutton.Visible = (vvin != null);
+            changebutton.Visible = !bookbutton.Visible;
             changebutton.Enabled = valid;
         }
 
