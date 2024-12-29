@@ -35,6 +35,8 @@ namespace LsjBok
             this.label2 = new System.Windows.Forms.Label();
             this.makeperiodbutton = new System.Windows.Forms.Button();
             this.momsxmlbutton = new System.Windows.Forms.Button();
+            this.momsbookbutton = new System.Windows.Forms.Button();
+            this.momspaybutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // LBfiscal
@@ -86,19 +88,41 @@ namespace LsjBok
             // 
             // momsxmlbutton
             // 
-            this.momsxmlbutton.Location = new System.Drawing.Point(3, 462);
+            this.momsxmlbutton.Location = new System.Drawing.Point(3, 444);
             this.momsxmlbutton.Name = "momsxmlbutton";
             this.momsxmlbutton.Size = new System.Drawing.Size(118, 53);
             this.momsxmlbutton.TabIndex = 5;
-            this.momsxmlbutton.Text = "Skapa momsrapport";
+            this.momsxmlbutton.Text = "Skapa momsrapport åt Skatteverket";
             this.momsxmlbutton.UseVisualStyleBackColor = true;
             this.momsxmlbutton.Click += new System.EventHandler(this.momsxmlbutton_Click);
+            // 
+            // momsbookbutton
+            // 
+            this.momsbookbutton.Location = new System.Drawing.Point(3, 513);
+            this.momsbookbutton.Name = "momsbookbutton";
+            this.momsbookbutton.Size = new System.Drawing.Size(118, 50);
+            this.momsbookbutton.TabIndex = 6;
+            this.momsbookbutton.Text = "Bokför momsrapport";
+            this.momsbookbutton.UseVisualStyleBackColor = true;
+            this.momsbookbutton.Click += new System.EventHandler(this.momsbookbutton_Click);
+            // 
+            // momspaybutton
+            // 
+            this.momspaybutton.Location = new System.Drawing.Point(3, 582);
+            this.momspaybutton.Name = "momspaybutton";
+            this.momspaybutton.Size = new System.Drawing.Size(118, 44);
+            this.momspaybutton.TabIndex = 7;
+            this.momspaybutton.Text = "Bokför momsbetalning";
+            this.momspaybutton.UseVisualStyleBackColor = true;
+            this.momspaybutton.Click += new System.EventHandler(this.momspaybutton_Click);
             // 
             // FormMoms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 761);
+            this.Controls.Add(this.momspaybutton);
+            this.Controls.Add(this.momsbookbutton);
             this.Controls.Add(this.momsxmlbutton);
             this.Controls.Add(this.makeperiodbutton);
             this.Controls.Add(this.label2);
@@ -120,5 +144,7 @@ namespace LsjBok
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button makeperiodbutton;
         private System.Windows.Forms.Button momsxmlbutton;
+        private System.Windows.Forms.Button momsbookbutton;
+        private System.Windows.Forms.Button momspaybutton;
     }
 }

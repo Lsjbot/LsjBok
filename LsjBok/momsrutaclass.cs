@@ -10,9 +10,11 @@ namespace LsjBok
     {
         public static Dictionary<int, momsrutaclass> momsdict = new Dictionary<int, momsrutaclass>();
 
+        public static List<int> momskontorutor = new List<int>() { 10, 11, 12, 30, 31, 32, 60, 61, 62, 48 };
+
         public string xmltag = "";
         public int ruta = -1;
-        //public decimal amount;
+        public decimal amount;
 
         public momsrutaclass(int rutnr,string desc, string tag, string k1, string k2, string k3, string k4)
         {

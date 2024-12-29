@@ -1880,6 +1880,19 @@ namespace LsjBok
 
 		}
 
-
+		public static decimal sumperiod(Konto kk, DateTime start, DateTime end)
+        {
+			decimal sum = 0;
+			foreach (Rad rr in kk.Rad)
+			{
+				if (rr.VerVer.Verdate < start)
+					continue;// IBsum += rr.Amount;
+				else if (rr.VerVer.Verdate > end)
+					continue;
+				else
+					sum += rr.Amount;
+			}
+			return sum;
+        }
 	}
 }

@@ -46,6 +46,36 @@ namespace LsjBok
 
         public FormBook()
         {
+            init();
+        }
+
+        public FormBook(string title,Dictionary<int,decimal> rader)
+        {
+            init();
+            this.Text = title;
+            TBdecription.Text = title;
+            int i = 0;
+            foreach (int kk in rader.Keys)
+            {
+                int k = kk;
+                if (k > 9999)
+                    k /= 10;
+                cbnumber[i].Text = k.ToString();
+                cbname[i].Text = kontoclass.kontodict[k];
+                if (rader[kk] > 0)
+                    cbdebit[i].Text = rader[kk].ToString("N2");
+                else
+                    cbcredit[i].Text = (-(rader[kk])).ToString("N2");
+                enabled[i] = true;
+                i++;
+            }
+            setvisible();
+
+            validate_setbuttons();
+        }
+
+        private void init()
+        {
             InitializeComponent();
 
             make_controls();
@@ -54,11 +84,11 @@ namespace LsjBok
             TBdate.Text = DateTime.Now.ToString("yyMMdd");
             TBdate.LostFocus += new EventHandler(checkdate);
 
-            bookbutton.Visible =   true; //bookbutton.Enabled = false;
+            bookbutton.Visible = true; //bookbutton.Enabled = false;
             changebutton.Visible = false; //changebutton.Enabled = changebutton.Visible;
-            annulbutton.Visible =  false; //annulbutton.Enabled = annulbutton.Visible;
-            copybutton.Visible =   false; //copybutton.Enabled = copybutton.Visible;
-            mallbutton.Visible =   true; //mallbutton.Enabled = mallbutton.Visible;
+            annulbutton.Visible = false; //annulbutton.Enabled = annulbutton.Visible;
+            copybutton.Visible = false; //copybutton.Enabled = copybutton.Visible;
+            mallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
 
             this.Text = "Bokför nytt verifikat för " + util.getcompanyname() + " " + util.getfiscalname();
         }
@@ -417,9 +447,7 @@ namespace LsjBok
             return (dsum - csum == 0);
         }
 
-
-
-        private void cbmoney_Lostfocus(object sender, EventArgs e)
+        private void validate_setbuttons()
         {
             bool valid = validate();
 
@@ -427,6 +455,13 @@ namespace LsjBok
             bookbutton.Enabled = valid;
             changebutton.Visible = !bookbutton.Visible;
             changebutton.Enabled = valid;
+        }
+
+
+
+        private void cbmoney_Lostfocus(object sender, EventArgs e)
+        {
+            validate_setbuttons();
         }
 
         private void checkdate(object sender, EventArgs e)

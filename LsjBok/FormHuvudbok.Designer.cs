@@ -101,7 +101,6 @@ namespace LsjBok
             // 
             // IBbutton
             // 
-            this.IBbutton.Enabled = false;
             this.IBbutton.Location = new System.Drawing.Point(530, 927);
             this.IBbutton.Name = "IBbutton";
             this.IBbutton.Size = new System.Drawing.Size(141, 23);

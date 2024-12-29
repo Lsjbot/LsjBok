@@ -27,6 +27,8 @@ namespace LsjBok
         Dictionary<TextBox, int> tbrutdict = new Dictionary<TextBox, int>();
         Dictionary<int,TextBox> ruttbdict = new Dictionary<int,TextBox>();
 
+        Momsperiod mp = null;
+
         public FormMoms()
         {
             InitializeComponent();
@@ -145,6 +147,7 @@ namespace LsjBok
                     select c;
             if (q.Count() == 0)
                 return;
+            mp = q.First();
             updateamounts(q.First());
         }
 
@@ -152,10 +155,11 @@ namespace LsjBok
         {
             foreach (momsrutaclass mc in momsrutaclass.momsdict.Values)
             {
-                decimal amount = mc.summoms(localfiscal, mp.Startdate, mp.Enddate);
-                if (amount != 0)
+                mc.amount = mc.summoms(localfiscal, mp.Startdate, mp.Enddate);
+                
+                if (mc.amount != 0)
                 {
-                    ruttbdict[mc.ruta].Text = amount.ToString("N2");
+                    ruttbdict[mc.ruta].Text = mc.amount.ToString("N2");
                 }
                 else
                 {
@@ -166,15 +170,11 @@ namespace LsjBok
 
         private void momsxmlbutton_Click(object sender, EventArgs e)
         {
-            if (LBperiod.SelectedItem == null)
+            if (mp == null)
+            {
+                MessageBox.Show("Välj momsperiod");
                 return;
-            var q = from c in common.db.Momsperiod
-                    where c.Name == LBperiod.SelectedItem.ToString()
-                    where c.Fiscal == localfiscal
-                    select c;
-            if (q.Count() == 0)
-                return;
-            Momsperiod mp = q.First();
+            }
             string orgnr = util.getcompany(common.currentcompany).Orgnr.Trim();
             string fn = util.unused_filename(common.mainfolder + "\\moms_" + orgnr + "_" + mp.Startdate.ToString("yyMMdd") + "_" + mp.Enddate.ToString("yyMMdd")+"_.txt");
             using (StreamWriter sw = new StreamWriter(fn))
@@ -190,6 +190,9 @@ namespace LsjBok
                 {
                     string tag = momsrutaclass.momsdict[ruta].xmltag;
                     decimal amount = util.tryconvertdecimal(ruttbdict[ruta].Text);
+                    decimal oldamount = momsrutaclass.momsdict[ruta].amount;
+                    if (amount != oldamount)
+                        momsrutaclass.momsdict[ruta].amount = amount;
                     if (amount != 0 || ruta == 5 || ruta == 49)
                         sw.WriteLine("    <" + tag + ">" + amount.ToString("F0") + "</" + tag + ">");
                 }
@@ -197,6 +200,83 @@ namespace LsjBok
                 sw.WriteLine("</eSKDUpload>");
             }
             MessageBox.Show("Momsdeklaration skapad: " + fn);
+        }
+
+        private void momsbookbutton_Click(object sender, EventArgs e)
+        {
+            if (mp == null)
+            {
+                MessageBox.Show("Välj momsperiod");
+                return;
+            }
+
+            Dictionary<int, decimal> kontoamount = new Dictionary<int, decimal>();
+
+            int meid = 1;
+            var q = from c in common.db.Momsentry select c.Id;
+            if (q.Count() > 0)
+                meid = q.Max() + 1;
+
+            foreach (int ruta in ruttbdict.Keys)
+            {
+                if (momsrutaclass.momsdict[ruta].amount != 0)
+                {
+                    Momsentry me = new Momsentry();
+                    me.Id = meid;
+                    meid++;
+                    me.Period = mp.Id;
+                    me.Field = ruta;
+                    me.Amount = momsrutaclass.momsdict[ruta].amount;
+                    common.db.Momsentry.InsertOnSubmit(me);
+                }
+            }
+            mp.Net = momsrutaclass.momsdict[49].amount;
+
+            kontoamount.Add(2650, -momsrutaclass.momsdict[49].amount);
+
+            common.db.SubmitChanges();
+
+            foreach (int ruta in momsrutaclass.momskontorutor)
+            {
+                foreach (Konto kk in momsrutaclass.momsdict[ruta].getkonto(localfiscal))
+                {
+                    decimal amount = kontoclass.sumperiod(kk, mp.Startdate, mp.Enddate);
+                    if (amount != 0)
+                    {
+                        kontoamount.Add(kk.Number, -amount);
+                    }
+                }
+            }
+
+            FormBook fb = new FormBook("Momsrapport "+mp.Name, kontoamount);
+            fb.Show();
+        }
+
+        private void momspaybutton_Click(object sender, EventArgs e)
+        {
+            if (mp == null)
+            {
+                MessageBox.Show("Välj momsperiod");
+                return;
+            }
+
+            Dictionary<int, decimal> kontoamount = new Dictionary<int, decimal>();
+            decimal amount = mp.Net;
+            decimal roundamount = Math.Round(amount);
+
+            kontoamount.Add(1930, -roundamount);
+            kontoamount.Add(1630, roundamount);
+
+            kontoamount.Add(2650, amount);
+            kontoamount.Add(16300, -roundamount);
+
+            if (roundamount != amount)
+            {
+                kontoamount.Add(3740, roundamount - amount);
+            }
+
+            FormBook fb = new FormBook("Momsbetalning "+mp.Name, kontoamount);
+            fb.Show();
         }
     }
 }

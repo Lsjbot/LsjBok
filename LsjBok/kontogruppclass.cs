@@ -53,16 +53,8 @@ namespace LsjBok
             //decimal IBsum = 0;
             foreach (Konto kk in getkonto(fiscalyear))
             {
+                sum += kontoclass.sumperiod(kk,start, end);
                 //IBsum += kk.IB;
-                foreach (Rad rr in kk.Rad)
-                {
-                    if (rr.VerVer.Verdate < start)
-                        continue;// IBsum += rr.Amount;
-                    else if (rr.VerVer.Verdate > end)
-                        continue;
-                    else
-                        sum += rr.Amount;
-                }
                 //sum += kk.UB;
             }
             return sum;
