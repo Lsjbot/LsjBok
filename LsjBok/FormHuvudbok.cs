@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace LsjBok
 {
@@ -136,6 +137,66 @@ namespace LsjBok
                 }
             }
 
+        }
+
+        private decimal UpdateUB(Konto kk)
+        {
+            decimal value = kk.IB;
+            var q = from c in common.db.Rad where c.Konto == kk.Id select c;
+            foreach (Rad rr in q)
+            {
+                value += rr.Amount;
+            }
+            return value;
+        }
+
+        private void IBbutton_Click(object sender, EventArgs e)
+        {
+            //kludge to clean up after SIE-import bug losing IB values
+
+            OpenFileDialog of = new OpenFileDialog();
+            of.Title = "File with correct IB values";
+
+            var q = from c in common.db.Konto
+                    where c.Year == localfiscal
+                    select c;
+
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamReader sr = new StreamReader(of.FileName))
+                {
+                    int n = 0;
+                    while (!sr.EndOfStream)
+                    {
+                        string line = sr.ReadLine();
+                        string[] words = line.Split('\t');
+                        if (words.Length < 2)
+                            continue;
+                        int konto = Convert.ToInt32(words[0]);
+                        decimal amount = Convert.ToDecimal(words[1]);
+                        var q1 = from c in q
+                                 where c.Number == konto
+                                 select c;
+                        if (q1.Count() == 1)
+                        {
+                            Konto kk = q1.First();
+                            kk.IB = amount;
+                            kk.UB = UpdateUB(kk);
+                            n++;
+                        }
+                        else
+                        {
+                            MessageBox.Show("q1.Count = " + q1.Count() + ", konto = " + konto + ", amount = " + amount);
+                        }
+                    }
+                    MessageBox.Show("Fixat IB för " + n + " konton");
+                    if (n > 0)
+                    {
+                        common.db.SubmitChanges();
+                        updatetree();
+                    }
+                }
+            }
         }
     }
 }

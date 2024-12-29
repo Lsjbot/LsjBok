@@ -163,6 +163,7 @@ namespace LsjBok
                 cbname[i].TextChanged += new EventHandler(comboBox2_TextChanged);
                 cbname[i].SelectedIndexChanged += new EventHandler(comboBox2_SelectedIndexChanged);
                 cbnumber[i].TextChanged += new EventHandler(cbnumber_TextChanged);
+                cbnumber[i].SelectedIndexChanged += new EventHandler(comboBox2_SelectedIndexChanged);
                 cbcredit[i].LostFocus += new EventHandler(cbmoney_Lostfocus);
                 cbdebit[i].LostFocus += new EventHandler(cbmoney_Lostfocus);
             }
@@ -261,22 +262,39 @@ namespace LsjBok
             int i = ((sender as Control).Top - ybase) / heightdist;
 
             mytextchange = true;
-            if (cbname[i].SelectedItem == null)
+            if (cbname[i].SelectedItem == null && cbnumber[i].SelectedItem == null)
                 return;
-            string s = cbname[i].SelectedItem.ToString();
-            cbnumber[i].Text = s.ToString().Split('~')[0].Trim();
-            cbname[i].DroppedDown = false;
-            cbname[i].SelectedItem = null;
-            cbname[i].Items.Clear();
-            cbname[i].Items.Add(s.Split('~')[1].Trim());
-            cbname[i].Text = s.Split('~')[1].Trim();
-            mytextchange = false;
+            string s =" ~ ";
+            if (cbname[i].SelectedItem != null)
+            {
+                s = cbname[i].SelectedItem.ToString();
+                cbname[i].DroppedDown = false;
+                cbname[i].SelectedItem = null;
+                cbname[i].Items.Clear();
+                cbname[i].Items.Add(s.Split('~')[1].Trim());
+            }
+            if (cbnumber[i].SelectedItem != null)
+            {
+                s = cbnumber[i].SelectedItem.ToString();
+                cbnumber[i].DroppedDown = false;
+                cbnumber[i].SelectedItem = null;
+                cbnumber[i].Items.Clear();
+                cbnumber[i].Items.Add(s.Split('~')[0].Trim());
+            }
+            if (s.Contains("~"))
+            {
+                cbname[i].Text = s.Split('~')[1].Trim();
+                cbnumber[i].Text = s.Split('~')[0].Trim();
+            }
 
             if (vvin != null)
             {
                 changebutton.Visible = true;
                 changebutton.Enabled = true;
             }
+
+            mytextchange = false;
+
         }
 
         private void comboBox2_TextChanged(object sender, EventArgs e)
@@ -303,6 +321,8 @@ namespace LsjBok
 
         private void cbnumber_TextChanged(object sender, EventArgs e)
         {
+            if (mytextchange)
+                return;
             if ((sender as ComboBox).Text.Length == 4)
             {
                 int nr = util.tryconvert((sender as ComboBox).Text);
@@ -323,6 +343,22 @@ namespace LsjBok
                 else
                 {
                     cbnumber[i].ForeColor = Color.Red;
+                }
+                (sender as ComboBox).Select((sender as ComboBox).Text.Length, 0);
+
+            }
+            else if ((sender as ComboBox).Text.Length > 1)
+            {
+                var q = kontoclass.searchkonto((sender as ComboBox).Text);
+                if (q.Count() > 0)
+                {
+                    (sender as ComboBox).BeginUpdate();
+                    (sender as ComboBox).Items.Clear();
+                    foreach (int k in q.Keys)
+                        (sender as ComboBox).Items.Add(k + " ~ " + q[k]);
+                    (sender as ComboBox).EndUpdate();
+                    //(sender as ComboBox).DropDownStyle = ComboBoxStyle.Simple;
+                    (sender as ComboBox).DroppedDown = true;
                 }
                 (sender as ComboBox).Select((sender as ComboBox).Text.Length, 0);
 

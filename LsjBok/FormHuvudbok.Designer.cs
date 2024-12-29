@@ -36,6 +36,7 @@ namespace LsjBok
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.LBfiscal = new System.Windows.Forms.ListBox();
+            this.IBbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // closebutton
@@ -98,11 +99,24 @@ namespace LsjBok
             this.LBfiscal.TabIndex = 6;
             this.LBfiscal.SelectedIndexChanged += new System.EventHandler(this.LBfiscal_SelectedIndexChanged);
             // 
+            // IBbutton
+            // 
+            this.IBbutton.Enabled = false;
+            this.IBbutton.Location = new System.Drawing.Point(530, 927);
+            this.IBbutton.Name = "IBbutton";
+            this.IBbutton.Size = new System.Drawing.Size(141, 23);
+            this.IBbutton.TabIndex = 12;
+            this.IBbutton.Text = "Fixa IB-bugg";
+            this.IBbutton.UseVisualStyleBackColor = true;
+            this.IBbutton.Visible = false;
+            this.IBbutton.Click += new System.EventHandler(this.IBbutton_Click);
+            // 
             // FormHuvudbok
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 965);
+            this.Controls.Add(this.IBbutton);
             this.Controls.Add(this.TBslut);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.TBstart);
@@ -126,5 +140,6 @@ namespace LsjBok
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox LBfiscal;
+        private System.Windows.Forms.Button IBbutton;
     }
 }

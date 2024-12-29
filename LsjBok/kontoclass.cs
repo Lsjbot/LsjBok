@@ -11,6 +11,7 @@ namespace LsjBok
         public static Dictionary<int, string> kontodict = new Dictionary<int, string>();
         public static Dictionary<int, string> kontospecialdict = new Dictionary<int, string>();
         public static Dictionary<string, int> kontosearchlist = new Dictionary<string, int>();
+		public static Dictionary<string, List<int>> kontonumbersearch = new Dictionary<string, List<int>>();
 
 		public static decimal UB(Konto kk, DateTime end)
         {
@@ -29,9 +30,18 @@ namespace LsjBok
 
 		public static Dictionary<int, string> searchkonto(string s)
 		{
+			Dictionary<int, string> result = new Dictionary<int, string>();
+			if (s.Length < 4  && kontonumbersearch.ContainsKey(s))
+            {
+				foreach (int k in kontonumbersearch[s])
+                {
+					result.Add(k, kontodict[k]);
+                }
+				return result;
+            }
 			string ss = s.ToLower();
 			IEnumerable<string> q;
-			if (ss.Length < 4)
+			if (ss.Length < 3)
 			{
 				q = from c in kontosearchlist.Keys where c.StartsWith(ss) select c;
 			}
@@ -39,7 +49,6 @@ namespace LsjBok
             {
 				q = from c in kontosearchlist.Keys where c.Contains(ss) select c;
 			}
-			Dictionary<int, string> result = new Dictionary<int, string>();
 			foreach (string sss in q)
             {
 				result.Add(kontosearchlist[sss], kontodict[kontosearchlist[sss]]);
@@ -1852,8 +1861,22 @@ namespace LsjBok
 					while (kontosearchlist.ContainsKey(s))
 						s += ".";
 					kontosearchlist.Add(s, k);
+
+					int k10 = k / 10;
+					if (!kontonumbersearch.ContainsKey(k10.ToString()))
+                    {
+						kontonumbersearch.Add(k10.ToString(), new List<int>());
+                    }
+					kontonumbersearch[k10.ToString()].Add(k);
+					int k100 = k / 100;
+					if (!kontonumbersearch.ContainsKey(k100.ToString()))
+					{
+						kontonumbersearch.Add(k100.ToString(), new List<int>());
+					}
+					kontonumbersearch[k100.ToString()].Add(k);
+
 				}
-            }
+			}
 
 		}
 
