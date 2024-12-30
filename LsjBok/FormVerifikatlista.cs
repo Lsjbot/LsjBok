@@ -12,12 +12,26 @@ namespace LsjBok
 {
     public partial class FormVerifikatlista : Form
     {
+        TreeView tree;
         public FormVerifikatlista()
         {
             InitializeComponent();
             updatetitle();
-            TreeView tree = new TreeView();
+            tree = new TreeView();
+            updatetree();
+            tree.Left = 20;
+            tree.Top = 40;
+            tree.Width = this.Width - 40;
+            tree.Height = this.Height - 100;
+            this.Controls.Add(tree);
+
+            tree.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(tree_NodeMouseDoubleClick);
+        }
+
+        public void updatetree()
+        {
             tree.BeginUpdate();
+            tree.Nodes.Clear();
             //tree.Nodes.Add("Parent");
             //tree.Nodes[0].Nodes.Add("Child 1");
             //tree.Nodes[0].Nodes.Add("Child 2");
@@ -27,9 +41,9 @@ namespace LsjBok
                     where c.Year == common.currentfiscal
                     select c;
             int inode = 0;
-            foreach (var kk in q.OrderBy(c=>c.Vernumber))
+            foreach (var kk in q.OrderBy(c => c.Vernumber))
             {
-                tree.Nodes.Add("V"+kk.Vernumber + " | " + kk.Description+" | Ver#"+kk.Id);
+                tree.Nodes.Add("V" + kk.Vernumber + " | " + kk.Description + " |" + kk.Verdate.ToShortDateString() + " | Ver#" + kk.Id);
                 var qrad = from c in common.db.Rad
                            where c.Ver == kk.Id
                            select c;
@@ -43,13 +57,6 @@ namespace LsjBok
                 inode++;
             }
             tree.EndUpdate();
-            tree.Left = 20;
-            tree.Top = 20;
-            tree.Width = this.Width - 40;
-            tree.Height = this.Height - 100;
-            this.Controls.Add(tree);
-
-            tree.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(tree_NodeMouseDoubleClick);
         }
 
         public void updatetitle()
@@ -80,5 +87,15 @@ namespace LsjBok
             }
         }
 
+        private void updatebutton_Click(object sender, EventArgs e)
+        {
+            updatetree();
+        }
+
+        private void FormVerifikatlista_ResizeEnd(object sender, EventArgs e)
+        {
+            tree.Width = this.Width - 40;
+            tree.Height = this.Height - 100;
+        }
     }
 }

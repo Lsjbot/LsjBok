@@ -28,6 +28,41 @@ namespace LsjBok
 			return UBsum;
 		}
 
+		public static decimal updateUB(Konto kk)
+        {
+			decimal UBsum = kk.IB;
+			foreach (Rad rr in kk.Rad)
+			{
+				//if (rr.VerVer.Verdate < end)
+			    UBsum += rr.Amount;
+				//else if (rr.VerVer.Verdate > end)
+				//    continue;
+				//else
+				//    sum += rr.Amount;
+			}
+
+			if (UBsum != kk.UB)
+            {
+				kk.UB = UBsum;
+				common.db.SubmitChanges();
+			}
+			return UBsum;
+		}
+
+		public static decimal updateUB(int kontonr)
+        {
+			var q = from c in common.db.Konto
+					where c.Number == kontonr
+					where c.Year == common.currentfiscal
+					select c;
+
+			if (q.Count() != 1)
+				return 0;
+
+			Konto kk = q.First();
+			return updateUB(kk);
+        }
+
 		public static Dictionary<int, string> searchkonto(string s)
 		{
 			Dictionary<int, string> result = new Dictionary<int, string>();
@@ -1146,6 +1181,10 @@ namespace LsjBok
 			kontodict.Add(3002, "Försäljning inom Sverige, 12 % moms"); kontospecialdict.Add(3002, "■");
 			kontodict.Add(3003, "Försäljning inom Sverige, 6 % moms"); kontospecialdict.Add(3003, "■");
 			kontodict.Add(3004, "Försäljning inom Sverige, momsfri"); kontospecialdict.Add(3004, "■");
+			kontodict.Add(3011, "Försäljning tjänster inom Sverige, 25 % moms"); kontospecialdict.Add(3011, "■");
+			kontodict.Add(3012, "Försäljning tjänster inom Sverige, 12 % moms"); kontospecialdict.Add(3012, "■");
+			kontodict.Add(3013, "Försäljning tjänster inom Sverige, 6 % moms"); kontospecialdict.Add(3013, "■");
+			kontodict.Add(3014, "Försäljning tjänster inom Sverige, momsfri"); kontospecialdict.Add(3014, "■");
 			kontodict.Add(3100, "Försäljning av varor utanför Sverige"); kontospecialdict.Add(3100, "■");
 			kontodict.Add(3105, "Försäljning varor till land utanför EU"); kontospecialdict.Add(3105, "■");
 			kontodict.Add(3106, "Försäljning varor till annat EU-land, momspliktig"); kontospecialdict.Add(3106, "■");

@@ -48,6 +48,11 @@ namespace LsjBok
             this.sakerAttGöraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uppladdatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rapporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.huvudbokToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.balansrapportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resultatrapportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.momsrapportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.verifikatlistaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bankOchSkattekontoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bokföringOchBokslutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.skapaVerifikatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,11 +85,6 @@ namespace LsjBok
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
             this.lblFolder = new System.Windows.Forms.ToolStripLabel();
             this.btnFolder = new System.Windows.Forms.ToolStripButton();
-            this.huvudbokToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.balansrapportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resultatrapportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.momsrapportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.verifikatlistaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel32.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -247,7 +247,7 @@ namespace LsjBok
             // 
             // översiktToolStripMenuItem
             // 
-            this.översiktToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.översiktToolStripMenuItem.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.översiktToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.översiktToolStripMenuItem.Name = "översiktToolStripMenuItem";
             this.översiktToolStripMenuItem.Size = new System.Drawing.Size(176, 25);
@@ -286,6 +286,41 @@ namespace LsjBok
             this.rapporterToolStripMenuItem.Size = new System.Drawing.Size(176, 25);
             this.rapporterToolStripMenuItem.Text = "Rapporter";
             this.rapporterToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // huvudbokToolStripMenuItem
+            // 
+            this.huvudbokToolStripMenuItem.Name = "huvudbokToolStripMenuItem";
+            this.huvudbokToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.huvudbokToolStripMenuItem.Text = "Huvudbok";
+            this.huvudbokToolStripMenuItem.Click += new System.EventHandler(this.huvudbokToolStripMenuItem_Click);
+            // 
+            // balansrapportToolStripMenuItem
+            // 
+            this.balansrapportToolStripMenuItem.Name = "balansrapportToolStripMenuItem";
+            this.balansrapportToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.balansrapportToolStripMenuItem.Text = "Balansrapport";
+            this.balansrapportToolStripMenuItem.Click += new System.EventHandler(this.balansrapportToolStripMenuItem_Click);
+            // 
+            // resultatrapportToolStripMenuItem
+            // 
+            this.resultatrapportToolStripMenuItem.Name = "resultatrapportToolStripMenuItem";
+            this.resultatrapportToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.resultatrapportToolStripMenuItem.Text = "Resultatrapport";
+            this.resultatrapportToolStripMenuItem.Click += new System.EventHandler(this.resultatrapportToolStripMenuItem_Click);
+            // 
+            // momsrapportToolStripMenuItem
+            // 
+            this.momsrapportToolStripMenuItem.Name = "momsrapportToolStripMenuItem";
+            this.momsrapportToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.momsrapportToolStripMenuItem.Text = "Momsrapport";
+            this.momsrapportToolStripMenuItem.Click += new System.EventHandler(this.momsrapportToolStripMenuItem_Click);
+            // 
+            // verifikatlistaToolStripMenuItem
+            // 
+            this.verifikatlistaToolStripMenuItem.Name = "verifikatlistaToolStripMenuItem";
+            this.verifikatlistaToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.verifikatlistaToolStripMenuItem.Text = "Verifikatlista";
+            this.verifikatlistaToolStripMenuItem.Click += new System.EventHandler(this.verifikatToolStripMenuItem_Click);
             // 
             // bankOchSkattekontoToolStripMenuItem
             // 
@@ -536,41 +571,6 @@ namespace LsjBok
             this.btnFolder.Size = new System.Drawing.Size(62, 22);
             this.btnFolder.Text = "Byt mapp";
             this.btnFolder.Click += new System.EventHandler(this.btnFolder_Click);
-            // 
-            // huvudbokToolStripMenuItem
-            // 
-            this.huvudbokToolStripMenuItem.Name = "huvudbokToolStripMenuItem";
-            this.huvudbokToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
-            this.huvudbokToolStripMenuItem.Text = "Huvudbok";
-            this.huvudbokToolStripMenuItem.Click += new System.EventHandler(this.huvudbokToolStripMenuItem_Click);
-            // 
-            // balansrapportToolStripMenuItem
-            // 
-            this.balansrapportToolStripMenuItem.Name = "balansrapportToolStripMenuItem";
-            this.balansrapportToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
-            this.balansrapportToolStripMenuItem.Text = "Balansrapport";
-            this.balansrapportToolStripMenuItem.Click += new System.EventHandler(this.balansrapportToolStripMenuItem_Click);
-            // 
-            // resultatrapportToolStripMenuItem
-            // 
-            this.resultatrapportToolStripMenuItem.Name = "resultatrapportToolStripMenuItem";
-            this.resultatrapportToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
-            this.resultatrapportToolStripMenuItem.Text = "Resultatrapport";
-            this.resultatrapportToolStripMenuItem.Click += new System.EventHandler(this.resultatrapportToolStripMenuItem_Click);
-            // 
-            // momsrapportToolStripMenuItem
-            // 
-            this.momsrapportToolStripMenuItem.Name = "momsrapportToolStripMenuItem";
-            this.momsrapportToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
-            this.momsrapportToolStripMenuItem.Text = "Momsrapport";
-            this.momsrapportToolStripMenuItem.Click += new System.EventHandler(this.momsrapportToolStripMenuItem_Click);
-            // 
-            // verifikatlistaToolStripMenuItem
-            // 
-            this.verifikatlistaToolStripMenuItem.Name = "verifikatlistaToolStripMenuItem";
-            this.verifikatlistaToolStripMenuItem.Size = new System.Drawing.Size(188, 26);
-            this.verifikatlistaToolStripMenuItem.Text = "Verifikatlista";
-            this.verifikatlistaToolStripMenuItem.Click += new System.EventHandler(this.verifikatToolStripMenuItem_Click);
             // 
             // Form1
             // 

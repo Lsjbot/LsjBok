@@ -198,5 +198,21 @@ namespace LsjBok
                 }
             }
         }
+
+        private void updatebutton_Click(object sender, EventArgs e)
+        {
+            var q = from c in common.db.Konto
+                    where c.Year == common.currentfiscal
+                    select c;
+            foreach (Konto kk in q)
+                kontoclass.updateUB(kk);
+            updatetree();
+        }
+
+        private void FormHuvudbok_ResizeEnd(object sender, EventArgs e)
+        {
+            tree.Width = this.Width - 40;
+            tree.Height = this.Height - 100;
+        }
     }
 }

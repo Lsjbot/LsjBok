@@ -129,6 +129,7 @@
     <Compile Include="kontoclass.cs" />
     <Compile Include="kontogruppclass.cs" />
     <Compile Include="lsjbokdb.cs" />
+    <Compile Include="mallclass.cs" />
     <Compile Include="Models\AddEditCustomerForm.cs">
       <SubType>Form</SubType>
     </Compile>

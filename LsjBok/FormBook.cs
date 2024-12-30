@@ -47,6 +47,14 @@ namespace LsjBok
         public FormBook()
         {
             init();
+
+            mallclass.standardmallar_to_db();
+            CBmall.Items.Clear();
+            foreach (Mall mm in common.db.Mall)
+            {
+                CBmall.Items.Add(mm.Description);
+            }
+            loadmallbutton.Visible = (CBmall.Items.Count > 0);
         }
 
         public FormBook(string title,Dictionary<int,decimal> rader)
@@ -88,7 +96,7 @@ namespace LsjBok
             changebutton.Visible = false; //changebutton.Enabled = changebutton.Visible;
             annulbutton.Visible = false; //annulbutton.Enabled = annulbutton.Visible;
             copybutton.Visible = false; //copybutton.Enabled = copybutton.Visible;
-            mallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
+            savemallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
 
             this.Text = "Bokför nytt verifikat för " + util.getcompanyname() + " " + util.getfiscalname();
         }
@@ -119,7 +127,7 @@ namespace LsjBok
                 changebutton.Visible = false;// changebutton.Enabled = changebutton.Visible;
                 annulbutton.Visible = false; //annulbutton.Enabled = annulbutton.Visible;
                 copybutton.Visible = false; //copybutton.Enabled = copybutton.Visible;
-                mallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
+                savemallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
             }
             else
             {
@@ -127,7 +135,7 @@ namespace LsjBok
                 changebutton.Visible = false;// changebutton.Enabled = changebutton.Visible;
                 annulbutton.Visible = true; //annulbutton.Enabled = annulbutton.Visible;
                 copybutton.Visible = true; //copybutton.Enabled = copybutton.Visible;
-                mallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
+                savemallbutton.Visible = true; //mallbutton.Enabled = mallbutton.Visible;
             }
 
             var qrad = from c in common.db.Rad where c.Ver == vvin.Id select c;
@@ -693,6 +701,7 @@ namespace LsjBok
             vv.Verdate = vvin.Verdate;
 
             List<Rad> lrad = new List<Rad>();
+            List<Konto> affectedkonto = new List<Konto>();
             int idrad = 1;
             var qr = from c in common.db.Rad select c.Id;
             if (qr.Count() > 0)
@@ -705,6 +714,8 @@ namespace LsjBok
                 idrad++;
                 rr.Ver = vv.Id;
                 rr.Konto = rrin.Konto;
+                if (!affectedkonto.Contains(rr.KontoKonto))
+                    affectedkonto.Add(rr.KontoKonto);
                 rr.Amount = -rrin.Amount;
                 lrad.Add(rr);
             }
@@ -715,6 +726,10 @@ namespace LsjBok
 
 
             common.db.Rad.InsertAllOnSubmit(lrad);
+            common.db.SubmitChanges();
+
+            foreach (Konto kk in affectedkonto)
+                kontoclass.updateUB(kk);
             common.db.SubmitChanges();
         }
 
@@ -785,6 +800,39 @@ namespace LsjBok
             {
                 TBfilename.Text = of.FileName;
             }
+        }
+
+        private void loadmallbutton_Click(object sender, EventArgs e)
+        {
+            if (CBmall.SelectedItem == null)
+            {
+                MessageBox.Show("Ingen mall vald");
+                return;
+            }
+
+            string name = CBmall.SelectedItem.ToString();
+
+            Mall mm = (from c in common.db.Mall where c.Description == name select c).FirstOrDefault();
+            if (mm == null)
+            {
+                MessageBox.Show("Vald mall finns inte");
+                return;
+            }
+
+            TBdecription.Text = name;
+            int i = 0;
+            foreach (Mallrad mr in mm.Mallrad)
+            {
+                cbnumber[i].Text = mr.Kontonr.ToString();
+                cbname[i].Text = kontoclass.kontodict[mr.Kontonr];
+                if (mr.Amount > 0)
+                    cbdebit[i].Text = mr.Amount.ToString("N2");
+                else
+                    cbcredit[i].Text = Math.Abs(mr.Amount).ToString("N2");
+                enabled[i] = true;
+                i++;
+            }
+            setvisible();
         }
     }
 }

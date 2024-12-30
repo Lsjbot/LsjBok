@@ -79,6 +79,7 @@ namespace LsjBok
 
                     companytypeclass.fill_companytype();
                     kontoclass.fill_kontodict();
+                    mallclass.standardmallar_to_db();
                 }
             }
             setbuttons();

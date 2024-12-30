@@ -40,18 +40,20 @@ namespace LsjBok
             this.annulbutton = new System.Windows.Forms.Button();
             this.copybutton = new System.Windows.Forms.Button();
             this.changebutton = new System.Windows.Forms.Button();
-            this.mallbutton = new System.Windows.Forms.Button();
+            this.savemallbutton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.filedropbutton = new System.Windows.Forms.Button();
             this.TBfilename = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.loadmallbutton = new System.Windows.Forms.Button();
+            this.CBmall = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // bookbutton
             // 
             this.bookbutton.Location = new System.Drawing.Point(12, 707);
             this.bookbutton.Name = "bookbutton";
-            this.bookbutton.Size = new System.Drawing.Size(127, 62);
+            this.bookbutton.Size = new System.Drawing.Size(98, 62);
             this.bookbutton.TabIndex = 0;
             this.bookbutton.Text = "Bokför";
             this.bookbutton.UseVisualStyleBackColor = true;
@@ -60,12 +62,13 @@ namespace LsjBok
             // 
             // cancelbutton
             // 
-            this.cancelbutton.Location = new System.Drawing.Point(710, 705);
+            this.cancelbutton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.cancelbutton.Location = new System.Drawing.Point(745, 705);
             this.cancelbutton.Name = "cancelbutton";
-            this.cancelbutton.Size = new System.Drawing.Size(142, 64);
+            this.cancelbutton.Size = new System.Drawing.Size(107, 64);
             this.cancelbutton.TabIndex = 1;
             this.cancelbutton.Text = "Avbryt";
-            this.cancelbutton.UseVisualStyleBackColor = true;
+            this.cancelbutton.UseVisualStyleBackColor = false;
             this.cancelbutton.Click += new System.EventHandler(this.cancelbutton_Click);
             // 
             // TBdecription
@@ -111,9 +114,9 @@ namespace LsjBok
             // 
             // annulbutton
             // 
-            this.annulbutton.Location = new System.Drawing.Point(285, 707);
+            this.annulbutton.Location = new System.Drawing.Point(226, 707);
             this.annulbutton.Name = "annulbutton";
-            this.annulbutton.Size = new System.Drawing.Size(137, 62);
+            this.annulbutton.Size = new System.Drawing.Size(96, 62);
             this.annulbutton.TabIndex = 7;
             this.annulbutton.Text = "Annullera";
             this.annulbutton.UseVisualStyleBackColor = true;
@@ -121,9 +124,9 @@ namespace LsjBok
             // 
             // copybutton
             // 
-            this.copybutton.Location = new System.Drawing.Point(428, 707);
+            this.copybutton.Location = new System.Drawing.Point(328, 707);
             this.copybutton.Name = "copybutton";
-            this.copybutton.Size = new System.Drawing.Size(142, 62);
+            this.copybutton.Size = new System.Drawing.Size(104, 62);
             this.copybutton.TabIndex = 8;
             this.copybutton.Text = "Kopiera";
             this.copybutton.UseVisualStyleBackColor = true;
@@ -131,22 +134,22 @@ namespace LsjBok
             // 
             // changebutton
             // 
-            this.changebutton.Location = new System.Drawing.Point(145, 707);
+            this.changebutton.Location = new System.Drawing.Point(116, 707);
             this.changebutton.Name = "changebutton";
-            this.changebutton.Size = new System.Drawing.Size(134, 62);
+            this.changebutton.Size = new System.Drawing.Size(104, 62);
             this.changebutton.TabIndex = 9;
             this.changebutton.Text = "Ändra";
             this.changebutton.UseVisualStyleBackColor = true;
             this.changebutton.Click += new System.EventHandler(this.changebutton_Click);
             // 
-            // mallbutton
+            // savemallbutton
             // 
-            this.mallbutton.Location = new System.Drawing.Point(576, 707);
-            this.mallbutton.Name = "mallbutton";
-            this.mallbutton.Size = new System.Drawing.Size(128, 62);
-            this.mallbutton.TabIndex = 10;
-            this.mallbutton.Text = "Spara som mall";
-            this.mallbutton.UseVisualStyleBackColor = true;
+            this.savemallbutton.Location = new System.Drawing.Point(438, 706);
+            this.savemallbutton.Name = "savemallbutton";
+            this.savemallbutton.Size = new System.Drawing.Size(99, 62);
+            this.savemallbutton.TabIndex = 10;
+            this.savemallbutton.Text = "Spara som mall";
+            this.savemallbutton.UseVisualStyleBackColor = true;
             // 
             // filedropbutton
             // 
@@ -177,15 +180,36 @@ namespace LsjBok
             this.label4.TabIndex = 13;
             this.label4.Text = "Filnamn:";
             // 
+            // loadmallbutton
+            // 
+            this.loadmallbutton.Location = new System.Drawing.Point(543, 707);
+            this.loadmallbutton.Name = "loadmallbutton";
+            this.loadmallbutton.Size = new System.Drawing.Size(196, 34);
+            this.loadmallbutton.TabIndex = 14;
+            this.loadmallbutton.Text = "Ladda mall";
+            this.loadmallbutton.UseVisualStyleBackColor = true;
+            this.loadmallbutton.Click += new System.EventHandler(this.loadmallbutton_Click);
+            // 
+            // CBmall
+            // 
+            this.CBmall.FormattingEnabled = true;
+            this.CBmall.Location = new System.Drawing.Point(544, 748);
+            this.CBmall.Name = "CBmall";
+            this.CBmall.Size = new System.Drawing.Size(195, 21);
+            this.CBmall.TabIndex = 15;
+            this.CBmall.SelectedIndexChanged += new System.EventHandler(this.loadmallbutton_Click);
+            // 
             // FormBook
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 781);
+            this.Controls.Add(this.CBmall);
+            this.Controls.Add(this.loadmallbutton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.TBfilename);
             this.Controls.Add(this.filedropbutton);
-            this.Controls.Add(this.mallbutton);
+            this.Controls.Add(this.savemallbutton);
             this.Controls.Add(this.changebutton);
             this.Controls.Add(this.copybutton);
             this.Controls.Add(this.annulbutton);
@@ -215,10 +239,12 @@ namespace LsjBok
         private System.Windows.Forms.Button annulbutton;
         private System.Windows.Forms.Button copybutton;
         private System.Windows.Forms.Button changebutton;
-        private System.Windows.Forms.Button mallbutton;
+        private System.Windows.Forms.Button savemallbutton;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button filedropbutton;
         private System.Windows.Forms.TextBox TBfilename;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button loadmallbutton;
+        private System.Windows.Forms.ComboBox CBmall;
     }
 }

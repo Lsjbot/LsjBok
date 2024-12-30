@@ -37,6 +37,7 @@ namespace LsjBok
             this.label1 = new System.Windows.Forms.Label();
             this.LBfiscal = new System.Windows.Forms.ListBox();
             this.IBbutton = new System.Windows.Forms.Button();
+            this.updatebutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // closebutton
@@ -110,11 +111,22 @@ namespace LsjBok
             this.IBbutton.Visible = false;
             this.IBbutton.Click += new System.EventHandler(this.IBbutton_Click);
             // 
+            // updatebutton
+            // 
+            this.updatebutton.Location = new System.Drawing.Point(803, 419);
+            this.updatebutton.Name = "updatebutton";
+            this.updatebutton.Size = new System.Drawing.Size(100, 23);
+            this.updatebutton.TabIndex = 13;
+            this.updatebutton.Text = "Uppdatera";
+            this.updatebutton.UseVisualStyleBackColor = true;
+            this.updatebutton.Click += new System.EventHandler(this.updatebutton_Click);
+            // 
             // FormHuvudbok
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 965);
+            this.Controls.Add(this.updatebutton);
             this.Controls.Add(this.IBbutton);
             this.Controls.Add(this.TBslut);
             this.Controls.Add(this.label3);
@@ -125,6 +137,7 @@ namespace LsjBok
             this.Controls.Add(this.closebutton);
             this.Name = "FormHuvudbok";
             this.Text = "FormHuvudbok";
+            this.ResizeEnd += new System.EventHandler(this.FormHuvudbok_ResizeEnd);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,5 +153,6 @@ namespace LsjBok
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox LBfiscal;
         private System.Windows.Forms.Button IBbutton;
+        private System.Windows.Forms.Button updatebutton;
     }
 }
