@@ -139,16 +139,16 @@ namespace LsjBok
 
         }
 
-        private decimal UpdateUB(Konto kk)
-        {
-            decimal value = kk.IB;
-            var q = from c in common.db.Rad where c.Konto == kk.Id select c;
-            foreach (Rad rr in q)
-            {
-                value += rr.Amount;
-            }
-            return value;
-        }
+        //private decimal UpdateUB(Konto kk)
+        //{
+        //    decimal value = kk.IB;
+        //    var q = from c in common.db.Rad where c.Konto == kk.Id select c;
+        //    foreach (Rad rr in q)
+        //    {
+        //        value += rr.Amount;
+        //    }
+        //    return value;
+        //}
 
         private void IBbutton_Click(object sender, EventArgs e)
         {
@@ -181,7 +181,7 @@ namespace LsjBok
                         {
                             Konto kk = q1.First();
                             kk.IB = amount;
-                            kk.UB = UpdateUB(kk);
+                            kontoclass.updateUB(kk);
                             n++;
                         }
                         else

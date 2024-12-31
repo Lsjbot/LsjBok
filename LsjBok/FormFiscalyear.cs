@@ -50,45 +50,52 @@ namespace LsjBok
                 TBslut.ForeColor = Color.Red;
                 okdates = false; ;
             }
+            DateTime start = DateTime.Now; //dummy assignment because DateTime is not nullable
+            DateTime slut = start;
             if (okdates)
             {
-                DateTime start = (DateTime)startparse;
-                DateTime slut = (DateTime)slutparse;
+                start = (DateTime)startparse;
+                slut = (DateTime)slutparse;
                 if (slut <= start)
                     okdates = false;
-
-                if (!okdates)
-                {
-                    MessageBox.Show("Ogiltiga datum", "LsjBok", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-
-                    Fiscalyear fy = new Fiscalyear();
-                    fy.Id = common.db.Fiscalyear.Count() + 1;
-                    fy.Name = start.Year.ToString();
-                    if (slut.Year != start.Year)
-                        fy.Name += "-" + slut.Year;
-                    fy.Company = common.currentcompany;
-                    fy.Startdate = start;
-                    fy.Enddate = slut;
-                    fy.Closed = false;
-                    fy.Creator = common.currentuser;
-                    fy.Creationdate = DateTime.Now;
-                    common.db.Fiscalyear.InsertOnSubmit(fy);
-                    common.db.SubmitChanges();
-                    util.logentry("Skapar räkenskapsår " + fy.Name, fy.Id);
-
-                    common.currentfiscal = fy.Id;
-
-                    fiscalclass.update_IB(fy);
-
-                    //Skapa momsperioder:
-
-                    make_momsperiods(fy);
-                    this.Close();
-                }
             }
+
+            if (!okdates)
+            {
+                MessageBox.Show("Ogiltiga datum", "LsjBok", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+
+                Fiscalyear fy = new Fiscalyear();
+                fy.Id = common.db.Fiscalyear.Count() + 1;
+                fy.Name = start.Year.ToString();
+                if (slut.Year != start.Year)
+                    fy.Name += "-" + slut.Year;
+                fy.Company = common.currentcompany;
+                fy.Startdate = start;
+                fy.Enddate = slut;
+                fy.Closed = false;
+                fy.Creator = common.currentuser;
+                fy.Creationdate = DateTime.Now;
+                common.db.Fiscalyear.InsertOnSubmit(fy);
+                common.db.SubmitChanges();
+                util.logentry("Skapar räkenskapsår " + fy.Name, fy.Id);
+
+                common.currentfiscal = fy.Id;
+
+                fiscalclass.update_IB(fy);
+
+                string cin = fiscalclass.consistent_in(fy);
+                if (!String.IsNullOrEmpty(cin))
+                    MessageBox.Show(cin);
+
+                //Skapa momsperioder:
+
+                make_momsperiods(fy);
+                this.Close();
+            }
+
         }
 
         public static void make_momsperiods(Fiscalyear fy)

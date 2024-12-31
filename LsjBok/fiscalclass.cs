@@ -282,8 +282,10 @@ namespace LsjBok
                     kk.Konto3 = kkp.Konto3;
                     kk.IB = kkp.UB;
                     kk.UB = kk.IB;
+                    common.db.Konto.InsertOnSubmit(kk);
                 }
             }
+            common.db.SubmitChanges();
 
         }
     }

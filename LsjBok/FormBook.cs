@@ -50,7 +50,7 @@ namespace LsjBok
 
             mallclass.standardmallar_to_db();
             CBmall.Items.Clear();
-            foreach (Mall mm in common.db.Mall)
+            foreach (Mall mm in common.db.Mall.OrderBy(c=>c.Description))
             {
                 CBmall.Items.Add(mm.Description);
             }
@@ -339,6 +339,8 @@ namespace LsjBok
         {
             if (mytextchange)
                 return;
+            if (!CBkontosearch.Checked)
+                return;
             if ((sender as ComboBox).Text.Length > 1)
             {
                 var q = kontoclass.searchkonto((sender as ComboBox).Text);
@@ -385,7 +387,7 @@ namespace LsjBok
                 (sender as ComboBox).Select((sender as ComboBox).Text.Length, 0);
 
             }
-            else if ((sender as ComboBox).Text.Length > 1)
+            else if ((sender as ComboBox).Text.Length > 1 && CBkontosearch.Checked)
             {
                 var q = kontoclass.searchkonto((sender as ComboBox).Text);
                 if (q.Count() > 0)
@@ -833,6 +835,48 @@ namespace LsjBok
                 i++;
             }
             setvisible();
+        }
+
+        private void savemallbutton_Click(object sender, EventArgs e)
+        {
+            Mall mm = new Mall();
+            int mid = 1;
+            var q = from c in common.db.Mall select c.Id;
+            if (q.Count() > 0)
+                mid = q.Max() + 1;
+            mm.Id = mid;
+            mm.Description = TBdecription.Text;
+            mm.Creator = common.currentuser;
+            mm.Creationdate = DateTime.Now;
+
+            common.db.Mall.InsertOnSubmit(mm);
+            common.db.SubmitChanges();
+
+            int mrid = 1;
+            var qr = from c in common.db.Mallrad select c.Id;
+            if (qr.Count() > 0)
+                mrid = qr.Max() + 1;
+
+            for (int i=0;i< maxrow;i++)
+            {
+                if (enabled[i] && cbnumber[i].Text.Length == 4)
+                {
+                    Mallrad mr = new Mallrad();
+                    mr.Id = mrid;
+                    mrid++;
+                    mr.Mall = mm.Id;
+                    mr.Kontonr = util.tryconvert(cbnumber[i].Text);
+                    if (!kontoclass.kontodict.ContainsKey(mr.Kontonr))
+                        continue;
+                    mr.Amount = 0;
+                    if (cbdebit[i].Text.Length > 0)
+                        mr.Amount = util.tryconvertdecimal(cbdebit[i].Text);
+                    else if (cbcredit[i].Text.Length > 0)
+                        mr.Amount = -util.tryconvertdecimal(cbcredit[i].Text);
+                    common.db.Mallrad.InsertOnSubmit(mr);
+                }
+            }
+            common.db.SubmitChanges();
         }
     }
 }

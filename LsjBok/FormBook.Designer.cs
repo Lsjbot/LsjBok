@@ -47,6 +47,7 @@ namespace LsjBok
             this.label4 = new System.Windows.Forms.Label();
             this.loadmallbutton = new System.Windows.Forms.Button();
             this.CBmall = new System.Windows.Forms.ComboBox();
+            this.CBkontosearch = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // bookbutton
@@ -150,6 +151,7 @@ namespace LsjBok
             this.savemallbutton.TabIndex = 10;
             this.savemallbutton.Text = "Spara som mall";
             this.savemallbutton.UseVisualStyleBackColor = true;
+            this.savemallbutton.Click += new System.EventHandler(this.savemallbutton_Click);
             // 
             // filedropbutton
             // 
@@ -199,11 +201,22 @@ namespace LsjBok
             this.CBmall.TabIndex = 15;
             this.CBmall.SelectedIndexChanged += new System.EventHandler(this.loadmallbutton_Click);
             // 
+            // CBkontosearch
+            // 
+            this.CBkontosearch.AutoSize = true;
+            this.CBkontosearch.Location = new System.Drawing.Point(616, 51);
+            this.CBkontosearch.Name = "CBkontosearch";
+            this.CBkontosearch.Size = new System.Drawing.Size(112, 17);
+            this.CBkontosearch.TabIndex = 16;
+            this.CBkontosearch.Text = "Aktivera kontosök";
+            this.CBkontosearch.UseVisualStyleBackColor = true;
+            // 
             // FormBook
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 781);
+            this.Controls.Add(this.CBkontosearch);
             this.Controls.Add(this.CBmall);
             this.Controls.Add(this.loadmallbutton);
             this.Controls.Add(this.label4);
@@ -246,5 +259,6 @@ namespace LsjBok
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button loadmallbutton;
         private System.Windows.Forms.ComboBox CBmall;
+        private System.Windows.Forms.CheckBox CBkontosearch;
     }
 }

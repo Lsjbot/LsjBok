@@ -161,7 +161,7 @@ namespace LsjBok
             {
                 LBfiscal.Items.Add(ff.Name);
                 cboFiscalYear.Items.Add(ff.Name);
-                if (ff.Enddate > DateTime.Now)
+                if (ff.Enddate >= DateTime.Now)
                     common.currentfiscal = ff.Id;
             }
         }
@@ -169,6 +169,9 @@ namespace LsjBok
         public void updatetitle()
         {
             this.Text = "LsjBok - " + util.getusername(common.currentuser) + " - " + util.getcompanyname(common.currentcompany) + " - "+util.getfiscalname(common.currentfiscal);
+            cboUser.Text = util.getusername(common.currentuser);
+            cboCompany.Text = util.getcompanyname(common.currentcompany);
+            cboFiscalYear.Text = util.getfiscalname(common.currentfiscal);
         }
 
         public void updateboxes()
