@@ -63,6 +63,16 @@ namespace LsjBok
 			return updateUB(kk);
         }
 
+		public static void updateUB()
+		{
+			var q = from c in common.db.Konto
+					where c.Year == common.currentfiscal
+					select c;
+
+			foreach (Konto kk in q)
+				updateUB(kk);
+		}
+
 		public static Dictionary<int, string> searchkonto(string s)
 		{
 			Dictionary<int, string> result = new Dictionary<int, string>();

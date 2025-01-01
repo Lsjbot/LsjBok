@@ -90,7 +90,7 @@ namespace LsjBok
 
 
             TBdate.Text = DateTime.Now.ToString("yyMMdd");
-            TBdate.LostFocus += new EventHandler(checkdate);
+            TBdate.LostFocus += new EventHandler(validate_setbuttons);
 
             bookbutton.Visible = true; //bookbutton.Enabled = false;
             changebutton.Visible = false; //changebutton.Enabled = changebutton.Visible;
@@ -119,7 +119,7 @@ namespace LsjBok
                 TBdate.Text = vvin.Verdate.ToString("yyMMdd");
             else
                 TBdate.Text = "";
-            TBdate.LostFocus += new EventHandler(checkdate);
+            TBdate.LostFocus += new EventHandler(validate_setbuttons);
 
             if (makecopy)
             {
@@ -457,6 +457,11 @@ namespace LsjBok
             return (dsum - csum == 0);
         }
 
+        private void validate_setbuttons(object sender, EventArgs e)
+        {
+            validate_setbuttons();
+        }
+
         private void validate_setbuttons()
         {
             bool valid = validate();
@@ -559,6 +564,7 @@ namespace LsjBok
                 idkonto = qkk.Max() + 1;
             List<Rad> lrad = new List<Rad>();
             List<Konto> lkonto = new List<Konto>();
+            List<int> affectedkonto = new List<int>();
 
 
             decimal csum = 0;
@@ -628,13 +634,15 @@ namespace LsjBok
                     //common.db.Konto.InsertOnSubmit(qk);
                     //common.db.SubmitChanges();
                 }
+                if (!affectedkonto.Contains(kontonr))
+                    affectedkonto.Add(kontonr);
                 Rad rr = new Rad();
                 rr.Id = idrad;
                 idrad++;
                 rr.Ver = vv.Id;
                 rr.Konto = qk.Id;
                 rr.Amount = deb - cred;
-                qk.UB += rr.Amount;
+                //qk.UB += rr.Amount;
 
                 //common.db.Rad.InsertOnSubmit(rr);
                 lrad.Add(rr);
@@ -665,12 +673,16 @@ namespace LsjBok
             common.db.SubmitChanges();
             util.logentry("Skapar verifikat " + vv.Vernumber+" "+vv.Description, vv.Id);
 
-
             common.db.Konto.InsertAllOnSubmit(lkonto);
             common.db.SubmitChanges();
 
             common.db.Rad.InsertAllOnSubmit(lrad);
             common.db.SubmitChanges();
+
+            foreach (int kontonr in affectedkonto)
+            {
+                kontoclass.updateUB(kontonr);
+            }
 
         }
 
@@ -716,8 +728,8 @@ namespace LsjBok
                 idrad++;
                 rr.Ver = vv.Id;
                 rr.Konto = rrin.Konto;
-                if (!affectedkonto.Contains(rr.Konto))
-                    affectedkonto.Add(rr.Konto);
+                if (!affectedkonto.Contains(rr.KontoKonto.Number))
+                    affectedkonto.Add(rr.KontoKonto.Number);
                 rr.Amount = -rrin.Amount;
                 lrad.Add(rr);
             }
@@ -877,6 +889,11 @@ namespace LsjBok
                 }
             }
             common.db.SubmitChanges();
+        }
+
+        private void TBdate_TextChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

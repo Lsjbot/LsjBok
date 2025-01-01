@@ -85,6 +85,8 @@ namespace LsjBok
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
             this.lblFolder = new System.Windows.Forms.ToolStripLabel();
             this.btnFolder = new System.Windows.Forms.ToolStripButton();
+            this.bokslutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.avslutaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel32.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -238,7 +240,8 @@ namespace LsjBok
             this.faktureringToolStripMenuItem,
             this.leverantörerOchInköpToolStripMenuItem,
             this.personalOchLönerToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.avslutaToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(189, 761);
@@ -338,7 +341,8 @@ namespace LsjBok
             this.skapaVerifikatToolStripMenuItem,
             this.bokföringsinställningarToolStripMenuItem,
             this.bokföringsmallarToolStripMenuItem,
-            this.tillgångarToolStripMenuItem});
+            this.tillgångarToolStripMenuItem,
+            this.bokslutToolStripMenuItem});
             this.bokföringOchBokslutToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bokföringOchBokslutToolStripMenuItem.Name = "bokföringOchBokslutToolStripMenuItem";
             this.bokföringOchBokslutToolStripMenuItem.Size = new System.Drawing.Size(176, 25);
@@ -572,6 +576,23 @@ namespace LsjBok
             this.btnFolder.Text = "Byt mapp";
             this.btnFolder.Click += new System.EventHandler(this.btnFolder_Click);
             // 
+            // bokslutToolStripMenuItem
+            // 
+            this.bokslutToolStripMenuItem.Name = "bokslutToolStripMenuItem";
+            this.bokslutToolStripMenuItem.Size = new System.Drawing.Size(241, 26);
+            this.bokslutToolStripMenuItem.Text = "Bokslut";
+            this.bokslutToolStripMenuItem.Click += new System.EventHandler(this.bokslutToolStripMenuItem_Click);
+            // 
+            // avslutaToolStripMenuItem
+            // 
+            this.avslutaToolStripMenuItem.BackColor = System.Drawing.SystemColors.Info;
+            this.avslutaToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.avslutaToolStripMenuItem.Name = "avslutaToolStripMenuItem";
+            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(176, 25);
+            this.avslutaToolStripMenuItem.Text = "Avsluta";
+            this.avslutaToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.avslutaToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -652,6 +673,8 @@ namespace LsjBok
         private System.Windows.Forms.ToolStripMenuItem resultatrapportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem momsrapportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verifikatlistaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bokslutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem avslutaToolStripMenuItem;
     }
 }
 

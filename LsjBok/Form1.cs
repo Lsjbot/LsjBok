@@ -157,13 +157,20 @@ namespace LsjBok
             LBfiscal.Items.Clear();
             cboFiscalYear.Items.Clear();
             var q = from c in common.db.Fiscalyear where c.Company == common.currentcompany select c;
+            DateTime latestend = new DateTime(0);
             foreach (var ff in q)
             {
                 LBfiscal.Items.Add(ff.Name);
                 cboFiscalYear.Items.Add(ff.Name);
                 if (ff.Enddate >= DateTime.Now.Date)
                     common.currentfiscal = ff.Id;
+                else if (ff.Enddate > latestend)
+                {
+                    latestend = ff.Enddate;
+                    common.currentfiscal = ff.Id;
+                }
             }
+
         }
 
         public void updatetitle()
@@ -383,6 +390,17 @@ namespace LsjBok
                 using (StreamWriter sw = new StreamWriter(common.folderfn))
                     sw.WriteLine(common.mainfolder);
             }
+        }
+
+        private void bokslutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormBokslut fbs = new FormBokslut();
+            fbs.Show();
+        }
+
+        private void avslutaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -94,6 +94,7 @@ namespace LsjBok
             this.TBdate.Name = "TBdate";
             this.TBdate.Size = new System.Drawing.Size(128, 20);
             this.TBdate.TabIndex = 4;
+            this.TBdate.TextChanged += new System.EventHandler(this.TBdate_TextChanged);
             // 
             // label2
             // 

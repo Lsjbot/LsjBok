@@ -12,6 +12,11 @@ namespace LsjBok
         {
             return (from c in common.db.Fiscalyear where c.Id == id select c).FirstOrDefault();
         }
+
+        public static int getyear(int id)
+        {
+            return getfiscal(id).Enddate.Year;
+        }
         public static bool infiscal(DateTime? date)
         {
             if (date == null)

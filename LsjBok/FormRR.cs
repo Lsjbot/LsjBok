@@ -70,13 +70,20 @@ namespace LsjBok
 
             if (headerstring == "Resultaträkning")
             {
-                rrbrclass rrtop = (from c in rrbrclass.rrlist where c.field == "Resultaträkning" select c).First();
+                //rrbrclass rrtop = (from c in rrbrclass.rrlist where c.field == "Resultaträkning" select c).First();
 
-                rrbrclass intakt = (from c in rrbrclass.rrlist where c.field == "Rörelsens intäkter" select c).First();
-                rrbrclass kostnad = (from c in rrbrclass.rrlist where c.field == "Rörelsens kostnader" select c).First();
-                rrbrclass finans = (from c in rrbrclass.rrlist where c.field == "Finansiella poster" select c).First();
-                rrbrclass bokdisp = (from c in rrbrclass.rrlist where c.field == "Bokslutsdispositioner" select c).First();
-                rrbrclass skatt = (from c in rrbrclass.rrlist where c.field == "Skatter" select c).First();
+                //rrbrclass intakt = (from c in rrbrclass.rrlist where c.field == "Rörelsens intäkter" select c).First();
+                //rrbrclass kostnad = (from c in rrbrclass.rrlist where c.field == "Rörelsens kostnader" select c).First();
+                //rrbrclass finans = (from c in rrbrclass.rrlist where c.field == "Finansiella poster" select c).First();
+                //rrbrclass bokdisp = (from c in rrbrclass.rrlist where c.field == "Bokslutsdispositioner" select c).First();
+                //rrbrclass skatt = (from c in rrbrclass.rrlist where c.field == "Skatter" select c).First();
+                rrbrclass rrtop = rrbrclass.rrtop;
+
+                rrbrclass intakt = rrbrclass.intakt;
+                rrbrclass kostnad = rrbrclass.kostnad;
+                rrbrclass finans = rrbrclass.finans;
+                rrbrclass bokdisp = rrbrclass.bokdisp;
+                rrbrclass skatt = rrbrclass.skatt;
 
                 decimal rorelseresultat = -intakt.sumamount_transactions(localfiscal, start, end) - kostnad.sumamount_transactions(localfiscal, start, end);
                 TreeNode rrnode = tree.Nodes.Add(rrtop.field + " | " + (rorelseresultat).ToString("N2"));

@@ -19,6 +19,15 @@ namespace LsjBok
 
         //public static Dictionary<string,rrbrclass>
 
+        public static rrbrclass rrtop = null;
+
+        public static rrbrclass intakt = null;
+        public static rrbrclass kostnad = null;
+        public static rrbrclass finans = null;
+        public static rrbrclass bokdisp = null;
+        public static rrbrclass skatt = null;
+
+
         public rrbrclass(string f,string desc,string k1,string k2,string k3,string k4,int sg,string partofpar)
         {
             field = f.Replace("Fält: ", "");
@@ -57,6 +66,19 @@ namespace LsjBok
             return sum;
         }
 
+        public decimal sumamount(int fiscalyear)
+        {
+            decimal sum = sumkonto(fiscalyear);
+            //sum = sign * sum;
+            var qpr = from c in rrlist where c.partof == this.field select c;
+            foreach (rrbrclass r in qpr)
+                sum += r.sumamount(fiscalyear);
+            var qpb = from c in brlist where c.partof == this.field select c;
+            foreach (rrbrclass r in qpb)
+                sum += r.sumamount(fiscalyear);
+            return sum;
+
+        }
         public decimal sumamount_transactions(int fiscalyear, DateTime start, DateTime end)
         {
             decimal sum = sumkonto_transactions(fiscalyear, start, end);
@@ -388,6 +410,15 @@ namespace LsjBok
                 if (!covered.Contains(k))
                     Console.WriteLine(k + " " + kontoclass.kontodict[k]);
             }
+
+            rrtop = (from c in rrbrclass.rrlist where c.field == "Resultaträkning" select c).First();
+
+            intakt = (from c in rrbrclass.rrlist where c.field == "Rörelsens intäkter" select c).First();
+            kostnad = (from c in rrbrclass.rrlist where c.field == "Rörelsens kostnader" select c).First();
+            finans = (from c in rrbrclass.rrlist where c.field == "Finansiella poster" select c).First();
+            bokdisp = (from c in rrbrclass.rrlist where c.field == "Bokslutsdispositioner" select c).First();
+            skatt = (from c in rrbrclass.rrlist where c.field == "Skatter" select c).First();
+
         }
     }
 }
