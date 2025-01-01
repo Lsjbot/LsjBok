@@ -539,7 +539,7 @@ namespace LsjBok
             vv.Description = TBdecription.Text;
             vv.Year = localfiscal;
             vv.Creator = common.currentuser;
-            vv.Creationdate = DateTime.Now;
+            vv.Creationdate = DateTime.Now.Date;
             
             DateTime? verdate = util.parsedate(TBdate.Text);
             if (!fiscalclass.infiscal(verdate))
@@ -623,7 +623,7 @@ namespace LsjBok
                     qk.IB = 0;
                     qk.UB = 0;
                     qk.Creator = common.currentuser;
-                    qk.Creationdate = DateTime.Now;
+                    qk.Creationdate = DateTime.Now.Date;
                     lkonto.Add(qk);
                     //common.db.Konto.InsertOnSubmit(qk);
                     //common.db.SubmitChanges();
@@ -699,11 +699,11 @@ namespace LsjBok
             vv.Description = "Annullera verifikat " + vvin.Vernumber;
             vv.Year = vvin.Year;
             vv.Creator = common.currentuser;
-            vv.Creationdate = DateTime.Now;
+            vv.Creationdate = DateTime.Now.Date;
             vv.Verdate = vvin.Verdate;
 
             List<Rad> lrad = new List<Rad>();
-            List<Konto> affectedkonto = new List<Konto>();
+            List<int> affectedkonto = new List<int>();
             int idrad = 1;
             var qr = from c in common.db.Rad select c.Id;
             if (qr.Count() > 0)
@@ -716,8 +716,8 @@ namespace LsjBok
                 idrad++;
                 rr.Ver = vv.Id;
                 rr.Konto = rrin.Konto;
-                if (!affectedkonto.Contains(rr.KontoKonto))
-                    affectedkonto.Add(rr.KontoKonto);
+                if (!affectedkonto.Contains(rr.Konto))
+                    affectedkonto.Add(rr.Konto);
                 rr.Amount = -rrin.Amount;
                 lrad.Add(rr);
             }
@@ -730,7 +730,7 @@ namespace LsjBok
             common.db.Rad.InsertAllOnSubmit(lrad);
             common.db.SubmitChanges();
 
-            foreach (Konto kk in affectedkonto)
+            foreach (int kk in affectedkonto)
                 kontoclass.updateUB(kk);
             common.db.SubmitChanges();
         }
@@ -847,7 +847,7 @@ namespace LsjBok
             mm.Id = mid;
             mm.Description = TBdecription.Text;
             mm.Creator = common.currentuser;
-            mm.Creationdate = DateTime.Now;
+            mm.Creationdate = DateTime.Now.Date;
 
             common.db.Mall.InsertOnSubmit(mm);
             common.db.SubmitChanges();

@@ -161,7 +161,7 @@ namespace LsjBok
             {
                 LBfiscal.Items.Add(ff.Name);
                 cboFiscalYear.Items.Add(ff.Name);
-                if (ff.Enddate >= DateTime.Now)
+                if (ff.Enddate >= DateTime.Now.Date)
                     common.currentfiscal = ff.Id;
             }
         }

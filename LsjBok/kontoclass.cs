@@ -18,7 +18,7 @@ namespace LsjBok
 			decimal UBsum = kk.IB;
 			foreach (Rad rr in kk.Rad)
 			{
-				if (rr.VerVer.Verdate < end)
+				if (rr.VerVer.Verdate <= end.Date)
 					UBsum += rr.Amount;
 				//else if (rr.VerVer.Verdate > end)
 				//    continue;
@@ -1924,9 +1924,9 @@ namespace LsjBok
 			decimal sum = 0;
 			foreach (Rad rr in kk.Rad)
 			{
-				if (rr.VerVer.Verdate < start)
+				if (rr.VerVer.Verdate < start.Date)
 					continue;// IBsum += rr.Amount;
-				else if (rr.VerVer.Verdate > end)
+				else if (rr.VerVer.Verdate > end.Date)
 					continue;
 				else
 					sum += rr.Amount;

@@ -55,16 +55,19 @@ namespace LsjBok
             int inode = 0;
             foreach (var kk in q.OrderBy(c => c.Number))
             {
+                kontoclass.updateUB(kk);
                 tree.Nodes.Add(kk.Number + " " + kk.Name + " | IB: " + kk.IB.ToString("N2") + " | UB: " + kk.UB.ToString("N2"));
                 var qrad = from c in common.db.Rad
                            where c.Konto == kk.Id
                            select c;
-                foreach (var rr in qrad)
+                decimal saldo = kk.IB;
+                foreach (var rr in qrad.OrderBy(c=>c.VerVer.Verdate))
                 {
+                    saldo += rr.Amount;
                     string debcred = rr.Amount > 0 ?
-                        " | " + rr.Amount.ToString("N2").PadLeft(12) + " |            0 |" :
+                        " | " + rr.Amount.ToString("N2").PadLeft(12) + " |           0 |" :
                         " |            0 |" + (-rr.Amount).ToString("N2").PadLeft(12) + " |";
-                    tree.Nodes[inode].Nodes.Add("Ver.nr" + rr.VerVer.Vernumber.ToString().PadLeft(5) + debcred + " | "+rr.VerVer.Verdate.ToString("yy-MM-dd") + " | Rad #" + rr.Id);
+                    tree.Nodes[inode].Nodes.Add("Ver.nr" + rr.VerVer.Vernumber.ToString().PadLeft(5) + debcred + saldo.ToString("N2").PadLeft(12) + " | "+rr.VerVer.Verdate.ToString("yy-MM-dd") + " | Rad #" + rr.Id);
                 }
                 inode++;
             }

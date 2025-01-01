@@ -50,7 +50,7 @@ namespace LsjBok
                 TBslut.ForeColor = Color.Red;
                 okdates = false; ;
             }
-            DateTime start = DateTime.Now; //dummy assignment because DateTime is not nullable
+            DateTime start = DateTime.Now.Date; //dummy assignment because DateTime is not nullable
             DateTime slut = start;
             if (okdates)
             {
@@ -77,7 +77,7 @@ namespace LsjBok
                 fy.Enddate = slut;
                 fy.Closed = false;
                 fy.Creator = common.currentuser;
-                fy.Creationdate = DateTime.Now;
+                fy.Creationdate = DateTime.Now.Date;
                 common.db.Fiscalyear.InsertOnSubmit(fy);
                 common.db.SubmitChanges();
                 util.logentry("Skapar räkenskapsår " + fy.Name, fy.Id);
@@ -118,7 +118,7 @@ namespace LsjBok
                 mp.Closed = false;
                 mp.Net = 0;
                 mp.Creator = common.currentuser;
-                mp.Creationdate = DateTime.Now;
+                mp.Creationdate = DateTime.Now.Date;
                 common.db.Momsperiod.InsertOnSubmit(mp);
                 st = st.AddMonths(mm);
                 id++;
