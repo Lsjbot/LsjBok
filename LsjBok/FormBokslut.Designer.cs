@@ -70,10 +70,19 @@ namespace LsjBok
             this.label15 = new System.Windows.Forms.Label();
             this.RByesdiscount = new System.Windows.Forms.RadioButton();
             this.label16 = new System.Windows.Forms.Label();
+            this.updatebutton = new System.Windows.Forms.Button();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label17 = new System.Windows.Forms.Label();
+            this.RBnobalance = new System.Windows.Forms.RadioButton();
+            this.label18 = new System.Windows.Forms.Label();
+            this.RByesbalance = new System.Windows.Forms.RadioButton();
+            this.bookprofitbutton = new System.Windows.Forms.Button();
+            this.closeyearbutton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // LBfiscal
@@ -327,7 +336,7 @@ namespace LsjBok
             this.panel3.Controls.Add(this.RByesdisp);
             this.panel3.Controls.Add(this.RBnodisp);
             this.panel3.Controls.Add(this.label12);
-            this.panel3.Location = new System.Drawing.Point(12, 235);
+            this.panel3.Location = new System.Drawing.Point(12, 324);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(327, 142);
             this.panel3.TabIndex = 32;
@@ -427,7 +436,7 @@ namespace LsjBok
             this.panel4.Controls.Add(this.RBnodiscount);
             this.panel4.Controls.Add(this.label15);
             this.panel4.Controls.Add(this.RByesdiscount);
-            this.panel4.Location = new System.Drawing.Point(12, 164);
+            this.panel4.Location = new System.Drawing.Point(12, 253);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(327, 65);
             this.panel4.TabIndex = 16;
@@ -474,11 +483,102 @@ namespace LsjBok
             this.label16.TabIndex = 15;
             this.label16.Text = "(avskrivningar, periodiseringar etc. )";
             // 
+            // updatebutton
+            // 
+            this.updatebutton.Location = new System.Drawing.Point(772, 236);
+            this.updatebutton.Name = "updatebutton";
+            this.updatebutton.Size = new System.Drawing.Size(120, 23);
+            this.updatebutton.TabIndex = 33;
+            this.updatebutton.Text = "Uppdatera";
+            this.updatebutton.UseVisualStyleBackColor = true;
+            this.updatebutton.Click += new System.EventHandler(this.updatebutton_Click);
+            // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.MistyRose;
+            this.panel5.Controls.Add(this.label17);
+            this.panel5.Controls.Add(this.RBnobalance);
+            this.panel5.Controls.Add(this.label18);
+            this.panel5.Controls.Add(this.RByesbalance);
+            this.panel5.Location = new System.Drawing.Point(12, 164);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(327, 83);
+            this.panel5.TabIndex = 17;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(11, 35);
+            this.label17.MaximumSize = new System.Drawing.Size(200, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(187, 26);
+            this.label17.TabIndex = 15;
+            this.label17.Text = "( t.ex. ska saldot i konto 1930 matcha vad du faktiskt har på banken) )";
+            // 
+            // RBnobalance
+            // 
+            this.RBnobalance.AutoSize = true;
+            this.RBnobalance.Checked = true;
+            this.RBnobalance.Location = new System.Drawing.Point(251, 31);
+            this.RBnobalance.Name = "RBnobalance";
+            this.RBnobalance.Size = new System.Drawing.Size(41, 17);
+            this.RBnobalance.TabIndex = 1;
+            this.RBnobalance.TabStop = true;
+            this.RBnobalance.Text = "Nej";
+            this.RBnobalance.UseVisualStyleBackColor = true;
+            this.RBnobalance.CheckedChanged += new System.EventHandler(this.RBnobook_CheckedChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(12, 21);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(210, 13);
+            this.label18.TabIndex = 14;
+            this.label18.Text = "Har du stämt av alla tillgångar och skulder?";
+            // 
+            // RByesbalance
+            // 
+            this.RByesbalance.AutoSize = true;
+            this.RByesbalance.Location = new System.Drawing.Point(251, 8);
+            this.RByesbalance.Name = "RByesbalance";
+            this.RByesbalance.Size = new System.Drawing.Size(37, 17);
+            this.RByesbalance.TabIndex = 0;
+            this.RByesbalance.Text = "JA";
+            this.RByesbalance.UseVisualStyleBackColor = true;
+            this.RByesbalance.CheckedChanged += new System.EventHandler(this.RByesbook_CheckedChanged);
+            // 
+            // bookprofitbutton
+            // 
+            this.bookprofitbutton.Enabled = false;
+            this.bookprofitbutton.Location = new System.Drawing.Point(362, 269);
+            this.bookprofitbutton.Name = "bookprofitbutton";
+            this.bookprofitbutton.Size = new System.Drawing.Size(385, 65);
+            this.bookprofitbutton.TabIndex = 34;
+            this.bookprofitbutton.Text = "Bokför årets resultat och beräknade skatt";
+            this.bookprofitbutton.UseVisualStyleBackColor = true;
+            this.bookprofitbutton.Click += new System.EventHandler(this.bookprofitbutton_Click);
+            // 
+            // closeyearbutton
+            // 
+            this.closeyearbutton.Enabled = false;
+            this.closeyearbutton.Location = new System.Drawing.Point(362, 353);
+            this.closeyearbutton.Name = "closeyearbutton";
+            this.closeyearbutton.Size = new System.Drawing.Size(385, 67);
+            this.closeyearbutton.TabIndex = 35;
+            this.closeyearbutton.Text = "Stäng räkenskapsår";
+            this.closeyearbutton.UseVisualStyleBackColor = true;
+            this.closeyearbutton.Click += new System.EventHandler(this.closeyearbutton_Click);
+            // 
             // FormBokslut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(893, 655);
+            this.Controls.Add(this.closeyearbutton);
+            this.Controls.Add(this.bookprofitbutton);
+            this.Controls.Add(this.panel5);
+            this.Controls.Add(this.updatebutton);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
@@ -510,6 +610,8 @@ namespace LsjBok
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -558,5 +660,13 @@ namespace LsjBok
         private System.Windows.Forms.RadioButton RBnodiscount;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.RadioButton RByesdiscount;
+        private System.Windows.Forms.Button updatebutton;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.RadioButton RBnobalance;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.RadioButton RByesbalance;
+        private System.Windows.Forms.Button bookprofitbutton;
+        private System.Windows.Forms.Button closeyearbutton;
     }
 }

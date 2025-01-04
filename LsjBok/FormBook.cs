@@ -86,6 +86,12 @@ namespace LsjBok
         {
             InitializeComponent();
 
+            if (fiscalclass.isclosed(localfiscal))
+            {
+                MessageBox.Show("Räkenskapsåret är stängt");
+                this.Close();
+            }
+
             make_controls();
 
 
@@ -506,6 +512,14 @@ namespace LsjBok
                     }
                 }
             }
+
+            if (!fiscalclass.isclosed(localfiscal))
+            {
+                MessageBox.Show("Räkenskapsåret är stängt");
+                TBdate.ForeColor = Color.Red;
+                return false;
+            }
+
             if (!fiscalclass.infiscal(verdate,localfiscal))
             {
                 TBdate.ForeColor = Color.Red;
@@ -520,6 +534,7 @@ namespace LsjBok
 
         private void cancelbutton_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
@@ -696,6 +711,7 @@ namespace LsjBok
 
             make_booking();
 
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
@@ -755,6 +771,8 @@ namespace LsjBok
                 return;
             else
                 annulment();
+
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
@@ -770,6 +788,7 @@ namespace LsjBok
 
             make_booking();
 
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 

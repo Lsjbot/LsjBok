@@ -97,7 +97,10 @@ namespace LsjBok
 
         private void LBfiscal_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var q = (from c in common.db.Fiscalyear where c.Name == LBfiscal.SelectedItem.ToString() select c).FirstOrDefault();
+            var q = (from c in common.db.Fiscalyear 
+                     where c.Name == LBfiscal.SelectedItem.ToString()
+                     where c.Company == common.currentcompany
+                     select c).FirstOrDefault();
             if (q != null)
             {
                 common.currentfiscal = q.Id;
@@ -108,6 +111,16 @@ namespace LsjBok
         private void RByesbook_CheckedChanged(object sender, EventArgs e)
         {
             (sender as Control).Parent.BackColor = yescolor;
+
+            bool ok = true;
+            foreach (Control cc in this.Controls)
+            {
+                if (cc.Name.StartsWith("panel") && cc.BackColor == nocolor)
+                    ok = false;
+            }
+
+            bookprofitbutton.Enabled = ok;
+
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -148,7 +161,7 @@ namespace LsjBok
                 }
                 kontolist.Add(kontonr, -amount);
 
-                FormBook fb = new FormBook("Bokför avsättning till periodiseringsfond", kontolist);
+                FormBook fb = new FormBook("Avsättning till periodiseringsfond", kontolist);
                 fb.ShowDialog();
                 updateamounts();
             }
@@ -169,10 +182,43 @@ namespace LsjBok
                 kontolist.Add(8819, -amount);
                 kontolist.Add(kontonr, amount);
 
-                FormBook fb = new FormBook("Bokför återförande från periodiseringsfond", kontolist);
+                FormBook fb = new FormBook("Återförande från periodiseringsfond", kontolist);
                 fb.ShowDialog();
                 updateamounts();
             }
+        }
+
+        private void updatebutton_Click(object sender, EventArgs e)
+        {
+            updatetitle();
+            updatefiscal();
+            updateamounts();
+        }
+
+        private void bookprofitbutton_Click(object sender, EventArgs e)
+        {
+            updateamounts();
+
+            decimal profitamount = util.tryconvertdecimal(TBefterskatt.Text);
+            decimal taxamount = util.tryconvertdecimal(TBskatt.Text);
+
+            Dictionary<int, decimal> kontolist = new Dictionary<int, decimal>();
+            kontolist.Add(8999, profitamount);
+            kontolist.Add(2099, -profitamount);
+            kontolist.Add(8910, taxamount);
+            kontolist.Add(2512, -taxamount);
+
+            FormBook fb = new FormBook("Årets resultat och beräknade skatt", kontolist);
+            fb.ShowDialog();
+
+            closeyearbutton.Enabled = (fb.DialogResult == DialogResult.OK);
+        }
+
+        private void closeyearbutton_Click(object sender, EventArgs e)
+        {
+            fiscalclass.closefiscal(common.currentfiscal);
+            
+            this.Close();
         }
     }
 }

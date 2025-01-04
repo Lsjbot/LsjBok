@@ -17,6 +17,20 @@ namespace LsjBok
         {
             return getfiscal(id).Enddate.Year;
         }
+
+        public static void closefiscal(int id)
+        {
+            Fiscalyear fy = getfiscal(id);
+            fy.Closed = true;
+            common.db.SubmitChanges();
+            util.logentry("Stänger räkenskapsår " + fy.Name, -1);
+        }
+
+        public static bool isclosed(int id)
+        {
+            Fiscalyear fy = getfiscal(id);
+            return fy.Closed;
+        }
         public static bool infiscal(DateTime? date)
         {
             if (date == null)
