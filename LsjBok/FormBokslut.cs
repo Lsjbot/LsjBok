@@ -44,15 +44,17 @@ namespace LsjBok
             aterforandebutton.Enabled = false;
             foreach (Konto kk in q)
             {
-                if (kk.UB != 0)
+                if (kontoclass.getUB(kk) != 0)
                 {
-                    CBaterforande.Items.Add(Math.Abs(kk.UB).ToString("N0") + " | " + kk.Number + " | " + kk.Name);
+                    CBaterforande.Items.Add(Math.Abs(kontoclass.getUB(kk)).ToString("N0") + " | " + kk.Number + " | " + kk.Name);
                 }
             }
         }
 
         public void updateamounts()
         {
+            common.memo("FormBokslut.updateamounts");
+
             kontoclass.updateUB();
 
             rorelseresultat = -rrbrclass.intakt.sumamount(common.currentfiscal) - rrbrclass.kostnad.sumamount(common.currentfiscal);
@@ -61,13 +63,17 @@ namespace LsjBok
             resultatbokdisp = resultatfinans - bokdisp;
             resultatefterskatt = resultatbokdisp - rrbrclass.skatt.sumamount(common.currentfiscal);
 
+            common.memo("Bokdisp = " + bokdisp);
+
             TBrorelseresultat.Text = rorelseresultat.ToString("N2");
             TBresultatfinans.Text = resultatfinans.ToString("N2");
             TBbokdisp.Text = bokdisp.ToString("N2");
             TBresultatbokdisp.Text = resultatbokdisp.ToString("N2");
             TBskattesats.Text = taxrate.ToString("N1");
+
             skatt = (decimal)0.01 * resultatbokdisp * taxrate;
             TBskatt.Text = skatt.ToString("N2");
+
             resultatefterskatt = resultatbokdisp - skatt;
             TBefterskatt.Text = resultatefterskatt.ToString("N2");
         }
@@ -135,15 +141,15 @@ namespace LsjBok
                 int year = fiscalclass.getyear(common.currentfiscal);
                 int lastdigit = year % 10;
                 int kontonr = 2120 + lastdigit;
-                decimal oldamount = kontoclass.updateUB(kontonr);
-                if (oldamount > 0)
+                decimal oldamount = kontoclass.getUB(kontonr);
+                if (oldamount != 0)
                 {
                     kontonr = 2130 + lastdigit;
                 }
                 kontolist.Add(kontonr, -amount);
 
                 FormBook fb = new FormBook("Bokför avsättning till periodiseringsfond", kontolist);
-                fb.Show();
+                fb.ShowDialog();
                 updateamounts();
             }
         }
@@ -164,7 +170,7 @@ namespace LsjBok
                 kontolist.Add(kontonr, amount);
 
                 FormBook fb = new FormBook("Bokför återförande från periodiseringsfond", kontolist);
-                fb.Show();
+                fb.ShowDialog();
                 updateamounts();
             }
         }

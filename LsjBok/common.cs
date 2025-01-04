@@ -18,5 +18,11 @@ namespace LsjBok
         public static int currentuser = -1;
         public static int currentcompany = -1;
         public static int currentfiscal = -1;
+        public static FormMemo fm = new FormMemo();
+
+        public static void memo(string s)
+        {
+            fm.memo(s);
+        }
     }
 }

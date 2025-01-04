@@ -13,25 +13,64 @@ namespace LsjBok
         public static Dictionary<string, int> kontosearchlist = new Dictionary<string, int>();
 		public static Dictionary<string, List<int>> kontonumbersearch = new Dictionary<string, List<int>>();
 
-		public static decimal UB(Konto kk, DateTime end)
+		public static decimal getUB(Konto kk, DateTime end)
         {
 			decimal UBsum = kk.IB;
-			foreach (Rad rr in kk.Rad)
+			var qrad = from c in common.db.Rad
+					   where c.Konto == kk.Id
+					   select c;
+			//foreach (Rad rr in kk.Rad)
+			foreach (Rad rr in qrad)
 			{
 				if (rr.VerVer.Verdate <= end.Date)
-					UBsum += rr.Amount;
-				//else if (rr.VerVer.Verdate > end)
-				//    continue;
-				//else
-				//    sum += rr.Amount;
+				    UBsum += rr.Amount;
+			//else if (rr.VerVer.Verdate > end)
+			//    continue;
+			//else
+			//    sum += rr.Amount;
 			}
 			return UBsum;
 		}
 
+		public static decimal getUB(Konto kk)
+        {
+			decimal UBsum = kk.IB;
+			var qrad = from c in common.db.Rad
+					   where c.Konto == kk.Id
+					   select c;
+			//foreach (Rad rr in kk.Rad)
+			foreach (Rad rr in qrad)
+			{
+				UBsum += rr.Amount;
+			}
+			return UBsum;
+		}
+
+		public static decimal getUB(int kontonr, int fiscal)
+        {
+			var q = from c in common.db.Konto
+					where c.Number == kontonr
+					where c.Year == fiscal
+					select c;
+
+			if (q.Count() != 1)
+				return 0;
+
+			return getUB(q.First());
+		}
+
+		public static decimal getUB(int kontonr)
+        {
+			return getUB(kontonr, common.currentfiscal);
+        }
+
 		public static decimal updateUB(Konto kk)
         {
 			decimal UBsum = kk.IB;
-			foreach (Rad rr in kk.Rad)
+			var qrad = from c in common.db.Rad
+					   where c.Konto == kk.Id
+					   select c;
+			foreach (Rad rr in qrad)
 			{
 				//if (rr.VerVer.Verdate < end)
 			    UBsum += rr.Amount;
@@ -45,6 +84,7 @@ namespace LsjBok
             {
 				kk.UB = UBsum;
 				common.db.SubmitChanges();
+				common.memo("updateUB: " + kk.Number + "\t" + UBsum);
 			}
 			return UBsum;
 		}

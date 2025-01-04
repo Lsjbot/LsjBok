@@ -43,7 +43,10 @@ namespace LsjBok
         {
             decimal sum = 0;
             foreach (Konto kk in getkonto(fiscalyear))
-                sum += kk.UB;
+            {
+                sum += kontoclass.getUB(kk);
+                common.memo(kk.Number + "\t" + sum);
+            }
             return sum;
         }
 
@@ -91,7 +94,7 @@ namespace LsjBok
                 UBsum += kk.IB;
                 foreach (Rad rr in kk.Rad)
                 {
-                    if (rr.VerVer.Verdate < end)
+                    if (rr.VerVer.Verdate <= end)
                         UBsum += rr.Amount;
                     //else if (rr.VerVer.Verdate > end)
                     //    continue;

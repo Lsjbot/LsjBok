@@ -728,8 +728,8 @@ namespace LsjBok
                 idrad++;
                 rr.Ver = vv.Id;
                 rr.Konto = rrin.Konto;
-                if (!affectedkonto.Contains(rr.KontoKonto.Number))
-                    affectedkonto.Add(rr.KontoKonto.Number);
+                if (!affectedkonto.Contains(rrin.KontoKonto.Number))
+                    affectedkonto.Add(rrin.KontoKonto.Number);
                 rr.Amount = -rrin.Amount;
                 lrad.Add(rr);
             }

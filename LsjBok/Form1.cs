@@ -18,6 +18,10 @@ namespace LsjBok
         public Form1()
         {
             InitializeComponent();
+
+            common.fm.Show();
+
+            common.memo("For debug and other text output");
             if (!File.Exists(common.folderfn))
             {
                 common.mainfolder = @"C:\LsjBok\";

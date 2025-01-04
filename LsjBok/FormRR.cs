@@ -153,7 +153,7 @@ namespace LsjBok
             }
             foreach (Konto kk in rootrr.getkonto(localfiscal))
             {
-                decimal sum = kontoclass.UB(kk, end) - kontoclass.UB(kk, start);
+                decimal sum = kontoclass.getUB(kk, end) - kontoclass.getUB(kk, start);
                 if (sum != 0)
                 {
                     TreeNode knode = newnode.Nodes.Add(RRrow(kk.Number + " | " + kk.Name, level + 1, sum));
@@ -177,7 +177,7 @@ namespace LsjBok
                 if (kk.UB != 0)
                 {
                     //TreeNode knode = newnode.Nodes.Add(BRrow(kk.Number + " | " + kk.Name, level + 1, rootrr.sign * kk.UB));
-                    TreeNode knode = newnode.Nodes.Add(BRrow(kk.Number + " | " + kk.Name, level + 1, kontoclass.UB(kk,start),kontoclass.UB(kk,end)));
+                    TreeNode knode = newnode.Nodes.Add(BRrow(kk.Number + " | " + kk.Name, level + 1, kontoclass.getUB(kk,start),kontoclass.getUB(kk,end)));
                     //knode.ToolTipText = kk.
                 }
             }

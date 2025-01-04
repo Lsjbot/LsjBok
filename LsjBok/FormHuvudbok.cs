@@ -55,8 +55,8 @@ namespace LsjBok
             int inode = 0;
             foreach (var kk in q.OrderBy(c => c.Number))
             {
-                kontoclass.updateUB(kk);
-                tree.Nodes.Add(kk.Number + " " + kk.Name + " | IB: " + kk.IB.ToString("N2") + " | UB: " + kk.UB.ToString("N2"));
+                //kontoclass.updateUB(kk);
+                tree.Nodes.Add(kk.Number + " " + kk.Name + " | IB: " + kk.IB.ToString("N2") + " | UB: " + kontoclass.getUB(kk).ToString("N2"));
                 var qrad = from c in common.db.Rad
                            where c.Konto == kk.Id
                            select c;

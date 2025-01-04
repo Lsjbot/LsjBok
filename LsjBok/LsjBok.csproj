@@ -114,6 +114,12 @@
     <Compile Include="FormImportExport.Designer.cs">
       <DependentUpon>FormImportExport.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormMemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMemo.Designer.cs">
+      <DependentUpon>FormMemo.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMoms.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +215,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormImportExport.resx">
       <DependentUpon>FormImportExport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMemo.resx">
+      <DependentUpon>FormMemo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMoms.resx">
       <DependentUpon>FormMoms.cs</DependentUpon>
