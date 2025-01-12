@@ -59,6 +59,7 @@ namespace LsjBok
             this.bokföringsinställningarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bokföringsmallarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tillgångarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bokslutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.faktureringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fakturorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.offerterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,6 +73,7 @@ namespace LsjBok
             this.importexportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.företagsinställningarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.räkenskapsårToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.avslutaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.cboUser = new System.Windows.Forms.ToolStripComboBox();
@@ -85,8 +87,9 @@ namespace LsjBok
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
             this.lblFolder = new System.Windows.Forms.ToolStripLabel();
             this.btnFolder = new System.Windows.Forms.ToolStripButton();
-            this.bokslutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.avslutaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loggToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.årsredovisningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deklarationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel32.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -342,7 +345,9 @@ namespace LsjBok
             this.bokföringsinställningarToolStripMenuItem,
             this.bokföringsmallarToolStripMenuItem,
             this.tillgångarToolStripMenuItem,
-            this.bokslutToolStripMenuItem});
+            this.bokslutToolStripMenuItem,
+            this.årsredovisningToolStripMenuItem,
+            this.deklarationToolStripMenuItem});
             this.bokföringOchBokslutToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bokföringOchBokslutToolStripMenuItem.Name = "bokföringOchBokslutToolStripMenuItem";
             this.bokföringOchBokslutToolStripMenuItem.Size = new System.Drawing.Size(176, 25);
@@ -374,6 +379,13 @@ namespace LsjBok
             this.tillgångarToolStripMenuItem.Size = new System.Drawing.Size(241, 26);
             this.tillgångarToolStripMenuItem.Text = "Tillgångar";
             // 
+            // bokslutToolStripMenuItem
+            // 
+            this.bokslutToolStripMenuItem.Name = "bokslutToolStripMenuItem";
+            this.bokslutToolStripMenuItem.Size = new System.Drawing.Size(241, 26);
+            this.bokslutToolStripMenuItem.Text = "Bokslut";
+            this.bokslutToolStripMenuItem.Click += new System.EventHandler(this.bokslutToolStripMenuItem_Click);
+            // 
             // faktureringToolStripMenuItem
             // 
             this.faktureringToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -391,27 +403,27 @@ namespace LsjBok
             // fakturorToolStripMenuItem
             // 
             this.fakturorToolStripMenuItem.Name = "fakturorToolStripMenuItem";
-            this.fakturorToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.fakturorToolStripMenuItem.Size = new System.Drawing.Size(138, 26);
             this.fakturorToolStripMenuItem.Text = "Fakturor";
             this.fakturorToolStripMenuItem.Click += new System.EventHandler(this.fakturorToolStripMenuItem_Click);
             // 
             // offerterToolStripMenuItem
             // 
             this.offerterToolStripMenuItem.Name = "offerterToolStripMenuItem";
-            this.offerterToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.offerterToolStripMenuItem.Size = new System.Drawing.Size(138, 26);
             this.offerterToolStripMenuItem.Text = "Offerter";
             // 
             // kunderToolStripMenuItem
             // 
             this.kunderToolStripMenuItem.Name = "kunderToolStripMenuItem";
-            this.kunderToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.kunderToolStripMenuItem.Size = new System.Drawing.Size(138, 26);
             this.kunderToolStripMenuItem.Text = "Kunder";
             this.kunderToolStripMenuItem.Click += new System.EventHandler(this.kunderToolStripMenuItem_Click);
             // 
             // artiklarToolStripMenuItem
             // 
             this.artiklarToolStripMenuItem.Name = "artiklarToolStripMenuItem";
-            this.artiklarToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.artiklarToolStripMenuItem.Size = new System.Drawing.Size(138, 26);
             this.artiklarToolStripMenuItem.Text = "Artiklar";
             this.artiklarToolStripMenuItem.Click += new System.EventHandler(this.artiklarToolStripMenuItem_Click);
             // 
@@ -454,7 +466,8 @@ namespace LsjBok
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importexportToolStripMenuItem,
             this.företagsinställningarToolStripMenuItem,
-            this.räkenskapsårToolStripMenuItem});
+            this.räkenskapsårToolStripMenuItem,
+            this.loggToolStripMenuItem});
             this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(176, 25);
@@ -480,6 +493,17 @@ namespace LsjBok
             this.räkenskapsårToolStripMenuItem.Name = "räkenskapsårToolStripMenuItem";
             this.räkenskapsårToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
             this.räkenskapsårToolStripMenuItem.Text = "Räkenskapsår";
+            this.räkenskapsårToolStripMenuItem.Click += new System.EventHandler(this.räkenskapsårToolStripMenuItem_Click_1);
+            // 
+            // avslutaToolStripMenuItem
+            // 
+            this.avslutaToolStripMenuItem.BackColor = System.Drawing.SystemColors.Info;
+            this.avslutaToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.avslutaToolStripMenuItem.Name = "avslutaToolStripMenuItem";
+            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(176, 25);
+            this.avslutaToolStripMenuItem.Text = "Avsluta";
+            this.avslutaToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.avslutaToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -576,22 +600,25 @@ namespace LsjBok
             this.btnFolder.Text = "Byt mapp";
             this.btnFolder.Click += new System.EventHandler(this.btnFolder_Click);
             // 
-            // bokslutToolStripMenuItem
+            // loggToolStripMenuItem
             // 
-            this.bokslutToolStripMenuItem.Name = "bokslutToolStripMenuItem";
-            this.bokslutToolStripMenuItem.Size = new System.Drawing.Size(241, 26);
-            this.bokslutToolStripMenuItem.Text = "Bokslut";
-            this.bokslutToolStripMenuItem.Click += new System.EventHandler(this.bokslutToolStripMenuItem_Click);
+            this.loggToolStripMenuItem.Name = "loggToolStripMenuItem";
+            this.loggToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+            this.loggToolStripMenuItem.Text = "Logg";
+            this.loggToolStripMenuItem.Click += new System.EventHandler(this.loggToolStripMenuItem_Click);
             // 
-            // avslutaToolStripMenuItem
+            // årsredovisningToolStripMenuItem
             // 
-            this.avslutaToolStripMenuItem.BackColor = System.Drawing.SystemColors.Info;
-            this.avslutaToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.avslutaToolStripMenuItem.Name = "avslutaToolStripMenuItem";
-            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(176, 25);
-            this.avslutaToolStripMenuItem.Text = "Avsluta";
-            this.avslutaToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.avslutaToolStripMenuItem_Click);
+            this.årsredovisningToolStripMenuItem.Name = "årsredovisningToolStripMenuItem";
+            this.årsredovisningToolStripMenuItem.Size = new System.Drawing.Size(241, 26);
+            this.årsredovisningToolStripMenuItem.Text = "Årsredovisning";
+            // 
+            // deklarationToolStripMenuItem
+            // 
+            this.deklarationToolStripMenuItem.Name = "deklarationToolStripMenuItem";
+            this.deklarationToolStripMenuItem.Size = new System.Drawing.Size(241, 26);
+            this.deklarationToolStripMenuItem.Text = "Deklaration";
+            this.deklarationToolStripMenuItem.Click += new System.EventHandler(this.deklarationToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -675,6 +702,9 @@ namespace LsjBok
         private System.Windows.Forms.ToolStripMenuItem verifikatlistaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bokslutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem avslutaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem årsredovisningToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deklarationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loggToolStripMenuItem;
     }
 }
 

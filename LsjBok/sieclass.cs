@@ -454,7 +454,7 @@ namespace LsjBok
                     MessageBox.Show(cout, "UB-konflikt", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                util.logentry("Importerar " + fn, -1);
+                util.logentry("Importerar " + fn, FormLog.logdict[FormLog.logimportexport]);
 
             }
 
@@ -544,7 +544,7 @@ namespace LsjBok
                     }
                     sw.WriteLine("}");
                 }
-                util.logentry("Exporterar till " + fn, -1);
+                util.logentry("Exporterar till " + fn, FormLog.logdict[FormLog.logimportexport]);
             }
 
         }

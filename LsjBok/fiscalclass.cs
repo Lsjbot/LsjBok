@@ -23,7 +23,7 @@ namespace LsjBok
             Fiscalyear fy = getfiscal(id);
             fy.Closed = true;
             common.db.SubmitChanges();
-            util.logentry("Stänger räkenskapsår " + fy.Name, -1);
+            util.logentry("Stänger räkenskapsår " + fy.Name, FormLog.logdict[FormLog.logfiscalyear]);
         }
 
         public static bool isclosed(int id)

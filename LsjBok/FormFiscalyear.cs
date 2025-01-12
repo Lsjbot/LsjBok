@@ -28,11 +28,56 @@ namespace LsjBok
                 TBstart.Text = (DateTime.Now.Year - 2000).ToString() + "0101";
                 TBslut.Text  = (DateTime.Now.Year - 2000).ToString() + "1231";
             }
+            TBstart.LostFocus += new EventHandler(checkdates);
+            TBslut.LostFocus += new EventHandler(checkdates);
+
+            var q = from c in common.db.Fiscalyear where c.Company == common.currentcompany select c;
+            foreach (Fiscalyear fy in q)
+            {
+                LByears.Items.Add(fy.Name);
+            }
+
+
         }
+
+        private void checkdates(object sender, EventArgs e)
+        {
+            createbutton.Enabled = checkdates();
+        }
+
 
         private void cancelbutton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private bool checkdates()
+        {
+            DateTime? startparse = util.parsedate(TBstart.Text);
+            DateTime? slutparse = util.parsedate(TBslut.Text);
+            bool okdates = true;
+            if (startparse == null)
+            {
+                TBstart.ForeColor = Color.Red;
+                okdates = false;
+            }
+            if (slutparse == null)
+            {
+                TBslut.ForeColor = Color.Red;
+                okdates = false; ;
+            }
+
+            DateTime start = DateTime.Now.Date; //dummy assignment because DateTime is not nullable
+            DateTime slut = start;
+            if (okdates)
+            {
+                start = (DateTime)startparse;
+                slut = (DateTime)slutparse;
+                if (slut <= start)
+                    okdates = false;
+            }
+
+            return okdates;
         }
 
         private void createbutton_Click(object sender, EventArgs e)
@@ -50,6 +95,7 @@ namespace LsjBok
                 TBslut.ForeColor = Color.Red;
                 okdates = false; ;
             }
+
             DateTime start = DateTime.Now.Date; //dummy assignment because DateTime is not nullable
             DateTime slut = start;
             if (okdates)
@@ -80,7 +126,7 @@ namespace LsjBok
                 fy.Creationdate = DateTime.Now.Date;
                 common.db.Fiscalyear.InsertOnSubmit(fy);
                 common.db.SubmitChanges();
-                util.logentry("Skapar räkenskapsår " + fy.Name, fy.Id);
+                util.logentry("Skapar räkenskapsår " + fy.Name, FormLog.logdict[FormLog.logfiscalyear]);
 
                 common.currentfiscal = fy.Id;
 
@@ -127,6 +173,50 @@ namespace LsjBok
 
         }
 
+        private void closeyearbutton_Click(object sender, EventArgs e)
+        {
+            if (selectedyear == null)
+                return;
+            selectedyear.Closed = true;
+            util.logentry("Stänger räkenskapsår " + selectedyear.Name, FormLog.logdict[FormLog.logfiscalyear]);
+            common.db.SubmitChanges();
+        }
 
+        private Fiscalyear selectedyear = null;
+
+        private void LByears_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (LByears.SelectedItem != null)
+            {
+                string s = LByears.SelectedItem.ToString();
+                selectedyear = (from c in common.db.Fiscalyear where c.Name == s where c.Company == common.currentcompany select c).FirstOrDefault();
+                if (selectedyear != null)
+                {
+                    closeyearbutton.Text = "Stäng år " + s;
+                    openyearbutton.Text = "Öppna år " + s;
+                    if (selectedyear.Closed)
+                    {
+                        openyearbutton.Enabled = true;
+                        closeyearbutton.Enabled = false;
+                        createbutton.Enabled = false;
+                    }
+                    else
+                    {
+                        openyearbutton.Enabled = false;
+                        closeyearbutton.Enabled = true;
+                        createbutton.Enabled = false;
+                    }
+                }
+            }
+        }
+
+        private void openyearbutton_Click(object sender, EventArgs e)
+        {
+            if (selectedyear == null)
+                return;
+            selectedyear.Closed = false;
+            util.logentry("Öppnar räkenskapsår " + selectedyear.Name, FormLog.logdict[FormLog.logfiscalyear]);
+            common.db.SubmitChanges();
+        }
     }
 }

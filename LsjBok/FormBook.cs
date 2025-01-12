@@ -513,7 +513,7 @@ namespace LsjBok
                 }
             }
 
-            if (!fiscalclass.isclosed(localfiscal))
+            if (fiscalclass.isclosed(localfiscal))
             {
                 MessageBox.Show("Räkenskapsåret är stängt");
                 TBdate.ForeColor = Color.Red;

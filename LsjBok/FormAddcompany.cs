@@ -72,7 +72,7 @@ namespace LsjBok
             common.db.Company.InsertOnSubmit(cc);
             common.db.SubmitChanges();
 
-            util.logentry("Skapar företag " + cc.Name, cc.Id);
+            util.logentry("Skapar företag " + cc.Name, -2);
 
             common.currentcompany = cc.Id;
             

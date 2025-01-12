@@ -26,6 +26,7 @@ namespace LsjBok
         public static rrbrclass finans = null;
         public static rrbrclass bokdisp = null;
         public static rrbrclass skatt = null;
+        public static rrbrclass periodiseringsfond = null;
 
 
         public rrbrclass(string f,string desc,string k1,string k2,string k3,string k4,int sg,string partofpar)
@@ -417,6 +418,7 @@ namespace LsjBok
             kostnad = (from c in rrbrclass.rrlist where c.field == "Rörelsens kostnader" select c).First();
             finans = (from c in rrbrclass.rrlist where c.field == "Finansiella poster" select c).First();
             bokdisp = (from c in rrbrclass.rrlist where c.field == "Bokslutsdispositioner" select c).First();
+            periodiseringsfond = (from c in rrbrclass.brlist where c.field == "Periodiseringsfonder" select c).First();
             skatt = (from c in rrbrclass.rrlist where c.field == "Skatter" select c).First();
 
         }

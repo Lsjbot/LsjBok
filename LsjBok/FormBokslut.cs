@@ -26,6 +26,9 @@ namespace LsjBok
         public FormBokslut()
         {
             InitializeComponent();
+
+            sruclass.fill_srulist();
+
             updatetitle();
             updatefiscal();
             updateamounts();

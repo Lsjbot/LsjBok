@@ -54,7 +54,7 @@ namespace LsjBok
             common.db.LsjBokUser.InsertOnSubmit(lb);
             common.db.SubmitChanges();
             common.currentuser = lb.Id;
-            util.logentry("Skapar användare " + lb.Name, lb.Id);
+            util.logentry("Skapar användare " + lb.Name, FormLog.logdict[FormLog.logskapande]);
 
 
             this.Close();

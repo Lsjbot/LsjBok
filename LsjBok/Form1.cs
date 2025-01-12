@@ -406,5 +406,23 @@ namespace LsjBok
         {
             this.Close();
         }
+
+        private void räkenskapsårToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            FormFiscalyear ff = new FormFiscalyear();
+            ff.ShowDialog();
+        }
+
+        private void loggToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormLog fl = new FormLog();
+            fl.Show();
+        }
+
+        private void deklarationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormDeklaration fd = new FormDeklaration();
+            fd.Show();
+        }
     }
 }

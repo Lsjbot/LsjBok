@@ -36,21 +36,24 @@ namespace LsjBok
             this.TBstart = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.TBslut = new System.Windows.Forms.TextBox();
+            this.LByears = new System.Windows.Forms.ListBox();
+            this.closeyearbutton = new System.Windows.Forms.Button();
+            this.openyearbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // createbutton
             // 
-            this.createbutton.Location = new System.Drawing.Point(77, 393);
+            this.createbutton.Location = new System.Drawing.Point(19, 393);
             this.createbutton.Name = "createbutton";
-            this.createbutton.Size = new System.Drawing.Size(108, 45);
+            this.createbutton.Size = new System.Drawing.Size(188, 45);
             this.createbutton.TabIndex = 0;
-            this.createbutton.Text = "Skapa";
+            this.createbutton.Text = "Skapa räkenskapsår";
             this.createbutton.UseVisualStyleBackColor = true;
             this.createbutton.Click += new System.EventHandler(this.createbutton_Click);
             // 
             // cancelbutton
             // 
-            this.cancelbutton.Location = new System.Drawing.Point(348, 393);
+            this.cancelbutton.Location = new System.Drawing.Point(500, 393);
             this.cancelbutton.Name = "cancelbutton";
             this.cancelbutton.Size = new System.Drawing.Size(101, 45);
             this.cancelbutton.TabIndex = 1;
@@ -99,11 +102,45 @@ namespace LsjBok
             this.TBslut.Size = new System.Drawing.Size(100, 20);
             this.TBslut.TabIndex = 6;
             // 
+            // LByears
+            // 
+            this.LByears.FormattingEnabled = true;
+            this.LByears.Location = new System.Drawing.Point(363, 61);
+            this.LByears.Name = "LByears";
+            this.LByears.Size = new System.Drawing.Size(153, 186);
+            this.LByears.TabIndex = 7;
+            this.LByears.SelectedIndexChanged += new System.EventHandler(this.LByears_SelectedIndexChanged);
+            // 
+            // closeyearbutton
+            // 
+            this.closeyearbutton.Enabled = false;
+            this.closeyearbutton.Location = new System.Drawing.Point(240, 393);
+            this.closeyearbutton.Name = "closeyearbutton";
+            this.closeyearbutton.Size = new System.Drawing.Size(122, 45);
+            this.closeyearbutton.TabIndex = 8;
+            this.closeyearbutton.Text = "Stäng räkenskapsår";
+            this.closeyearbutton.UseVisualStyleBackColor = true;
+            this.closeyearbutton.Click += new System.EventHandler(this.closeyearbutton_Click);
+            // 
+            // openyearbutton
+            // 
+            this.openyearbutton.Enabled = false;
+            this.openyearbutton.Location = new System.Drawing.Point(368, 393);
+            this.openyearbutton.Name = "openyearbutton";
+            this.openyearbutton.Size = new System.Drawing.Size(117, 45);
+            this.openyearbutton.TabIndex = 9;
+            this.openyearbutton.Text = "Öppna räkenskapsår";
+            this.openyearbutton.UseVisualStyleBackColor = true;
+            this.openyearbutton.Click += new System.EventHandler(this.openyearbutton_Click);
+            // 
             // FormFiscalyear
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(613, 450);
+            this.Controls.Add(this.openyearbutton);
+            this.Controls.Add(this.closeyearbutton);
+            this.Controls.Add(this.LByears);
             this.Controls.Add(this.TBslut);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.TBstart);
@@ -127,5 +164,8 @@ namespace LsjBok
         private System.Windows.Forms.TextBox TBstart;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox TBslut;
+        private System.Windows.Forms.ListBox LByears;
+        private System.Windows.Forms.Button closeyearbutton;
+        private System.Windows.Forms.Button openyearbutton;
     }
 }
