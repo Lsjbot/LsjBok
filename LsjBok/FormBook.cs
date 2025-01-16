@@ -57,9 +57,19 @@ namespace LsjBok
             loadmallbutton.Visible = (CBmall.Items.Count > 0);
         }
 
-        public FormBook(string title,Dictionary<int,decimal> rader)
+        public FormBook(string title, Dictionary<int, decimal> rader)
+        {
+            init_with_list(title, rader, DateTime.Now);
+        }
+        public FormBook(string title,Dictionary<int,decimal> rader, DateTime bookdate)
+        {
+            init_with_list(title, rader, bookdate);
+        }
+
+        private void init_with_list(string title, Dictionary<int, decimal> rader, DateTime bookdate)
         {
             init();
+            TBdate.Text = bookdate.ToString("yyMMdd");
             this.Text = title;
             TBdecription.Text = title;
             int i = 0;

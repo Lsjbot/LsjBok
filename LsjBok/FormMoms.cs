@@ -48,6 +48,7 @@ namespace LsjBok
                 ll.Font = new Font(ll.Font.Name,7,ll.Font.Style);
                 ll.Location = new Point(xc1,ytop+pitch*i);
                 this.Controls.Add(ll);
+
                 TextBox tb = new TextBox();
                 tb.Location = new Point(xc1 + labelwidth + 10, ytop + pitch * i);
                 tb.Width = xc2 - tb.Location.X - 10;
@@ -70,6 +71,7 @@ namespace LsjBok
                 ll.Font = new Font(ll.Font.Name, 7, ll.Font.Style);
                 ll.Location = new Point(xc2, ytop + pitch * i);
                 this.Controls.Add(ll);
+
                 TextBox tb = new TextBox();
                 tb.Location = new Point(xc2 + labelwidth + 10, ytop + pitch * i);
                 tb.TextAlign = HorizontalAlignment.Right;
@@ -155,11 +157,13 @@ namespace LsjBok
         {
             foreach (momsrutaclass mc in momsrutaclass.momsdict.Values)
             {
-                mc.amount = mc.summoms(localfiscal, mp.Startdate, mp.Enddate);
+                StringBuilder sb = new StringBuilder(mc.ruta.ToString());
+                mc.amount = mc.summoms(localfiscal, mp.Startdate, mp.Enddate,sb);
                 
                 if (mc.amount != 0)
                 {
                     ruttbdict[mc.ruta].Text = mc.amount.ToString("N2");
+                    toolTip1.SetToolTip(ruttbdict[mc.ruta], sb.ToString());
                 }
                 else
                 {
@@ -194,7 +198,7 @@ namespace LsjBok
                     if (amount != oldamount)
                         momsrutaclass.momsdict[ruta].amount = amount;
                     if (amount != 0 || ruta == 5 || ruta == 49)
-                        sw.WriteLine("    <" + tag + ">" + amount.ToString("F0") + "</" + tag + ">");
+                        sw.WriteLine("    <" + tag + ">" + Math.Round(amount).ToString("F0") + "</" + tag + ">");
                 }
                 sw.WriteLine("  </Moms>");
                 sw.WriteLine("</eSKDUpload>");
@@ -248,7 +252,7 @@ namespace LsjBok
                 }
             }
 
-            FormBook fb = new FormBook("Momsrapport "+mp.Name, kontoamount);
+            FormBook fb = new FormBook("Momsrapport "+mp.Name, kontoamount,mp.Enddate);
             fb.Show();
         }
 

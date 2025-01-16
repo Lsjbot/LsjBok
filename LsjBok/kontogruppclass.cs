@@ -49,19 +49,21 @@ namespace LsjBok
             }
             return sum;
         }
-
         public decimal sumkonto_transactions(int fiscalyear, DateTime start, DateTime end)
+        {
+            return sumkonto_transactions(fiscalyear, start, end, null);
+        }
+        public decimal sumkonto_transactions(int fiscalyear, DateTime start, DateTime end,StringBuilder sb)
         {
             decimal sum = 0;
             //decimal IBsum = 0;
             foreach (Konto kk in getkonto(fiscalyear))
             {
-                sum += kontoclass.sumperiod(kk,start, end);
+                sum += kontoclass.sumperiod(kk,start, end,sb);
                 //IBsum += kk.IB;
                 //sum += kk.UB;
             }
             return sum;
-
         }
 
         public decimal sumkonto_IB(int fiscalyear, DateTime start)

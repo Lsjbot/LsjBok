@@ -64,8 +64,9 @@ namespace LsjBok
             momsdict.Add(49, new momsrutaclass(49, "Moms att betala/få tillbaka", "MomsBetala", "10+11+12+30+31+32-48", "", "", "2650"));
         }
 
-        public decimal summoms(int fiscal, DateTime start, DateTime end)
+        public decimal summoms(int fiscal, DateTime start, DateTime end, StringBuilder sb)
         {
+            //common.memo("Ruta " + ruta);
             if (ruta == 5)
             {
                 decimal sum = sumkonto_transactions(fiscal, start, end);
@@ -84,21 +85,21 @@ namespace LsjBok
             else if (ruta == 49)
             {
                 decimal sum = 0;
-                sum += momsdict[10].sumkonto_transactions(fiscal, start, end);
-                sum += momsdict[11].sumkonto_transactions(fiscal, start, end);
-                sum += momsdict[12].sumkonto_transactions(fiscal, start, end);
-                sum += momsdict[30].sumkonto_transactions(fiscal, start, end);
-                sum += momsdict[31].sumkonto_transactions(fiscal, start, end);
-                sum += momsdict[32].sumkonto_transactions(fiscal, start, end);
-                sum += momsdict[60].sumkonto_transactions(fiscal, start, end);
-                sum += momsdict[61].sumkonto_transactions(fiscal, start, end);
-                sum += momsdict[62].sumkonto_transactions(fiscal, start, end);
-                sum = Math.Abs(sum) - Math.Abs(momsdict[48].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[10].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[11].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[12].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[30].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[31].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[32].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[60].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[61].sumkonto_transactions(fiscal, start, end));
+                sum += Math.Round(momsdict[62].sumkonto_transactions(fiscal, start, end));
+                sum = Math.Abs(sum) - Math.Abs(Math.Round(momsdict[48].sumkonto_transactions(fiscal, start, end)));
                 return sum;
             }
             else
             {
-                return Math.Abs(sumkonto_transactions(fiscal, start, end));
+                return Math.Abs(sumkonto_transactions(fiscal, start, end, sb));
             }
         }
     }

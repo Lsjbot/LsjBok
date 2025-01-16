@@ -29,6 +29,7 @@ namespace LsjBok
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.LBfiscal = new System.Windows.Forms.ListBox();
             this.LBperiod = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -37,6 +38,7 @@ namespace LsjBok
             this.momsxmlbutton = new System.Windows.Forms.Button();
             this.momsbookbutton = new System.Windows.Forms.Button();
             this.momspaybutton = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // LBfiscal
@@ -146,5 +148,6 @@ namespace LsjBok
         private System.Windows.Forms.Button momsxmlbutton;
         private System.Windows.Forms.Button momsbookbutton;
         private System.Windows.Forms.Button momspaybutton;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

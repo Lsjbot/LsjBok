@@ -16,7 +16,7 @@ namespace LsjBok
         int tbwidth = 200;
         int labelwidth = 300;
         int columns = 3;
-        int linespacing = 4;
+        int linespacing = 5;
 
         int[] colleft = new int[3] { 20, 540, 1060 };
         int[] colsection = new int[3] { 3,2, 4 };
@@ -65,9 +65,15 @@ namespace LsjBok
 
             sruclass.fill_srulist();
 
+            bool addpanel = true;
             foreach (sruclass sru in sruclass.srudict.Values)
             {
                 decimal amount = sru.sumsru(common.currentfiscal);
+                //0 = use original sign, >0 = always positive, <0 = reverse original sign
+                if (sru.displaysign > 0)
+                    amount = Math.Abs(amount);
+                else if (sru.displaysign < 0)
+                    amount = -amount;
 
                 if (amount != 0 || sru.group == 4)
                 {
@@ -86,6 +92,20 @@ namespace LsjBok
                     tb.Text = amount != 0 ? amount.ToString("N0") : "";
                     this.Controls.Add(tb);
                     tbdict.Add(sru.fieldcode, tb);
+
+                    if (addpanel)
+                    {
+                        Panel pp = new Panel();
+                        pp.Top = tb.Top;
+                        pp.Height = tb.Height;
+                        pp.Left = ll.Right + 10;
+                        pp.Width = tb.Left - pp.Left - 10;
+                        pp.BackColor = Color.LightBlue;
+                        this.Controls.Add(pp);
+                        addpanel = false;
+                    }
+                    else
+                        addpanel = true;
 
                     colbottom[col] += tb.Height + linespacing;
                 }

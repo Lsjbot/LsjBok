@@ -1971,6 +1971,10 @@ namespace LsjBok
 
 		public static decimal sumperiod(Konto kk, DateTime start, DateTime end)
         {
+			return sumperiod(kk, start, end, null);
+        }
+		public static decimal sumperiod(Konto kk, DateTime start, DateTime end,StringBuilder sb)
+        {
 			decimal sum = 0;
 			foreach (Rad rr in kk.Rad)
 			{
@@ -1979,7 +1983,12 @@ namespace LsjBok
 				else if (rr.VerVer.Verdate > end.Date)
 					continue;
 				else
+				{
 					sum += rr.Amount;
+					if (sb != null)
+						sb.Append("\n"+rr.Konto + "\t" + rr.Amount + "\t" + rr.VerVer.Description);
+					//common.memo("  " + rr.Konto + "\t" + rr.Amount);
+				}
 			}
 			return sum;
         }
