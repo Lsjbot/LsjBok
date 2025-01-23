@@ -19,6 +19,8 @@ namespace LsjBok
         decimal resultatfinans = 0;
         decimal bokdisp = 0;
         decimal resultatbokdisp = 0;
+        decimal skattejust = 0;
+        decimal skatteunderlag = 0;
         decimal skatt = 0;
         decimal resultatefterskatt = 0;
         decimal taxrate = (decimal)20.6;
@@ -62,8 +64,10 @@ namespace LsjBok
 
             rorelseresultat = -rrbrclass.intakt.sumamount(common.currentfiscal) - rrbrclass.kostnad.sumamount(common.currentfiscal);
             resultatfinans = rorelseresultat - rrbrclass.finans.sumamount(common.currentfiscal);
-            bokdisp = rrbrclass.bokdisp.sumamount(common.currentfiscal);
-            resultatbokdisp = resultatfinans - bokdisp;
+            bokdisp = -rrbrclass.bokdisp.sumamount(common.currentfiscal);
+            resultatbokdisp = resultatfinans + bokdisp;
+            skattejust = sruclass.sum_skattejust(common.currentfiscal); 
+            skatteunderlag = resultatbokdisp + skattejust;
             resultatefterskatt = resultatbokdisp - rrbrclass.skatt.sumamount(common.currentfiscal);
 
             common.memo("Bokdisp = " + bokdisp);
@@ -72,9 +76,12 @@ namespace LsjBok
             TBresultatfinans.Text = resultatfinans.ToString("N2");
             TBbokdisp.Text = bokdisp.ToString("N2");
             TBresultatbokdisp.Text = resultatbokdisp.ToString("N2");
+            TBskattejust.Text = skattejust.ToString("N2");
+            TBskatteunderlag.Text = skatteunderlag.ToString("N2");
+
             TBskattesats.Text = taxrate.ToString("N1");
 
-            skatt = (decimal)0.01 * resultatbokdisp * taxrate;
+            skatt = (decimal)0.01 * skatteunderlag * taxrate;
             TBskatt.Text = skatt.ToString("N2");
 
             resultatefterskatt = resultatbokdisp - skatt;

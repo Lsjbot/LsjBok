@@ -41,6 +41,14 @@ namespace LsjBok
             else
                 return q.Name;
         }
+
+        public static LsjBokUser getuser(int nr)
+        {
+            if (common.db == null)
+                return null;
+            return (from c in common.db.LsjBokUser where c.Id == nr select c).FirstOrDefault();
+        }
+
         public static string getcompanyname()
         {
             return getcompanyname(common.currentcompany);

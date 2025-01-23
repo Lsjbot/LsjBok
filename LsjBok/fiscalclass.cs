@@ -183,7 +183,7 @@ namespace LsjBok
             rrbrclass tillgang = rrbrclass.get_assets();// (from c in rrbrclass.brlist where c.field == "Tillgångar" select c).First();
             rrbrclass skuld = rrbrclass.get_debts();// (from c in rrbrclass.brlist where c.field == "Eget kapital och skulder" select c).First();
 
-            decimal ts = tillgang.sumamount_IB(fy.Id) - skuld.sumamount_IB(fy.Id);
+            decimal ts = tillgang.sumamount_IB(fy.Id) + skuld.sumamount_IB(fy.Id);
 
             if (ts != 0)
                 sb.Append("IB balanserar ej. Diff = "+ts.ToString("N2")+"\n");

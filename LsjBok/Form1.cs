@@ -411,6 +411,7 @@ namespace LsjBok
         {
             FormFiscalyear ff = new FormFiscalyear();
             ff.ShowDialog();
+            updatefiscal();
         }
 
         private void loggToolStripMenuItem_Click(object sender, EventArgs e)

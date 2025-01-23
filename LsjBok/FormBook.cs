@@ -99,7 +99,7 @@ namespace LsjBok
             if (fiscalclass.isclosed(localfiscal))
             {
                 MessageBox.Show("Räkenskapsåret är stängt");
-                this.Close();
+                //this.Close();
             }
 
             make_controls();
@@ -483,9 +483,9 @@ namespace LsjBok
             bool valid = validate();
 
             bookbutton.Visible = (vvin == null) || makecopy;
-            bookbutton.Enabled = valid;
+            bookbutton.Enabled = valid && !fiscalclass.isclosed(localfiscal);
             changebutton.Visible = !bookbutton.Visible;
-            changebutton.Enabled = valid;
+            changebutton.Enabled = valid && !fiscalclass.isclosed(localfiscal); ;
         }
 
 

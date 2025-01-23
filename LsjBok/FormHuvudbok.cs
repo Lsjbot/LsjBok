@@ -25,7 +25,7 @@ namespace LsjBok
 
             tree.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(tree_NodeMouseDoubleClick);
 
-            foreach (var fy in (from c in common.db.Fiscalyear where c.Company == common.currentcompany select c))
+            foreach (var fy in (from c in common.db.Fiscalyear where c.Company == common.currentcompany select c).OrderBy(c=>c.Startdate))
             {
                 LBfiscal.Items.Add(fy.Name);
                 if (fy.Id == common.currentfiscal)

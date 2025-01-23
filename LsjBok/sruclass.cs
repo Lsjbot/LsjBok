@@ -17,7 +17,7 @@ namespace LsjBok
         public bool special = false;
         public int fromfield = -1;
         public int fromsign = 1;
-        public int group = -1;
+        public int grupp = -1;
         public int displaysign = 0; //0 = use original sign, >0 = always positive, <0 = reverse original sign
         public int addsign = 0; //0 = use original sign, >0 = always positive, <0 = reverse original sign
 
@@ -31,7 +31,7 @@ namespace LsjBok
             description = desc;
             fromfield = fromf;
             fromsign = froms;
-            group = grp;
+            grupp = grp;
             displaysign = dispsg;
             addsign = addsg;
             parsekontolist(kontolist);
@@ -49,8 +49,52 @@ namespace LsjBok
             }
             else
             {
-                return sumkonto(fiscalyear);
+                decimal amount = sumkonto(fiscalyear);
+                if (onlyplus)
+                {
+                    if (amount > 0)
+                        return amount;
+                    else
+                        return 0;
+                }
+                else if (onlyminus)
+                {
+                    if (amount < 0)
+                        return amount;
+                    else
+                        return 0;
+                }
+                else
+                    return amount;
             }
+        }
+
+        public static decimal signfix(decimal amount, int signcode)
+        {
+            if (signcode > 0)
+                return Math.Abs(amount);
+            else if (signcode < 0)
+                return -amount;
+            return amount;
+        }
+
+        public decimal sumsru_addsign(int fiscalyear)
+        {
+            decimal amount = sumsru(fiscalyear);
+            if (addsign > 0)
+                return Math.Abs(amount);
+            else if (addsign < 0)
+                return -amount;
+            return amount;
+        }
+        public decimal sumsru_displaysign(int fiscalyear)
+        {
+            decimal amount = sumsru(fiscalyear);
+            if (displaysign > 0)
+                return Math.Abs(amount);
+            else if (displaysign < 0)
+                return -amount;
+            return amount;
         }
 
         public decimal specialsumsru(int fiscalyear)
@@ -116,18 +160,86 @@ namespace LsjBok
                     if (ub8810b < 0)
                         amount7525 += ub8810b;
                     return amount7525;
+                case 7670:
+                    decimal s4plus = sum4(fiscalyear);
+                    if (s4plus > 0)
+                        return s4plus;
+                    else
+                        return 0;
+                case 7770:
+                    decimal s4minus = sum4(fiscalyear);
+                    if (s4minus < 0)
+                        return -s4minus;
+                    else
+                        return 0;
+
+                case 7764:
+                case 7668:
+                case 7665:
+                    return 0;
                 default:
                     common.memo("sru special " + fieldcode);
+//sru special 7755
+//sru special 7656
+//sru special 7756
+//sru special 7657
+//sru special 7658
+//sru special 7757
+//sru special 7758
+//sru special 7659
+//sru special 7660
+//sru special 7759
+//sru special 7666
+//sru special 7765
+//sru special 7661
+//sru special 7760
+//sru special 7761
+//sru special 7662
+//sru special 7663
+//sru special 7762
+//sru special 7763
+//sru special 7664
+//sru special 7670
+//sru special 7770
+//sru special 8020
+//sru special 8021
+//sru special 8023
+//sru special 8026
                     break;
 
             }
             return 0;
         }
 
+        public static decimal sum4(int fiscalyear)
+        {
+            decimal s4 = 0;
+            var q = from c in srudict.Keys
+                    where c < 8000
+                    where srudict[c].grupp == 4
+                    select c;
+
+            foreach (int fc in q)
+            {
+                if (fc == 7670 || fc == 7770)
+                    continue;
+                s4 += srudict[fc].sumsru_addsign(fiscalyear);
+                //s4 += tbdict[fc].Text
+            }
+
+            return s4;
+        }
+
         public static char hyphenchar = '-';
         public void parsekontolist(string s)
         {
             string s1 = s;
+            if (String.IsNullOrEmpty(s1))
+            {
+                if (fromfield < 0)
+                    special = true;
+                return;
+            }
             if (s1.EndsWith(onlyplusstring))
             {
                 this.onlyplus = true;
@@ -225,6 +337,22 @@ namespace LsjBok
             }
         }
 
+        public static decimal sum_skattejust(int fiscalyear)
+        {
+            decimal sum = 0;
+
+            foreach (sruclass sru in (from c in srudict.Values where c.grupp == 4 select c))
+            {
+                if (sru.fieldcode == 7650)
+                    continue;
+                if (sru.fieldcode == 7750)
+                    continue;
+                sum += sru.sumsru_addsign(fiscalyear);
+
+            }
+
+            return sum;
+        }
         public static void fill_srulist()
         {
             if (srudict.Count > 0)
@@ -358,19 +486,19 @@ namespace LsjBok
 
             srudict.Add(7650, new sruclass(7650, "4.1", "Årets resultat, vinst", "", 7450, 1, 4, 1, 0));
             srudict.Add(7750, new sruclass(7750, "4.2", "Årets resultat, förlust", "", 7550, 1, 4, 1, 0));
-            srudict.Add(7651, new sruclass(7651, "4.3a", "Bokförda kostnader som inte dras av a: Skatt på årets resultat", "", 7528, 1, 4, 1, 0));
-            srudict.Add(7652, new sruclass(7652, "4.3b", "Bokförda kostnader som inte dras av b: Nedskrivning av finansiella tillgångar", "807x,817x,827x,8370", -1, 1, 4, 1, 0));
-            srudict.Add(7653, new sruclass(7653, "4.3c", "Bokförda kostnader som inte dras av a: Andra bokförda kostnader", "5099,5199,6072,6342,6982,6992,7622,7623,7632", -1, 1, 4, 1, 0));
+            srudict.Add(7651, new sruclass(7651, "4.3a", "Bokförda kostnader som inte dras av a: Skatt på årets resultat", "", 7528, 1, 4, 1, 1));
+            srudict.Add(7652, new sruclass(7652, "4.3b", "Bokförda kostnader som inte dras av b: Nedskrivning av finansiella tillgångar", "807x,817x,827x,8370", -1, 1, 4, 1, 1));
+            srudict.Add(7653, new sruclass(7653, "4.3c", "Bokförda kostnader som inte dras av a: Andra bokförda kostnader", "5099,5199,6072,6342,6982,6992,7622,7623,7632,8423", -1, 1, 4, 1, 1));
 
             srudict.Add(7751, new sruclass(7751, "4.4a", "Kostnader som ska dras av men som inte ingår i det redovisade resultatet a. Lämnade koncernbidrag", "", 7524, 1, 4, 1, 0));
             srudict.Add(7764, new sruclass(7764, "4.4b", "Kostnader som ska dras av men som inte ingår i det redovisade resultatet b. Andra ej bokförda kostnader", "", -1, 1, 4, 1, 0));
-            srudict.Add(7752, new sruclass(7752, "4.5a", "Bokförda intäkter som inte ska tas upp: a. Ackordsvinster", "3995,8491", -1, 1, 4, 1, 0));
-            srudict.Add(7753, new sruclass(7753, "4.5b", "Bokförda intäkter som inte ska tas upp: b. Utdelning", "", -1, 1, 4, 1, 0));
-            srudict.Add(7754, new sruclass(7754, "4.5c", "Bokförda intäkter som inte ska tas upp: c. Andra bokförda intäkter", "", -1, 1, 4, 1, 0));
-            srudict.Add(7654,new sruclass(7654,"4.6a","Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: a. Beräknad schablonintäkt på kvarvarande periodiseringsfonder vid beskattningsårets ingång ","special",-1,1,4,1,0));
-
+            srudict.Add(7752, new sruclass(7752, "4.5a", "Bokförda intäkter som inte ska tas upp: a. Ackordsvinster", "3995,8491", -1, 1, 4, 1, -1));
+            srudict.Add(7753, new sruclass(7753, "4.5b", "Bokförda intäkter som inte ska tas upp: b. Utdelning", "", -1, 1, 4, 1, -1));
+            srudict.Add(7754, new sruclass(7754, "4.5c", "Bokförda intäkter som inte ska tas upp: c. Andra bokförda intäkter", "8254,8314", -1, 1, 4, 1, -1));
+            srudict.Add(7654, new sruclass(7654, "4.6a", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: a. Beräknad schablonintäkt på kvarvarande periodiseringsfonder vid beskattningsårets ingång ","special",-1,1,4,1,0));
             srudict.Add(7655, new sruclass(7655, "4.6c", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet:  b. Mottagna koncernbidrag", "", 7419, 1, 4, 1, 0));
             srudict.Add(7668, new sruclass(7668, "4.6b", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: c. Fondandelar schablonintäkt", "", -1, 1, 4, 1, 0));
+
             srudict.Add(7667, new sruclass(7667, "4.6d", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: d. Uppräknat belopp vid återföring av periodiseringsfond", "special", -1, 1, 4, 1, 0));
             srudict.Add(7665, new sruclass(7665, "4.6e", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: d. Andra ej bokförda intäkter", "", -1, 1, 4, 1, 0));
             srudict.Add(7755, new sruclass(7755, "4.7a", "Avyttring av delägarrätter: a. Bokförd vinst", "", -1, 1, 4, 1, 0));
@@ -396,7 +524,7 @@ namespace LsjBok
 
             srudict.Add(7663, new sruclass(7663, "4.13+", "Andra skattemässiga justeringar av resultatet: +        ", "", -1, 1, 4, 1, 0));
             srudict.Add(7762, new sruclass(7762, "4.13-", "Andra skattemässiga justeringar av resultatet: -         ", "", -1, 1, 4, 1, 0));
-            srudict.Add(7763, new sruclass(7763, "4.14a. Outnyttjat underskott från föregående år", "Underskott: a. Outnyttjat underskott från föregående år         ", "", -1, 1, 4, 1, 0));
+            srudict.Add(7763, new sruclass(7763, "4.14a. Outnyttjat underskott från föregående år", "Underskott: a. Outnyttjat underskott från föregående år         ", "", -1, 1, 4, 1, -1));
             srudict.Add(7664, new sruclass(7664, "4.14b", "Underskott: b. Reduktion av underskott med hänsyn till exempelvis ägarförändring eller ackord         ", "", -1, 1, 4, 1, 0));
             srudict.Add(7670, new sruclass(7670, "4.15", "Överskott (flyttas till p. 1.1 på sid. 1)         ", "special", -1, 1, 4, 1, 0));
             srudict.Add(7770, new sruclass(7770, "4.16", "Underskott (flyttas till p. 1.2 på sid. 1)         ", "special", -1, 1, 4, 1, 0));
@@ -404,10 +532,6 @@ namespace LsjBok
             srudict.Add(8021, new sruclass(8021, "4.18", "Årets begärda och tidigare års medgivna värdeminskningsavdrag på markanläggningar...         ", "", -1, 1, 4, 1, 0));
             srudict.Add(8023, new sruclass(8023, "4.19", "Vid restvärdesavskrivning: återförda belopp för av- och nedskrivning, försäljning, utrangering         ", "", -1, 1, 4, 1, 0));
             srudict.Add(8026, new sruclass(8026, "4.20", "Lån från aktieägare (fysisk person) vid räkenskapsårets utgång         ", "", -1, 1, 4, 1, 0));
-            srudict.Add(8040, new sruclass(8040, "", "Uppdragstagare (t.ex.) redovisningskonsult) har biträtt vid upprättandet av årsredovisningen: Ja", "", -1, 1, -1,0,0));
-            srudict.Add(8041, new sruclass(8041, "", "Uppdragstagare (t.ex.) redovisningskonsult) har biträtt vid upprättandet av årsredovisningen: Nej", "", -1, 1, -1,0,0));
-            srudict.Add(8044, new sruclass(8044, "", "Årsredovisningen har varit föremål för revision: Ja", "", -1, 1, -1,0,0));
-            srudict.Add(8045, new sruclass(8045, "", "Årsredovisningen har varit föremål för revision: Nej", "", -1, 1, -1,0,0));
 
         }
     }

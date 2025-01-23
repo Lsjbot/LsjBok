@@ -33,8 +33,8 @@ namespace LsjBok
             this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.RByesbook = new System.Windows.Forms.RadioButton();
             this.RBnobook = new System.Windows.Forms.RadioButton();
+            this.RByesbook = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -51,25 +51,25 @@ namespace LsjBok
             this.label10 = new System.Windows.Forms.Label();
             this.TBresultatfinans = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label11 = new System.Windows.Forms.Label();
-            this.RByesmoms = new System.Windows.Forms.RadioButton();
-            this.RBnodisp = new System.Windows.Forms.RadioButton();
-            this.momsbutton = new System.Windows.Forms.Button();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.label12 = new System.Windows.Forms.Label();
-            this.RByesdisp = new System.Windows.Forms.RadioButton();
             this.RBnomoms = new System.Windows.Forms.RadioButton();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.TBavsattning = new System.Windows.Forms.TextBox();
-            this.avsattningbutton = new System.Windows.Forms.Button();
-            this.CBaterforande = new System.Windows.Forms.ComboBox();
+            this.momsbutton = new System.Windows.Forms.Button();
+            this.RByesmoms = new System.Windows.Forms.RadioButton();
+            this.label11 = new System.Windows.Forms.Label();
+            this.RBnodisp = new System.Windows.Forms.RadioButton();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.aterforandebutton = new System.Windows.Forms.Button();
+            this.CBaterforande = new System.Windows.Forms.ComboBox();
+            this.avsattningbutton = new System.Windows.Forms.Button();
+            this.TBavsattning = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.RByesdisp = new System.Windows.Forms.RadioButton();
+            this.label12 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.label16 = new System.Windows.Forms.Label();
             this.RBnodiscount = new System.Windows.Forms.RadioButton();
             this.label15 = new System.Windows.Forms.Label();
             this.RByesdiscount = new System.Windows.Forms.RadioButton();
-            this.label16 = new System.Windows.Forms.Label();
             this.updatebutton = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label17 = new System.Windows.Forms.Label();
@@ -78,6 +78,10 @@ namespace LsjBok
             this.RByesbalance = new System.Windows.Forms.RadioButton();
             this.bookprofitbutton = new System.Windows.Forms.Button();
             this.closeyearbutton = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.TBskattejust = new System.Windows.Forms.TextBox();
+            this.TBskatteunderlag = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -124,17 +128,6 @@ namespace LsjBok
             this.panel1.TabIndex = 15;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // RByesbook
-            // 
-            this.RByesbook.AutoSize = true;
-            this.RByesbook.Location = new System.Drawing.Point(251, 8);
-            this.RByesbook.Name = "RByesbook";
-            this.RByesbook.Size = new System.Drawing.Size(37, 17);
-            this.RByesbook.TabIndex = 0;
-            this.RByesbook.Text = "JA";
-            this.RByesbook.UseVisualStyleBackColor = true;
-            this.RByesbook.CheckedChanged += new System.EventHandler(this.RByesbook_CheckedChanged);
-            // 
             // RBnobook
             // 
             this.RBnobook.AutoSize = true;
@@ -148,6 +141,17 @@ namespace LsjBok
             this.RBnobook.UseVisualStyleBackColor = true;
             this.RBnobook.CheckedChanged += new System.EventHandler(this.RBnobook_CheckedChanged);
             // 
+            // RByesbook
+            // 
+            this.RByesbook.AutoSize = true;
+            this.RByesbook.Location = new System.Drawing.Point(251, 8);
+            this.RByesbook.Name = "RByesbook";
+            this.RByesbook.Size = new System.Drawing.Size(37, 17);
+            this.RByesbook.TabIndex = 0;
+            this.RByesbook.Text = "JA";
+            this.RByesbook.UseVisualStyleBackColor = true;
+            this.RByesbook.CheckedChanged += new System.EventHandler(this.RByesbook_CheckedChanged);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -160,7 +164,7 @@ namespace LsjBok
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(359, 145);
+            this.label3.Location = new System.Drawing.Point(359, 217);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(60, 13);
             this.label3.TabIndex = 17;
@@ -169,7 +173,7 @@ namespace LsjBok
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(359, 175);
+            this.label5.Location = new System.Drawing.Point(359, 247);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(113, 13);
             this.label5.TabIndex = 18;
@@ -178,7 +182,7 @@ namespace LsjBok
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(359, 209);
+            this.label6.Location = new System.Drawing.Point(359, 281);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(99, 13);
             this.label6.TabIndex = 19;
@@ -187,7 +191,7 @@ namespace LsjBok
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(362, 41);
+            this.label7.Location = new System.Drawing.Point(359, 42);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(217, 13);
             this.label7.TabIndex = 20;
@@ -196,7 +200,7 @@ namespace LsjBok
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(362, 91);
+            this.label8.Location = new System.Drawing.Point(359, 90);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(108, 13);
             this.label8.TabIndex = 21;
@@ -225,21 +229,21 @@ namespace LsjBok
             // 
             // TBskattesats
             // 
-            this.TBskattesats.Location = new System.Drawing.Point(586, 145);
+            this.TBskattesats.Location = new System.Drawing.Point(586, 217);
             this.TBskattesats.Name = "TBskattesats";
             this.TBskattesats.Size = new System.Drawing.Size(60, 20);
             this.TBskattesats.TabIndex = 25;
             // 
             // TBskatt
             // 
-            this.TBskatt.Location = new System.Drawing.Point(586, 175);
+            this.TBskatt.Location = new System.Drawing.Point(586, 247);
             this.TBskatt.Name = "TBskatt";
             this.TBskatt.Size = new System.Drawing.Size(161, 20);
             this.TBskatt.TabIndex = 26;
             // 
             // TBefterskatt
             // 
-            this.TBefterskatt.Location = new System.Drawing.Point(586, 209);
+            this.TBefterskatt.Location = new System.Drawing.Point(586, 281);
             this.TBefterskatt.Name = "TBefterskatt";
             this.TBefterskatt.Size = new System.Drawing.Size(161, 20);
             this.TBefterskatt.TabIndex = 27;
@@ -247,7 +251,7 @@ namespace LsjBok
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(653, 151);
+            this.label9.Location = new System.Drawing.Point(653, 223);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(15, 13);
             this.label9.TabIndex = 28;
@@ -256,7 +260,7 @@ namespace LsjBok
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(365, 13);
+            this.label10.Location = new System.Drawing.Point(359, 13);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(77, 13);
             this.label10.TabIndex = 29;
@@ -281,14 +285,28 @@ namespace LsjBok
             this.panel2.Size = new System.Drawing.Size(327, 91);
             this.panel2.TabIndex = 31;
             // 
-            // label11
+            // RBnomoms
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 20);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(182, 13);
-            this.label11.TabIndex = 0;
-            this.label11.Text = "Har du momsdeklarerat alla perioder?";
+            this.RBnomoms.AutoSize = true;
+            this.RBnomoms.Checked = true;
+            this.RBnomoms.Location = new System.Drawing.Point(251, 26);
+            this.RBnomoms.Name = "RBnomoms";
+            this.RBnomoms.Size = new System.Drawing.Size(41, 17);
+            this.RBnomoms.TabIndex = 18;
+            this.RBnomoms.TabStop = true;
+            this.RBnomoms.Text = "Nej";
+            this.RBnomoms.UseVisualStyleBackColor = true;
+            this.RBnomoms.CheckedChanged += new System.EventHandler(this.RBnobook_CheckedChanged);
+            // 
+            // momsbutton
+            // 
+            this.momsbutton.Location = new System.Drawing.Point(31, 53);
+            this.momsbutton.Name = "momsbutton";
+            this.momsbutton.Size = new System.Drawing.Size(137, 23);
+            this.momsbutton.TabIndex = 16;
+            this.momsbutton.Text = "Deklarera moms";
+            this.momsbutton.UseVisualStyleBackColor = true;
+            this.momsbutton.Click += new System.EventHandler(this.momsbutton_Click);
             // 
             // RByesmoms
             // 
@@ -300,6 +318,15 @@ namespace LsjBok
             this.RByesmoms.Text = "JA";
             this.RByesmoms.UseVisualStyleBackColor = true;
             this.RByesmoms.CheckedChanged += new System.EventHandler(this.RByesbook_CheckedChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(12, 20);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(182, 13);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "Har du momsdeklarerat alla perioder?";
             // 
             // RBnodisp
             // 
@@ -313,16 +340,6 @@ namespace LsjBok
             this.RBnodisp.Text = "Nej";
             this.RBnodisp.UseVisualStyleBackColor = true;
             this.RBnodisp.CheckedChanged += new System.EventHandler(this.RBnobook_CheckedChanged);
-            // 
-            // momsbutton
-            // 
-            this.momsbutton.Location = new System.Drawing.Point(31, 53);
-            this.momsbutton.Name = "momsbutton";
-            this.momsbutton.Size = new System.Drawing.Size(137, 23);
-            this.momsbutton.TabIndex = 16;
-            this.momsbutton.Text = "Deklarera moms";
-            this.momsbutton.UseVisualStyleBackColor = true;
-            this.momsbutton.Click += new System.EventHandler(this.momsbutton_Click);
             // 
             // panel3
             // 
@@ -341,15 +358,59 @@ namespace LsjBok
             this.panel3.Size = new System.Drawing.Size(327, 142);
             this.panel3.TabIndex = 32;
             // 
-            // label12
+            // aterforandebutton
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 13);
-            this.label12.MaximumSize = new System.Drawing.Size(200, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(182, 26);
-            this.label12.TabIndex = 17;
-            this.label12.Text = "Har du bokfört eventuella ändringar i periodiseringsfonder?";
+            this.aterforandebutton.Location = new System.Drawing.Point(125, 102);
+            this.aterforandebutton.Name = "aterforandebutton";
+            this.aterforandebutton.Size = new System.Drawing.Size(119, 37);
+            this.aterforandebutton.TabIndex = 23;
+            this.aterforandebutton.Text = "Bokför återförande";
+            this.aterforandebutton.UseVisualStyleBackColor = true;
+            this.aterforandebutton.Click += new System.EventHandler(this.aterforandebutton_Click);
+            // 
+            // CBaterforande
+            // 
+            this.CBaterforande.FormattingEnabled = true;
+            this.CBaterforande.Location = new System.Drawing.Point(114, 75);
+            this.CBaterforande.Name = "CBaterforande";
+            this.CBaterforande.Size = new System.Drawing.Size(199, 21);
+            this.CBaterforande.TabIndex = 22;
+            this.CBaterforande.SelectedIndexChanged += new System.EventHandler(this.CBaterforande_SelectedIndexChanged);
+            // 
+            // avsattningbutton
+            // 
+            this.avsattningbutton.Location = new System.Drawing.Point(14, 102);
+            this.avsattningbutton.Name = "avsattningbutton";
+            this.avsattningbutton.Size = new System.Drawing.Size(94, 37);
+            this.avsattningbutton.TabIndex = 21;
+            this.avsattningbutton.Text = "Bokför avsättning";
+            this.avsattningbutton.UseVisualStyleBackColor = true;
+            this.avsattningbutton.Click += new System.EventHandler(this.avsattningbutton_Click);
+            // 
+            // TBavsattning
+            // 
+            this.TBavsattning.Location = new System.Drawing.Point(14, 76);
+            this.TBavsattning.Name = "TBavsattning";
+            this.TBavsattning.Size = new System.Drawing.Size(94, 20);
+            this.TBavsattning.TabIndex = 20;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(150, 59);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(62, 13);
+            this.label14.TabIndex = 19;
+            this.label14.Text = "Återförande";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(17, 59);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(72, 13);
+            this.label13.TabIndex = 18;
+            this.label13.Text = "Ny avsättning";
             // 
             // RByesdisp
             // 
@@ -362,72 +423,15 @@ namespace LsjBok
             this.RByesdisp.UseVisualStyleBackColor = true;
             this.RByesdisp.CheckedChanged += new System.EventHandler(this.RByesbook_CheckedChanged);
             // 
-            // RBnomoms
+            // label12
             // 
-            this.RBnomoms.AutoSize = true;
-            this.RBnomoms.Checked = true;
-            this.RBnomoms.Location = new System.Drawing.Point(251, 26);
-            this.RBnomoms.Name = "RBnomoms";
-            this.RBnomoms.Size = new System.Drawing.Size(41, 17);
-            this.RBnomoms.TabIndex = 18;
-            this.RBnomoms.TabStop = true;
-            this.RBnomoms.Text = "Nej";
-            this.RBnomoms.UseVisualStyleBackColor = true;
-            this.RBnomoms.CheckedChanged += new System.EventHandler(this.RBnobook_CheckedChanged);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(17, 59);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(72, 13);
-            this.label13.TabIndex = 18;
-            this.label13.Text = "Ny avsättning";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(150, 59);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(62, 13);
-            this.label14.TabIndex = 19;
-            this.label14.Text = "Återförande";
-            // 
-            // TBavsattning
-            // 
-            this.TBavsattning.Location = new System.Drawing.Point(14, 76);
-            this.TBavsattning.Name = "TBavsattning";
-            this.TBavsattning.Size = new System.Drawing.Size(94, 20);
-            this.TBavsattning.TabIndex = 20;
-            // 
-            // avsattningbutton
-            // 
-            this.avsattningbutton.Location = new System.Drawing.Point(14, 102);
-            this.avsattningbutton.Name = "avsattningbutton";
-            this.avsattningbutton.Size = new System.Drawing.Size(94, 37);
-            this.avsattningbutton.TabIndex = 21;
-            this.avsattningbutton.Text = "Bokför avsättning";
-            this.avsattningbutton.UseVisualStyleBackColor = true;
-            this.avsattningbutton.Click += new System.EventHandler(this.avsattningbutton_Click);
-            // 
-            // CBaterforande
-            // 
-            this.CBaterforande.FormattingEnabled = true;
-            this.CBaterforande.Location = new System.Drawing.Point(114, 75);
-            this.CBaterforande.Name = "CBaterforande";
-            this.CBaterforande.Size = new System.Drawing.Size(199, 21);
-            this.CBaterforande.TabIndex = 22;
-            this.CBaterforande.SelectedIndexChanged += new System.EventHandler(this.CBaterforande_SelectedIndexChanged);
-            // 
-            // aterforandebutton
-            // 
-            this.aterforandebutton.Location = new System.Drawing.Point(125, 102);
-            this.aterforandebutton.Name = "aterforandebutton";
-            this.aterforandebutton.Size = new System.Drawing.Size(119, 37);
-            this.aterforandebutton.TabIndex = 23;
-            this.aterforandebutton.Text = "Bokför återförande";
-            this.aterforandebutton.UseVisualStyleBackColor = true;
-            this.aterforandebutton.Click += new System.EventHandler(this.aterforandebutton_Click);
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(11, 13);
+            this.label12.MaximumSize = new System.Drawing.Size(200, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(182, 26);
+            this.label12.TabIndex = 17;
+            this.label12.Text = "Har du bokfört eventuella ändringar i periodiseringsfonder?";
             // 
             // panel4
             // 
@@ -440,6 +444,15 @@ namespace LsjBok
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(327, 65);
             this.panel4.TabIndex = 16;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(11, 35);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(174, 13);
+            this.label16.TabIndex = 15;
+            this.label16.Text = "(avskrivningar, periodiseringar etc. )";
             // 
             // RBnodiscount
             // 
@@ -473,15 +486,6 @@ namespace LsjBok
             this.RByesdiscount.Text = "JA";
             this.RByesdiscount.UseVisualStyleBackColor = true;
             this.RByesdiscount.CheckedChanged += new System.EventHandler(this.RByesbook_CheckedChanged);
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(11, 35);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(174, 13);
-            this.label16.TabIndex = 15;
-            this.label16.Text = "(avskrivningar, periodiseringar etc. )";
             // 
             // updatebutton
             // 
@@ -551,7 +555,7 @@ namespace LsjBok
             // bookprofitbutton
             // 
             this.bookprofitbutton.Enabled = false;
-            this.bookprofitbutton.Location = new System.Drawing.Point(362, 269);
+            this.bookprofitbutton.Location = new System.Drawing.Point(362, 311);
             this.bookprofitbutton.Name = "bookprofitbutton";
             this.bookprofitbutton.Size = new System.Drawing.Size(385, 65);
             this.bookprofitbutton.TabIndex = 34;
@@ -562,7 +566,7 @@ namespace LsjBok
             // closeyearbutton
             // 
             this.closeyearbutton.Enabled = false;
-            this.closeyearbutton.Location = new System.Drawing.Point(362, 353);
+            this.closeyearbutton.Location = new System.Drawing.Point(362, 396);
             this.closeyearbutton.Name = "closeyearbutton";
             this.closeyearbutton.Size = new System.Drawing.Size(385, 67);
             this.closeyearbutton.TabIndex = 35;
@@ -570,11 +574,47 @@ namespace LsjBok
             this.closeyearbutton.UseVisualStyleBackColor = true;
             this.closeyearbutton.Click += new System.EventHandler(this.closeyearbutton_Click);
             // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(359, 154);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(153, 13);
+            this.label19.TabIndex = 36;
+            this.label19.Text = "Skattemässiga justeringar (prel)";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(362, 184);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(123, 13);
+            this.label20.TabIndex = 37;
+            this.label20.Text = "Beskattningsbart resultat";
+            // 
+            // TBskattejust
+            // 
+            this.TBskattejust.Location = new System.Drawing.Point(586, 146);
+            this.TBskattejust.Name = "TBskattejust";
+            this.TBskattejust.Size = new System.Drawing.Size(161, 20);
+            this.TBskattejust.TabIndex = 38;
+            // 
+            // TBskatteunderlag
+            // 
+            this.TBskatteunderlag.Location = new System.Drawing.Point(586, 177);
+            this.TBskatteunderlag.Name = "TBskatteunderlag";
+            this.TBskatteunderlag.Size = new System.Drawing.Size(161, 20);
+            this.TBskatteunderlag.TabIndex = 39;
+            // 
             // FormBokslut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(893, 655);
+            this.Controls.Add(this.TBskatteunderlag);
+            this.Controls.Add(this.TBskattejust);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.label19);
             this.Controls.Add(this.closeyearbutton);
             this.Controls.Add(this.bookprofitbutton);
             this.Controls.Add(this.panel5);
@@ -668,5 +708,9 @@ namespace LsjBok
         private System.Windows.Forms.RadioButton RByesbalance;
         private System.Windows.Forms.Button bookprofitbutton;
         private System.Windows.Forms.Button closeyearbutton;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox TBskattejust;
+        private System.Windows.Forms.TextBox TBskatteunderlag;
     }
 }
