@@ -425,5 +425,11 @@ namespace LsjBok
             FormDeklaration fd = new FormDeklaration();
             fd.Show();
         }
+
+        private void scriptaDatabasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormDBscript fd = new FormDBscript();
+            fd.Show();
+        }
     }
 }

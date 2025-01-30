@@ -21,8 +21,8 @@ namespace LsjBok
         int linespacing = 5;
 
         int[] colleft = new int[3] { 20, 540, 1060 };
-        int[] colsection = new int[3] { 3,2, 4 };
-        string[] colheader = new string[3] { "Resultaträkning", "Balansräkning", "Skattemässiga justeringar" };
+        int[] colsection = new int[3] { 2, 3, 4 };
+        string[] colheader = new string[3] {  "Balansräkning", "Resultaträkning", "Skattemässiga justeringar" };
         string[] colinstr = new string[3] { 
             "Direkt från bokföringen, ska normalt inte ändras", 
             "Direkt från bokföringen, ska normalt inte ändras", 
@@ -31,10 +31,19 @@ namespace LsjBok
         int[] colwidth = new int[3] { 400, 400, 700 };
         Dictionary<int, int> sectioncol = new Dictionary<int, int>();
         Dictionary<int, TextBox> tbdict = new Dictionary<int, TextBox>();
+        int localfiscal = common.currentfiscal;
 
         public FormDeklaration()
         {
             InitializeComponent();
+
+            if (fiscalclass.getyear(common.currentfiscal) == DateTime.Now.Year)
+            {
+                localfiscal = fiscalclass.previousfiscal(fiscalclass.getfiscal(common.currentfiscal)).Id;
+            }
+
+            this.Text = "LsjBok - " + util.getusername(common.currentuser) + " - " + util.getcompanyname(common.currentcompany) + " - " + util.getfiscalname(localfiscal);
+            
             int screenwidth = Screen.PrimaryScreen.WorkingArea.Width;
             int screenheight = Screen.PrimaryScreen.WorkingArea.Height;
 
@@ -104,7 +113,7 @@ namespace LsjBok
             bool addpanel = true;
             foreach (sruclass sru in sruclass.srudict.Values)
             {
-                decimal amount = sru.sumsru(common.currentfiscal);
+                decimal amount = sru.sumsru(localfiscal);
                 //0 = use original sign, >0 = always positive, <0 = reverse original sign
                 if (sru.displaysign > 0)
                     amount = Math.Abs(amount);
@@ -255,9 +264,9 @@ namespace LsjBok
                     datetimestring = DateTime.Now.ToString("yyyyMMdd") + " " + DateTime.Now.ToString("hhmmss");
 
                 Company cc = util.getcompany(common.currentcompany);
-                Fiscalyear fy = fiscalclass.getfiscal(common.currentfiscal);
+                Fiscalyear fy = fiscalclass.getfiscal(localfiscal);
 
-                sw.WriteLine("#BLANKETT INK2R-" + fiscalclass.getyear(common.currentfiscal) + "P4");
+                sw.WriteLine("#BLANKETT INK2R-" + fiscalclass.getyear(localfiscal) + "P4");
                 sw.WriteLine("#IDENTITET " + orgnr16(cc.Orgnr) + " " + datetimestring);
                 sw.WriteLine("#NAMN " + cc.Name);
                 sw.WriteLine("#UPPGIFT 7011 " + fy.Startdate.ToString("yyyyMMdd"));
@@ -276,7 +285,7 @@ namespace LsjBok
                 sw.WriteLine("#BLANKETTSLUT");
 
 
-                sw.WriteLine("#BLANKETT INK2S-" + fiscalclass.getyear(common.currentfiscal) + "P4");
+                sw.WriteLine("#BLANKETT INK2S-" + fiscalclass.getyear(localfiscal) + "P4");
                 sw.WriteLine("#IDENTITET " + orgnr16(cc.Orgnr) + " " + datetimestring);
                 sw.WriteLine("#NAMN " + cc.Name);
                 sw.WriteLine("#UPPGIFT 7011 " + fy.Startdate.ToString("yyyyMMdd"));
