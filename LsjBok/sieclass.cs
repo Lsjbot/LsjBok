@@ -26,21 +26,22 @@ namespace LsjBok
         public static void read_SIE(string fn,MemoDelegate memo)
         {
             using (
-    var sr = new StreamReader(
-        new FileStream(fn, FileMode.Open, FileAccess.Read),
-        Encoding.GetEncoding("iso-8859-1")
-    )
-)
+                    var sr = new StreamReader(
+                    new FileStream(fn, FileMode.Open, FileAccess.Read),
+                    Encoding.GetEncoding("iso-8859-1")
+                  ))
             {
                 String format = "PC8";
                 string sietyp = "";
                 Company cc = new Company();
+                cc.Companytype = 1;
                 Dictionary<int, Fiscalyear> fiscdict = new Dictionary<int, Fiscalyear>();
                 List<Ver> verlist = new List<Ver>();
                 List<Rad> radlist = new List<Rad>();
                 List<int> usedkonto = new List<int>();
                 List<Konto> kontolist = new List<Konto>();
                 Dictionary<int, string> siekontodict = new Dictionary<int, string>();
+                Dictionary<int, List<int>> srudict = new Dictionary<int, List<int>>();
                 while (!sr.EndOfStream)
                 {
                     string line = sr.ReadLine().Trim(new char[] { ' ', '\t' });
@@ -77,22 +78,23 @@ namespace LsjBok
                             if (qftyp == null)
                             {
                                 memo("Okänd företagstyp " + words[1]);
-                                qftyp = (from c in common.db.Companytype where c.Shortname == "X" select c).FirstOrDefault();
+                                qftyp = (from c in common.db.Companytype where c.Shortname == "AB" select c).FirstOrDefault();
                             }
                             cc.Companytype = qftyp.Id;
                             break;
                         case "#FNR":
                             break;
                         case "#ORGNR":
-                            if (!util.validate_orgnr(words[1]))
-                                memo("Ogiltigt orgnr " + words[1]);
-                            else
-                            {
-                                if (words[1].Contains('-'))
-                                    cc.Orgnr = words[1];
-                                else
-                                    cc.Orgnr = words[1].Insert(6, "-");
-                            }
+                            //if (!util.validate_orgnr(words[1]))
+                            //    memo("Ogiltigt orgnr " + words[1]);
+                            //else
+                            //{
+                            //    if (words[1].Contains('-'))
+                            //        cc.Orgnr = words[1];
+                            //    else
+                            //        cc.Orgnr = words[1].Insert(6, "-");
+                            //}
+                            cc.Orgnr = "1234567890";
                             break;
                         case "#BKOD":
                             break;
@@ -100,7 +102,8 @@ namespace LsjBok
                             cc.Address = line.Replace("#ADRESS", "");
                             break;
                         case "#FNAMN":
-                            cc.Name = words[1].Trim('"');
+                            //cc.Name = words[1].Trim('"');
+                            cc.Name = "TEST";
                             break;
                         case "#RAR":
                             int fnr = util.tryconvert(words[1]);
@@ -138,6 +141,11 @@ namespace LsjBok
                             siekontodict.Add(k, words[2].Trim('"'));
                             break;
                         case "#SRU":
+                            int ksru = util.tryconvert(words[1]);
+                            int ssru = util.tryconvert(words[2]);
+                            if (!srudict.ContainsKey(ssru))
+                                srudict.Add(ssru, new List<int>());
+                            srudict[ssru].Add(ksru);
                             break;
                         case "#KTYP":
                             break;
@@ -289,6 +297,9 @@ namespace LsjBok
                     memo("Skapar nytt företag " + cc.Name);
                     cc.Id = (from c in common.db.Company select c).Count() + 1;
                     importcompany = cc.Id;
+                    cc.Admin = common.currentuser;
+                    cc.Creator = common.currentuser;
+                    cc.Creationdate = DateTime.Now;
                     common.db.Company.InsertOnSubmit(cc);
                     common.db.SubmitChanges();
                 }
@@ -369,6 +380,22 @@ namespace LsjBok
                     return;
                 }
 
+                //Fixar IB från äldre års UB:
+                foreach (Konto kkk in kontolist)
+                {
+                    if (kkk.Year != 0)
+                        continue;
+                    if (kkk.IB != 0)
+                        continue;
+                    var bkonto = from c in kontolist where c.Year < 0 where c.Number == kkk.Number select c;
+                    foreach (Konto bk in bkonto.OrderByDescending(c => c.Year))
+                    {
+                        if (bk.UB != 0)
+                            kkk.IB = bk.UB;
+                        break;
+                    }
+                }
+
                 Dictionary<int, int> kontoiddict = new Dictionary<int, int>();
 
                 foreach (Konto kkk in kontolist)
@@ -441,6 +468,18 @@ namespace LsjBok
                     common.db.Rad.InsertOnSubmit(rr);
                 }
                 common.db.SubmitChanges();
+
+                foreach (int ssru in srudict.Keys)
+                {
+                    StringBuilder sb = new StringBuilder(ssru + "\t");
+                    string s = "";
+                    foreach (int ksru in srudict[ssru])
+                    {
+                        sb.Append(s+ksru.ToString());
+                        s = ",";
+                    }
+                    memo(sb.ToString());
+                }
 
                 string cin = fiscalclass.consistent_in(fiscalclass.getfiscal(rarmatchdict[0]));
                 string cout = fiscalclass.consistent_out(fiscalclass.getfiscal(rarmatchdict[0]));

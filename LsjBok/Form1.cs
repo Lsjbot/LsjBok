@@ -431,5 +431,11 @@ namespace LsjBok
             FormDBscript fd = new FormDBscript();
             fd.Show();
         }
+
+        private void updatebutton_Click(object sender, EventArgs e)
+        {
+            updatetitle();
+            updateboxes();
+        }
     }
 }

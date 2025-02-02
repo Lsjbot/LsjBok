@@ -91,6 +91,7 @@ namespace LsjBok
             this.lblFolder = new System.Windows.Forms.ToolStripLabel();
             this.btnFolder = new System.Windows.Forms.ToolStripButton();
             this.scriptaDatabasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updatebutton = new System.Windows.Forms.Button();
             this.panel32.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -629,11 +630,22 @@ namespace LsjBok
             this.scriptaDatabasToolStripMenuItem.Text = "Scripta databas";
             this.scriptaDatabasToolStripMenuItem.Click += new System.EventHandler(this.scriptaDatabasToolStripMenuItem_Click);
             // 
+            // updatebutton
+            // 
+            this.updatebutton.Location = new System.Drawing.Point(416, 29);
+            this.updatebutton.Name = "updatebutton";
+            this.updatebutton.Size = new System.Drawing.Size(127, 23);
+            this.updatebutton.TabIndex = 22;
+            this.updatebutton.Text = "Uppdatera";
+            this.updatebutton.UseVisualStyleBackColor = true;
+            this.updatebutton.Click += new System.EventHandler(this.updatebutton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 761);
+            this.Controls.Add(this.updatebutton);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.panel32);
@@ -715,6 +727,7 @@ namespace LsjBok
         private System.Windows.Forms.ToolStripMenuItem deklarationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loggToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scriptaDatabasToolStripMenuItem;
+        private System.Windows.Forms.Button updatebutton;
     }
 }
 
