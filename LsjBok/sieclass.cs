@@ -85,16 +85,16 @@ namespace LsjBok
                         case "#FNR":
                             break;
                         case "#ORGNR":
-                            //if (!util.validate_orgnr(words[1]))
-                            //    memo("Ogiltigt orgnr " + words[1]);
-                            //else
-                            //{
-                            //    if (words[1].Contains('-'))
-                            //        cc.Orgnr = words[1];
-                            //    else
-                            //        cc.Orgnr = words[1].Insert(6, "-");
-                            //}
-                            cc.Orgnr = "1234567890";
+                            if (!util.validate_orgnr(words[1]))
+                                memo("Ogiltigt orgnr " + words[1]);
+                            else
+                            {
+                                if (words[1].Contains('-'))
+                                    cc.Orgnr = words[1];
+                                else
+                                    cc.Orgnr = words[1].Insert(6, "-");
+                            }
+                            //cc.Orgnr = "1234567890";
                             break;
                         case "#BKOD":
                             break;
@@ -102,8 +102,8 @@ namespace LsjBok
                             cc.Address = line.Replace("#ADRESS", "");
                             break;
                         case "#FNAMN":
-                            //cc.Name = words[1].Trim('"');
-                            cc.Name = "TEST";
+                            cc.Name = words[1].Trim('"');
+                            //cc.Name = "TEST";
                             break;
                         case "#RAR":
                             int fnr = util.tryconvert(words[1]);
@@ -306,7 +306,7 @@ namespace LsjBok
                 else
                 {
                     MessageBox.Show("Matchar flera befintliga företag. Kan ej importera"
-                        , "IB-konflikt", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        , "Importkonflikt", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     memo("Matchar flera befintliga företag. Kan ej importera.");
                     return;
                 }

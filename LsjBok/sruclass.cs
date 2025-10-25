@@ -495,10 +495,10 @@ namespace LsjBok
             srudict.Add(7752, new sruclass(7752, "4.5a", "Bokförda intäkter som inte ska tas upp: a. Ackordsvinster", "3995,8491", -1, 1, 4, 1, -1));
             srudict.Add(7753, new sruclass(7753, "4.5b", "Bokförda intäkter som inte ska tas upp: b. Utdelning", "8010,8012,8110-8113,8210,8212", -1, 1, 4, 1, -1));
             srudict.Add(7754, new sruclass(7754, "4.5c", "Bokförda intäkter som inte ska tas upp: c. Andra bokförda intäkter", "8254,8314", -1, 1, 4, 1, -1));
-            srudict.Add(7654,new sruclass(7654,"4.6a","Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: a. Beräknad schablonintäkt på kvarvarande periodiseringsfonder vid beskattningsårets ingång ","special",-1,1,4,1,0));
+            srudict.Add(7654, new sruclass(7654,"4.6a","Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: a. Beräknad schablonintäkt på kvarvarande periodiseringsfonder vid beskattningsårets ingång ","special",-1,1,4,1,0));
             srudict.Add(7655, new sruclass(7655, "4.6c", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet:  b. Mottagna koncernbidrag", "8820", 7419, 1, 4, 1, 0));
             srudict.Add(7668, new sruclass(7668, "4.6b", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: c. Fondandelar schablonintäkt", "", -1, 1, 4, 1, 0));
-            srudict.Add(7667, new sruclass(7667, "4.6d", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: d. Uppräknat belopp vid återföring av periodiseringsfond", "special", -1, 1, 4, 1, 0));
+            srudict.Add(7673, new sruclass(7673, "4.6d", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: d. Uppräknat belopp vid återföring av periodiseringsfond", "special", -1, 1, 4, 1, 0));
             srudict.Add(7665, new sruclass(7665, "4.6e", "Intäkter som ska tas upp men som inte ingår i det redovisade resultatet: d. Andra ej bokförda intäkter", "", -1, 1, 4, 1, 0));
             srudict.Add(7755, new sruclass(7755, "4.7a", "Avyttring av delägarrätter: a. Bokförd vinst", "812x (Om netto +)", -1, 1, 4, 1, 0));
             srudict.Add(7656, new sruclass(7656, "4.7b", "Avyttring av delägarrätter: b. Bokförd förlust", "812x (Om netto -)", -1, 1, 4, 1, 0));
@@ -524,7 +524,7 @@ namespace LsjBok
             srudict.Add(7663, new sruclass(7663, "4.13+", "Andra skattemässiga justeringar av resultatet: +        ", "", -1, 1, 4, 1, 0));
             srudict.Add(7762, new sruclass(7762, "4.13-", "Andra skattemässiga justeringar av resultatet: -         ", "", -1, 1, 4, 1, 0));
             srudict.Add(7763, new sruclass(7763, "4.14a. Outnyttjat underskott från föregående år", "Underskott: a. Outnyttjat underskott från föregående år         ", "", -1, 1, 4, 1, -1));
-            srudict.Add(7664, new sruclass(7664, "4.14b", "Underskott: b. Reduktion av underskott med hänsyn till exempelvis ägarförändring eller ackord         ", "", -1, 1, 4, 1, 0));
+            srudict.Add(7671, new sruclass(7671, "4.14b", "Underskott: b. Reduktion av underskott med hänsyn till exempelvis ägarförändring eller ackord         ", "", -1, 1, 4, 1, 0));
             srudict.Add(7670, new sruclass(7670, "4.15", "Överskott (flyttas till p. 1.1 på sid. 1)         ", "special", -1, 1, 4, 1, 0));
             srudict.Add(7770, new sruclass(7770, "4.16", "Underskott (flyttas till p. 1.2 på sid. 1)         ", "special", -1, 1, 4, 1, 0));
             srudict.Add(8020, new sruclass(8020, "4.17", "Årets begärda och tidigare års medgivna värdeminskningsavdrag på byggnader...         ", "", -1, 1, 4, 1, 0));
